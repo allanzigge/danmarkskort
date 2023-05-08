@@ -37,6 +37,7 @@ public class Highway extends Way {
 
     }
 
+    //sets the Highway object's fields needed for pathfinding depending on the OSM tags
     private void setProperty() {
         if (roadType.equals("motorway") || roadType.equals("motorway_link")) {
             this.maxSpeed = 110;
@@ -77,6 +78,9 @@ public class Highway extends Way {
         }
     }
 
+    //Sets the line width settings depending on the determinant
+    //and draws the highway path with stroke() instead of just making the path
+    //Used in the View redraw() method
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         if (determinant < 2.e9 && determinant > 2.e6) {

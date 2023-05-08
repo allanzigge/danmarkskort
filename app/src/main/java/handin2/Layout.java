@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+//This class is a helper class for View. It helps create, copy, and size elements in View
 public class Layout {
     int boxWidth = 300;
     int circleRadius = 20;
