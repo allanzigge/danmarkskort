@@ -181,7 +181,7 @@ public class View {
         StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
         carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
-        carButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+        carButton.setBackground(new Background(new BackgroundFill(Color.PURPLE, null, null)));
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
         walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
         clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
