@@ -50,7 +50,6 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
-                System.out.println("før return");
                 createTextRoute(edges);
                 return edges;
             } else {
@@ -107,7 +106,7 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
-                
+                createTextRoute(edges);
                 return edges;
             } else {
                 for (Edge edge : next.originalNode.neigbors) {
@@ -234,7 +233,7 @@ public class Pathfinder implements Serializable {
         }
 
         if(3600 < timeEstimate){
-            travelTime = Float.toString(timeEstimate/3600) + " time(r) " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
+            travelTime = Float.toString( (float) Math.floor(timeEstimate/3600)) + " time(r) " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
         } else{
             travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
         }
@@ -246,7 +245,7 @@ public class Pathfinder implements Serializable {
             //System.out.println((i));
             //System.out.println("Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0))) +"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2));
         }        
-        System.out.println("Længde: " + Math.round(.5 + totalLength*111139));
+        System.out.println("Laengde: " + Math.round(.5 + totalLength*114900));
     }
 
     public ArrayList<ArrayList<String>> getTextRoute(){
