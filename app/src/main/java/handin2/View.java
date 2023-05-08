@@ -221,11 +221,7 @@ public class View {
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
 
         routeDescriptionInstruction = layout.getSearchResultVbox();
-        for (int i = 0; i < 100; i++) {
-            Label label = new Label("hej");
-            routeDescriptionInstruction.getChildren().add(label);
-
-        }
+        
         routeDescriptionScrollpane = layout.getScrollpane(routeDescriptionInstruction);
 
         routeDescriptionStackPane = layout.getStackPane(280, 340);

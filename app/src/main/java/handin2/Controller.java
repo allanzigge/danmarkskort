@@ -1,5 +1,6 @@
 package handin2;
 
+import java.util.ArrayList;
 import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -148,9 +151,13 @@ public class Controller {
 
         });
         view.routeDescriptionButton.setOnMouseClicked(e -> {
+            if (model.route.size() > 0) {
             applyButtonPressReleaseEffect(view.routeDescriptionButton, Color.LIGHTBLUE);
             view.routeDescriptionStackPane.setVisible(true);
             view.routeDescriptionStackPane.setMouseTransparent(false);
+            
+            getRouteDescription(model, view);
+            }
         });
 
         view.swapButton.setOnMouseClicked(e -> {
@@ -170,6 +177,7 @@ public class Controller {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX, view.position.panY);
                     findRoute(model, view);
+                    getRouteDescription(model,view);
                 } else {
                     if(view.searchToNode != null) {
                     view.position.findPosition(view.searchToNode, view.searchFromNode);
@@ -226,11 +234,18 @@ public class Controller {
         view.copyButton.setOnAction(e -> {
             applyButtonPressReleaseEffect(view.copyButton, Color.LIGHTBLUE);
 
-            // ClipboardContent clipboardContent = new ClipboardContent();
-            // ArrayList<String> strings = new ArrayList<>();
+            ClipboardContent clipboardContent = new ClipboardContent();
+            ArrayList<String> strings = new ArrayList<>();
+            ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
 
-            // clipboardContent.putString(String.join(System.lineSeparator(), strings));
-            // Clipboard.getSystemClipboard().setContent(clipboardContent);
+
+            for (int i = 0; i < ruteVejledning.size(); i++) {
+                String string = ruteVejledning.get(i)[0];
+                strings.add(string);
+            }
+
+            clipboardContent.putString(String.join(System.lineSeparator(), strings));
+            Clipboard.getSystemClipboard().setContent(clipboardContent);
         });
         view.routeDescriptionCloseButton.setOnAction(e -> {
             view.routeDescriptionStackPane.setVisible(false);
@@ -261,6 +276,7 @@ public class Controller {
             transportType = "car";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
+                getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -270,6 +286,7 @@ public class Controller {
             transportType = "bike";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
+                getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -279,6 +296,7 @@ public class Controller {
             veichleTypeSelected(view.walkButton, view);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
+                getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -311,7 +329,20 @@ public class Controller {
         });
 
     }
+private void getRouteDescription(Model model, View view) {
+    view.routeDescriptionInstruction.getChildren().clear();
+    if(model.pathfinder.getTextRoute().size()>0) {
+    ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
 
+
+    for (int i = 0; i < ruteVejledning.size(); i++) {
+        Label label = new Label(ruteVejledning.get(i)[0]);
+        view.routeDescriptionInstruction.getChildren().add(label);
+    }
+    }   
+}
+
+	
     private void setAdressOptionBox(TextField textField, VBox searchVBox, String searchNode, String newValue,
             Model model, View view) {
         if (newValue.length() > 0) {
@@ -355,6 +386,7 @@ public class Controller {
         if (view.searchFromNode != null && view.searchToNode != null) {
             findRoute(model, view);
             view.redraw();
+            getRouteDescription(model,view);
         }
     }
 
@@ -390,6 +422,7 @@ public class Controller {
             view.searchToNode = searchToNode;
             if(view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
+                getRouteDescription(model,view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.panX, view.position.panY);
