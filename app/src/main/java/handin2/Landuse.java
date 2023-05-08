@@ -15,6 +15,9 @@ public class Landuse extends Way {
         this.type = type;
     }
 
+    //Sets the fill settings depending on the landuse type
+    //Then uses the super class draw method to create the path
+    //ans draws the landuse path with fill()
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.setFill(colors.getLanduse(type));

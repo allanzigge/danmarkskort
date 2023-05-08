@@ -14,6 +14,9 @@ public class Natural extends Way {
         this.type = type;
     }
 
+    //Sets the fill settings depending on the natural type
+    //Then uses the super class draw method to create the path
+    //ans draws the natural path with fill()
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.setFill(colors.getNatural(type));
