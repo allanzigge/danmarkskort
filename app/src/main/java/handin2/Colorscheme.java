@@ -136,8 +136,6 @@ public class Colorscheme implements Serializable {
         return water;
       case "wetland":
         return meadow;
-      case "strait":
-        return water;
       case "spring":
         return water;
 
@@ -169,7 +167,7 @@ public class Colorscheme implements Serializable {
       case "scree":
         return rock;
 
-      case "island":  
+      case "island":
         return farmland;
 
       case "coastline":
@@ -228,7 +226,6 @@ public class Colorscheme implements Serializable {
   }
 
   private void colorblindMode() {
-    
 
     water = Color.BLACK;
     building = Color.DARKGRAY;
@@ -250,9 +247,9 @@ public class Colorscheme implements Serializable {
 
   public void darkMode() {
     scrub = Color.rgb(42, 66, 40);
-    //black
+    // black
     water = Color.rgb(31, 29, 54);
-    //violet
+    // violet
     building = Color.rgb(134, 72, 121);
     landuse = Color.DARKGRAY;
     meadow = Color.DARKGREEN;
@@ -261,7 +258,7 @@ public class Colorscheme implements Serializable {
     other = Color.DARKGREY;
     farmland = Color.DARKGREEN;
     forest = Color.rgb(146, 154, 171);
-    //light peach
+    // light peach
     highway = Color.rgb(233, 166, 166);
     motorway = Color.RED;
     trunk = Color.ORANGE;

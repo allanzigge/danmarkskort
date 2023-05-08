@@ -126,7 +126,7 @@ public class View {
         colors = new Colorscheme(); // Creates coclorscheme
 
         primaryStage.setTitle("GoKort");
-        primaryStage.getIcons().add(new Image("file:icon/logo.jpg"));
+        primaryStage.getIcons().add(new Image("file:icons/logo.jpg"));
 
         BorderPane mapBoarderPane = new BorderPane();
 
@@ -364,11 +364,9 @@ public class View {
         }
 
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -392,11 +390,9 @@ public class View {
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -412,11 +408,9 @@ public class View {
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -432,11 +426,9 @@ public class View {
             }
 
         } else {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
 
             if (model.route.size() > 0) {
                 gc.setStroke(Color.PURPLE);

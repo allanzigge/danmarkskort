@@ -3,6 +3,7 @@ package handin2;
 import java.util.ArrayList;
 
 public class Edge extends Way {
+    private static final long serialVersionUID = 6218782255583747084L;
     Long fromID;
     Long toID;
     Double cost;
@@ -10,7 +11,7 @@ public class Edge extends Way {
     Way path;
     Boolean isDrivable;
     Boolean isBikeable;
-
+    
     public Edge(Long fromID, Long toID, Highway road, boolean isDriveable, boolean isBikeable, double cost,
             ArrayList<Node> path) {
         super(path);
@@ -36,6 +37,10 @@ public class Edge extends Way {
    
     public Long getToID(){
         return toID;
+    }
+
+    public Highway getRoad(){
+        return road;
     }
    
     
