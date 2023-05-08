@@ -159,7 +159,6 @@ public class Pathfinder implements Serializable {
 
         for(int i = 0; i < edges.size()-1;i++){ //When turning from thisRoad to nextRoad
             thisRoad = edges.get(i); //Peeking to the next road 
-            tempLength += thisRoad.getCost(); //Counter for the total length
             totalLength += thisRoad.getCost();
 
             timeEstimate += (thisRoad.getCost()*111139)/ (thisRoad.getRoad().getSpeed()/3.6);
@@ -235,6 +234,7 @@ public class Pathfinder implements Serializable {
                 guide.add(new ArrayList<>(tempList));
                 tempList.clear();
             }
+            tempLength += thisRoad.getCost(); //Counter for the total length
         }
 
         if(3600 < timeEstimate){

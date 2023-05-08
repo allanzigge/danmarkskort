@@ -21,7 +21,8 @@ public class Highway extends Way {
         this.isOneWay = isOneWay;
         this.wayId = wayId;
         this.roadType = roadType;
-        if(roadName != null){
+        if(roadName != null) {
+
             this.roadName = roadName;
         }
         this.bikeable = true;
