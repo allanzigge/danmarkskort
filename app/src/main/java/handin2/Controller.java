@@ -186,7 +186,7 @@ public class Controller {
                 Button button = view.layout.copyButton(view.searchMenu,
                         view.layout.copyImageView(view.serachLoopImage));
 
-                addToFavorite(button, vBox, view, view.searchFromNode, null);
+                addToFavorite(button, vBox, view, model, view.searchFromNode, null);
             }
 
         });
@@ -201,20 +201,23 @@ public class Controller {
                 Button button = view.layout.copyButton(view.findRouteMenu,
                         view.layout.copyImageView(view.findRouteImage));
 
-                addToFavorite(button, vBox, view, view.searchFromNode, view.searchToNode);
+                addToFavorite(button, vBox, view, model, view.searchFromNode, view.searchToNode);
             }
         });
 
         view.findRouteMenu.setOnMouseClicked(e -> {
-            menuSelected(view.findRouteMenu, view.findRouteStackPane, view);
+            menuSelected(view.findRouteMenu, view.findRouteStackPane, view, model);
         });
 
         view.favoriteMenu.setOnMouseClicked(e -> {
-            menuSelected(view.favoriteMenu, view.favoriteStackPane, view);
+            menuSelected(view.favoriteMenu, view.favoriteStackPane, view, model);
         });
 
         view.settingsMenu.setOnMouseClicked(e -> {
-            menuSelected(view.settingsMenu, view.settingStackPane, view);
+            menuSelected(view.settingsMenu, view.settingStackPane, view, model);
+        });
+        view.searchMenu.setOnMouseClicked(e -> {
+            menuSelected(view.searchMenu, view.searchStackpan, view, model);
         });
         view.copyButton.setOnAction(e -> {
             applyButtonPressReleaseEffect(view.copyButton, Color.LIGHTBLUE);
@@ -230,9 +233,7 @@ public class Controller {
             view.routeDescriptionStackPane.setMouseTransparent(true);
         });
 
-        view.searchMenu.setOnMouseClicked(e -> {
-            menuSelected(view.searchMenu, view.searchStackpan, view);
-        });
+        
 
         view.clearFavoritesButton.setOnMouseClicked(e -> {
             applyButtonPressReleaseEffect(view.clearFavoritesButton, Color.RED);
@@ -379,12 +380,16 @@ public class Controller {
 
     }
 
-    private void addToFavorite(Button button, VBox vBox, View view, Node searchFromNode, Node searchToNode) {
+    private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode, Node searchToNode) {
         button.setOnMouseClicked(i -> {
             view.searchFromNode = searchFromNode;
             view.searchToNode = searchToNode;
+            if(view.searchFromNode != null && view.searchToNode != null) {
+                findRoute(model, view);
+            }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.panX, view.position.panY);
+            
         });
 
         StackPane stackPane = new StackPane(vBox, button);
@@ -398,7 +403,7 @@ public class Controller {
 
     }
 
-    private void menuSelected(Button button, StackPane stackPane, View view) {
+    private void menuSelected(Button button, StackPane stackPane, View view, Model model) {
         if (button.getBackground().getFills().get(0).getFill().equals(Color.LIGHTGREY)) {
             button.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
             stackPane.setVisible(false);
@@ -437,6 +442,8 @@ public class Controller {
 
             view.searchFromNode = null;
             view.searchToNode = null;
+            model.route.clear();
+            view.redraw();
         }
     }
 
