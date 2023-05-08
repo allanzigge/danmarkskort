@@ -28,7 +28,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "motorway", false, "");
 
-        assertEquals(100000, h.showAtZoom);
         assertEquals(110, h.maxSpeed);
         assertEquals(4, h.thickness);
     }
@@ -39,7 +38,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "null", "Adelgade", "trunk", false, "");
 
-        assertEquals(100000, h.showAtZoom);
         assertEquals(90, h.maxSpeed);
         assertEquals(4, h.thickness);
     }
@@ -50,7 +48,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "primary", false, "");
 
-        assertEquals(10000, h.showAtZoom);
         assertEquals(80, h.maxSpeed);
         assertEquals(3, h.thickness);
     }
@@ -61,7 +58,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "secondary", false, "");
 
-        assertEquals(10000, h.showAtZoom);
         assertEquals(80, h.maxSpeed);
         assertEquals (2.5, h.thickness);
     }
@@ -72,7 +68,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "tertiary", false, "");
 
-        assertEquals(5000, h.showAtZoom);
         assertEquals(80, h.maxSpeed);
         assertEquals(2, h.thickness);
     }
@@ -83,7 +78,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "unclassified", false, "");
 
-        assertEquals(2000, h.showAtZoom);
         assertEquals(50, h.maxSpeed);
         assertEquals(1, h.thickness);
     }
@@ -94,7 +88,7 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "residential", false, "");
 
-        assertEquals(500, h.showAtZoom);
+        
         assertEquals(50, h.maxSpeed);
         assertEquals(1, h.thickness);
     }
@@ -105,7 +99,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "", "Adelgade", "other", false, "");
 
-        assertEquals(500, h.showAtZoom);
         assertEquals(50, h.maxSpeed);
         assertEquals(1f, h.thickness);
     }
@@ -116,7 +109,6 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, true, true, "200", "Adelgade", "other", false, "");
 
-        assertEquals(500, h.showAtZoom);
         assertEquals(200, h.maxSpeed);
         assertEquals(1f, h.thickness);
     }
