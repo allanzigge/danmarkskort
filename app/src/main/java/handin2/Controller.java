@@ -11,19 +11,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class Controller {
     float lastX;
     float lastY;
-    String transportType = "car";
 
     public Controller(Model model, View view) {
         view.canvas.setOnMousePressed(e -> {
@@ -247,6 +251,7 @@ public class Controller {
             clipboardContent.putString(String.join(System.lineSeparator(), strings));
             Clipboard.getSystemClipboard().setContent(clipboardContent);
         });
+        
         view.routeDescriptionCloseButton.setOnAction(e -> {
             view.routeDescriptionStackPane.setVisible(false);
             view.routeDescriptionStackPane.setMouseTransparent(true);
@@ -270,8 +275,8 @@ public class Controller {
             view.redraw();
         });
         view.carButton.setOnMouseClicked(e -> {
-            veichleTypeSelected(view.carButton, view);
-            transportType = "car";
+            veichleTypeSelected(view.carButton, view, Color.PURPLE);
+            view.transportType = "car";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
@@ -280,8 +285,8 @@ public class Controller {
         });
 
         view.bikeButton.setOnMouseClicked(e -> {
-            veichleTypeSelected(view.bikeButton, view);
-            transportType = "bike";
+            veichleTypeSelected(view.bikeButton, view, Color.PINK);
+            view.transportType = "bike";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
@@ -290,8 +295,8 @@ public class Controller {
         });
 
         view.walkButton.setOnMouseClicked(e -> {
-            transportType = "walk";
-            veichleTypeSelected(view.walkButton, view);
+            view.transportType = "walk";
+            veichleTypeSelected(view.walkButton, view, Color.LIGHTBLUE);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
@@ -332,14 +337,29 @@ private void getRouteDescription(Model model, View view) {
     if(model.pathfinder.getTextRoute().size()>0) {
     ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
     view.routeInfoHBox.getChildren().clear();
-    
+
     view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelTime));
     view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelLength));
+    view.routeInfoHBox.setSpacing(40);
 
 
     for (int i = 0; i < ruteVejledning.size(); i++) {
-        Label label = new Label(ruteVejledning.get(i)[0]);
-        view.routeDescriptionInstruction.getChildren().add(label);
+    
+        Text text = new Text(ruteVejledning.get(i)[0]);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setPrefWidth(300); 
+
+        ImageView imageView = new ImageView();
+        if(ruteVejledning.get(i)[1].equals("venstre")) {
+            imageView = view.layout.copyImageView(view.turnLeftImage);
+        } else if (ruteVejledning.get(i)[1].equals("højre")) {
+            imageView = view.layout.copyImageView(view.turnRightImage);
+        }
+        HBox hBox = new HBox(textFlow, imageView);
+        view.routeDescriptionInstruction.getChildren().add(hBox);
+        view.routeDescriptionInstruction.setSpacing(10);
+        view.routeDescriptionInstruction.setAlignment(Pos.CENTER_LEFT);
+
     }
     }   
 }
@@ -395,14 +415,14 @@ private void getRouteDescription(Model model, View view) {
     }
 
     private void findRoute(Model model, View view) {
-        if (transportType.equals("car")) {
+        if (view.transportType.equals("car")) {
             Edge fromEdge = (Edge) model.edgeTreeCar
                     .NNSearch(new float[] { view.searchFromNode.lat, view.searchFromNode.lon });
             Edge toEdge = (Edge) model.edgeTreeCar
                     .NNSearch(new float[] { view.searchToNode.lat, view.searchToNode.lon });
             model.route = model.pathfinder.findPathCar(model.vertexMap.get(fromEdge.toID),
                     model.vertexMap.get(toEdge.toID));
-        } else if (transportType.equals("bike") | transportType.equals("walk")) {
+        } else if (view.transportType.equals("bike") | view.transportType.equals("walk")) {
             Edge fromEdge = (Edge) model.edgeTreeBike
                     .NNSearch(new float[] { view.searchFromNode.lat, view.searchFromNode.lon });
             Edge toEdge = (Edge) model.edgeTreeBike
@@ -412,11 +432,11 @@ private void getRouteDescription(Model model, View view) {
         }
     }
 
-    private void veichleTypeSelected(Button viechleType, View view) {
+    private void veichleTypeSelected(Button viechleType, View view, Color color) {
         view.carButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         view.bikeButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         view.walkButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        viechleType.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        viechleType.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }
 

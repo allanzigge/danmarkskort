@@ -19,6 +19,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -37,11 +38,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+
 public class View {
     Layout layout = new Layout();
     TextField fromSearch = new TextField("");
     TextField toSearch = new TextField("");
     Address TSTadr = null;
+    
+
 
     Colorscheme colors;
     Canvas canvas = new Canvas(640, 480);
@@ -79,6 +83,8 @@ public class View {
     // search elements
     ImageView serachLoopImage;
     ImageView findRouteImage;
+    ImageView turnLeftImage;
+    ImageView turnRightImage;
 
     StackPane searchStackpan;
 
@@ -157,6 +163,8 @@ public class View {
         searchResultVBox = layout.getSearchResultVbox();
         searchTextField = layout.getTextField("Skriv adresse");
 
+        turnLeftImage = layout.getImageView("file:icons/turnLeft.png");
+        turnRightImage = layout.getImageView("file:icons/turnRight.png");
         serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
         findRouteImage = layout.getImageView("file:icons/findRoute.png");
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
@@ -184,6 +192,7 @@ public class View {
         searchResultToVBox = layout.getSearchResultVbox();
         favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
         routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:icons/description.png"), 20);
+        routeDescriptionButton.setTooltip(new Tooltip("Show directions"));
         swapButton = layout.getButtonIcon(layout.getImageView("file:icons/swap.png"), 20);
 
         HBox veichleOption = new HBox(carButton, bikeButton, walkButton);
@@ -217,17 +226,16 @@ public class View {
 
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
-        routeInfoHBox.setSpacing(20);
         routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
-
+        copyButton.setTooltip(new Tooltip("Copy to clipboard"));
         routeDescriptionInstruction = layout.getSearchResultVbox();
+       
         
-        
-        routeDescriptionScrollpane = layout.getScrollpane(routeDescriptionInstruction);
+        routeDescriptionScrollpane = new ScrollPane(routeDescriptionInstruction);
         routeInfoHBox = new HBox();
         routeDescriptionStackPane = layout.getStackPane(280, 340);
-        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeDescriptionCloseButton, copyButton, routeInfoHBox, routeDescriptionScrollpane);
+        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeInfoHBox, routeDescriptionScrollpane,routeDescriptionCloseButton, copyButton);
         StackPane.setMargin(routeDescriptionCloseButton, new Insets(0, 0, 0, 300));
         StackPane.setMargin(routeDescriptionScrollpane, new Insets(40, 0, 20, 0));
         StackPane.setMargin(routeInfoHBox, new Insets(10, 0, 0, 40));
@@ -382,14 +390,6 @@ public class View {
 
             }
 
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
-
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
@@ -399,13 +399,6 @@ public class View {
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
-            }
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
@@ -431,14 +424,6 @@ public class View {
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
-
         }
 
         for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {
@@ -450,8 +435,10 @@ public class View {
 
             way.draw(gc, colors, (float) trans.determinant());
         }
-        if (model.route.size() > 0) {
-            gc.setStroke(Color.PURPLE);
+        if (model.route.size() > 0) {  
+            if(transportType.equals("walk")) gc.setStroke(Color.LIGHTBLUE);
+            else if (transportType.equals("bike"))  gc.setStroke(Color.PINK);
+            else gc.setStroke(Color.PURPLE);
             for (Edge edge : model.route) {
                 edge.draw(gc, colors, (float) trans.determinant());
                 gc.stroke();
@@ -467,7 +454,7 @@ public class View {
 
         if (searchFromNode != null) {
             double radius = 5 / Math.sqrt(trans.determinant());
-            gc.setFill(Color.LIGHTGREEN);
+            gc.setFill(Color.GREEN);
 
             gc.fillOval(0.56 * searchFromNode.getLon() - radius, -searchFromNode.getLat() - radius, radius * 2,
                     radius * 2);
