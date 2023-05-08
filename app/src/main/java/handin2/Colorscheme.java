@@ -269,22 +269,4 @@ public class Colorscheme implements Serializable {
     secondary = Color.LIGHTYELLOW;
   }
 
-  // public void bloody() {
-  //   scrub = Color.rgb(247, 7, 7);
-  //   water = Color.rgb(145, 70, 70);
-  //   building = Color.rgb(247, 156, 156);
-  //   landuse = Color.rgb(214, 43, 43);
-  //   highway = Color.rgb(110, 36, 36);
-  //   meadow = Color.rgb(242, 97, 97);
-  //   grass = Color.rgb(227, 2, 2);
-  //   residential = Color.rgb(179, 64, 64);
-  //   other = Color.rgb(107, 0, 0);
-
-  //   highway = Color.rgb(110, 36, 36);
-  //   motorway = Color.RED;
-  //   trunk = Color.ORANGE;
-  //   primary = Color.LIGHTGOLDENRODYELLOW;
-  //   secondary = Color.LIGHTYELLOW;
-  // }
-
 }

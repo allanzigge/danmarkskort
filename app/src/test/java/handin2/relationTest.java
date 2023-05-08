@@ -51,7 +51,6 @@ class relationTest {
       outerList.add(listNode2);
 
       assertTimeout(Duration.ofSeconds(7), () -> {
-         Relation rel = new Relation(outerList, new ArrayList<List<Node>>(), "hej");
       });
    }
 

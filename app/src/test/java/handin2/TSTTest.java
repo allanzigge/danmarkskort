@@ -3,7 +3,6 @@ package handin2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
-import java.util.*;
 
 public class TSTTest {
 
@@ -60,15 +59,4 @@ public class TSTTest {
         boolean expected = true;
         assertEquals(expected, actual);
     }
-
-    // @Test
-    // public void TSTDeleteTest() {
-
-    //     TST.delete("Rønnevej 2A, 3720 Aakirkeby");
-
-    //     boolean actual = tst.contains("Rønnevej 2A, 3720 Aakirkeby");
-    //     boolean expected = false;
-    //     assertEquals(expected, actual);
-    // }
-
 }

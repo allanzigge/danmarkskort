@@ -2,14 +2,7 @@ package handin2;
 
 import org.junit.jupiter.api.Test;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.junit.jupiter.api.BeforeEach;
 
 import java.util.*;
 
