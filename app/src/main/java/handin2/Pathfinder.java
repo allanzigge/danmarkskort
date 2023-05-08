@@ -152,7 +152,6 @@ public class Pathfinder implements Serializable {
 
         for(int i = 0; i < edges.size()-1;i++){ //When turning from thisRoad to nextRoad
             thisRoad = edges.get(i); //Peeking to the next road 
-            tempLength += thisRoad.getCost(); //Counter for the total length
             totalLength += thisRoad.getCost();
             String thisRoadName = thisRoad.getName();
             if(!uniqueRoads.get(uniqueRoads.size()-1).getName().equals(thisRoadName)){ //If next roadnames ! equal, a shift is indicated
@@ -219,6 +218,7 @@ public class Pathfinder implements Serializable {
                 guide.add(new ArrayList<>(tempList));
                 tempList.clear();
             }
+            tempLength += thisRoad.getCost(); //Counter for the total length
         }
         
 

@@ -9,7 +9,7 @@ public class Highway extends Way {
     boolean isOneWay;
     boolean bikeable;
     boolean driveable;
-    String roadName;
+    String roadName = "Unnamed Road";
     int maxSpeed;
     String wayId;
 
@@ -21,7 +21,9 @@ public class Highway extends Way {
         this.isOneWay = isOneWay;
         this.wayId = wayId;
         this.roadType = roadType;
-        this.roadName = roadName;
+        if(roadName != null) {
+            this.roadName = roadName;
+        }
         this.bikeable = true;
         this.driveable = false;
         setProperty();
