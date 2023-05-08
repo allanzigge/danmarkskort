@@ -26,7 +26,7 @@ public class HighwayTest {
         nodes.add(n2);
         nodes.add(n3);
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "motorway", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "motorway", false, "");
 
         assertEquals(110, h.maxSpeed);
         assertEquals(4, h.thickness);
@@ -36,7 +36,7 @@ public class HighwayTest {
     public void setPropertyTest1() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "null", "Adelgade", "trunk", false, "");
+        Highway h = new Highway(nodes, "null", "Adelgade", "trunk", false, "");
 
         assertEquals(90, h.maxSpeed);
         assertEquals(4, h.thickness);
@@ -46,7 +46,7 @@ public class HighwayTest {
     public void setPropertyTest2() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "primary", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "primary", false, "");
 
         assertEquals(80, h.maxSpeed);
         assertEquals(3, h.thickness);
@@ -56,7 +56,7 @@ public class HighwayTest {
     public void setPropertyTest3() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "secondary", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "secondary", false, "");
 
         assertEquals(80, h.maxSpeed);
         assertEquals (2.5, h.thickness);
@@ -66,7 +66,7 @@ public class HighwayTest {
     public void setPropertyTest4() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "tertiary", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "tertiary", false, "");
 
         assertEquals(80, h.maxSpeed);
         assertEquals(2, h.thickness);
@@ -76,7 +76,7 @@ public class HighwayTest {
     public void setPropertyTest5() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "unclassified", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "unclassified", false, "");
 
         assertEquals(50, h.maxSpeed);
         assertEquals(1, h.thickness);
@@ -86,7 +86,7 @@ public class HighwayTest {
     public void setPropertyTest6() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "residential", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "residential", false, "");
 
         
         assertEquals(50, h.maxSpeed);
@@ -97,7 +97,7 @@ public class HighwayTest {
     public void setPropertyTest7() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "", "Adelgade", "other", false, "");
+        Highway h = new Highway(nodes, "", "Adelgade", "other", false, "");
 
         assertEquals(50, h.maxSpeed);
         assertEquals(1f, h.thickness);
@@ -107,7 +107,7 @@ public class HighwayTest {
     public void constructorTryCatchTest() {
         ArrayList<Node> nodes = new ArrayList<Node>();
 
-        Highway h = new Highway(nodes, true, true, "200", "Adelgade", "other", false, "");
+        Highway h = new Highway(nodes, "200", "Adelgade", "other", false, "");
 
         assertEquals(200, h.maxSpeed);
         assertEquals(1f, h.thickness);

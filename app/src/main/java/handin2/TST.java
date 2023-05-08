@@ -1,17 +1,7 @@
 package handin2;
 
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import java.io.Serializable;
-
 import java.util.Scanner;
-
-import javax.naming.directory.SearchResult;
-
-import org.checkerframework.checker.units.qual.Prefix;
 
 /******************************************************************************
  *  Compilation:  javac TST.java

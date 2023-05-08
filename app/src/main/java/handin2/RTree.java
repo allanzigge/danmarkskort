@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class RTree implements Serializable {
     Boolean isEmpty = true;
@@ -14,7 +13,6 @@ public class RTree implements Serializable {
     private int M = 50; //Maximum amount of children pr. Node
     private int m = (M*40)/100;
     private float[] nearPoint;
-    private Map<String, ArrayList<handin2.Node>> id2way;
 
     public RTree() {
         root = new Node(true);
@@ -416,53 +414,6 @@ public class RTree implements Serializable {
         return n;
     }
 
-    public handin2.Node NearestNodeSearch(float[] point) {
-        this.nearPoint = point;
-        return nearestNodeSearchNode(root);
-    }
-
-    public handin2.Node nearestNodeSearchNode(Node node) {
-        float nearestDist = Float.MAX_VALUE;
-        handin2.Node nearestNode = null;
-
-       if(node.isLeaf) {
-            for(Node entry : node.children) {
-                Entry e = (Entry) entry;
-                if(e.getObject().distanceToPoint(nearPoint) < nearestDist) {
-                    handin2.Node nearest = null;
-                    Highway h = (Highway) e.getObject();
-                    float localbest = Float.MAX_VALUE;
-                    for(handin2.Node n : id2way.get(h.getWayId())) {
-                        double dist = (Math.pow(Math.abs((nearPoint[0]-(n.lat))),2.0) + Math.pow(Math.abs((nearPoint[1]-n.lon)),2.0));
-                        if(dist < localbest) {
-                            localbest = (float )dist;
-                            nearest = n;
-                        }
-                    }
-                    nearestNode = nearest;
-                    nearestDist = localbest;
-                }
-            }
-        } else {
-            List<Node> abl = new ArrayList<Node>();
-            for(Node child : node.children) {
-                abl.add(child);
-            }
-            abl.sort(new AblSort());
-            abl = downWardPrune(abl, nearPoint);
-            for(Node child : abl) {
-                if(nearestNeighborSearch(child).distanceToPoint(nearPoint)<nearestDist) {
-                    nearestNode = nearestNodeSearchNode(child);
-                    nearestDist = (float) (Math.pow(Math.abs((nearPoint[0]-(nearestNode.lat))),2.0) + Math.pow(Math.abs((nearPoint[1]-nearestNode.lon)),2.0));
-                    abl = downWardPrune(abl, nearPoint);
-                }   
-
-            }
-        }
-        return nearestNode;
-    }
-    
-
     public Way NNSearch(float[] point) {
         this.nearPoint = point;
         return nearestNeighborSearch(root);
@@ -545,8 +496,6 @@ public class RTree implements Serializable {
         }
 
         return (float) (Math.pow((Math.abs(point[0]-rlat)),2.0) + (Math.pow((Math.abs(point[1]-rlon)),2.0)));
-
-
     }
 
     //in mbr point1 = min,min point2 = max,max 
@@ -585,8 +534,5 @@ public class RTree implements Serializable {
         }
         lonDist = (float) (Math.pow((Math.abs(point[1]-rmlon)),2.0) + (Math.pow((Math.abs(point[0]-rnlat)),2.0)));
         return Math.min(latDist, lonDist);
-    }
-
-    
-    
+    }   
 }

@@ -20,9 +20,7 @@ public class Relation  implements Serializable{
     
         this.relationTrace = createWayOuter(outerList);
         
-        relationTrace.addAll(createWayInner(innerList, relationTrace.get(relationTrace.size()-1)));
-       
-        
+        relationTrace.addAll(createWayInner(innerList, relationTrace.get(relationTrace.size()-1)));        
     }
 
     /* Denne metode danner en enkelt way ud af de mange ways polygonerne består af. Ved at modtage en Arrayliste der indeholder en liste af Noder
@@ -79,7 +77,6 @@ public class Relation  implements Serializable{
                         listOfNodes.add(node);
                     }
                     outerList.remove(nodeList);
-    
                     break;
                 }
                 
@@ -90,20 +87,9 @@ public class Relation  implements Serializable{
                     listOfNodes = rev(nodeList);
                     listOfNodes.addAll(temp1);
                     outerList.remove(nodeList);
-                    break;
-                                    
+                    break;               
                 } 
-                //the last node in the list matches the first node in the trace, 
-                //then sets it as the new start point in the trace
-                // else if (currentLast.isNodeEqual(firstNode)) {
-                //     var temp2 = listOfNodes;
-                //     listOfNodes = (ArrayList<Node>) nodeList;
-                //     listOfNodes.addAll(temp2);
-                //     outerList.remove(nodeList);
-                //     break;
-                // }
-
-                counter ++;
+                    counter ++;
             }
 
             //updates the knew start and end point in the trace.
@@ -118,9 +104,7 @@ public class Relation  implements Serializable{
 
             //checks if it went through the whole list without adding to the trace. Should only happen if something went wrong
             if(size == counter){
-                System.out.println("relation did something weird" + v );
-                listOfNodes.addAll(createWayOuter(outerList));
-                
+                listOfNodes.addAll(createWayOuter(outerList));                
             }
         }
         return listOfNodes;

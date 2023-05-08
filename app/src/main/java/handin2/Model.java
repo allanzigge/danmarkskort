@@ -1,7 +1,6 @@
 package handin2;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -64,7 +63,6 @@ public class Model implements Serializable {
 
     // Global attributes
     int counter = 0;
-    List<Line> lines = new ArrayList<Line>();
     TST<Set<Address>> addresses = new TST<Set<Address>>();
 
     float minlat, maxlat, minlon, maxlon;
@@ -76,8 +74,6 @@ public class Model implements Serializable {
     ArrayList<Node> way = new ArrayList<Node>();
     String roadName = null;
     boolean isOneWay = false;
-    boolean isBikeable = true;
-    Boolean isDriveable = false;
     String maxSpeed = null;
     Boolean place = false;
     Boolean building = false;
@@ -124,7 +120,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-            // save(filename + ".obj");
+             save(filename + ".obj");
         }
 
     }
@@ -344,7 +340,7 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline"))) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -412,7 +408,7 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline"))) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -615,20 +611,20 @@ public class Model implements Serializable {
                     }
                 }
                 if (endVertex != null && startVertex != null) {
-                    if (!highway.isOneWay) {
+                    if (!highway.isOneWay()) {
                         Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
+                                highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
                         startVertex.addNeigbor(startVertexEdge);
                         Edge endVertexEdge = new Edge(endVertex.nodeID, startVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
+                                highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
                         endVertex.addNeigbor(endVertexEdge);
-                        if (highway.isDriveable) {
+                        if (highway.isDriveable()) {
                             edgeTreeCar.insert(endVertexEdge);
                             edgeTreeCar.insert(startVertexEdge);
                         }
-                        if (highway.isBikeable) {
+                        if (highway.isBikeable()) {
                             edgeTreeBike.insert(endVertexEdge);
                             edgeTreeBike.insert(startVertexEdge);
                         }
@@ -641,14 +637,14 @@ public class Model implements Serializable {
                         way.add(startVertex);
                     } else {
                         Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
+                                highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
 
                         startVertex.addNeigbor(startVertexEdge);
-                        if (highway.isDriveable) {
+                        if (highway.isDriveable()) {
                             edgeTreeCar.insert(startVertexEdge);
                         }
-                        if (highway.isBikeable) {
+                        if (highway.isBikeable()) {
                             edgeTreeBike.insert(startVertexEdge);
                         }
                         startVertex = endVertex;
@@ -661,7 +657,6 @@ public class Model implements Serializable {
                 }
             }
         }
-        System.out.println(vertexMap.get(Long.parseLong("33677811")));
     }
 
     // Checks to see if relations have inner- and outer-lists. If so, updates the
@@ -763,13 +758,6 @@ public class Model implements Serializable {
         var k = input.getAttributeValue(null, "k").intern();
         if (k.equals("highway")) {
             v = input.getAttributeValue(null, "v").intern();
-            if (v.equals("cycleway")) {
-                isDriveable = false;
-            } else if (v.equals("motorway")) {
-                isBikeable = false;
-            } else if (v.equals("trunk")) {
-                isBikeable = false;
-            }
             highway = true;
         } else if (k.equals("name")) {
             roadName = input.getAttributeValue(null, "v");
@@ -781,10 +769,6 @@ public class Model implements Serializable {
             isOneWay = true;
         } else if (k.equals("maxspeed")) {
             maxSpeed = input.getAttributeValue(null, "v");
-        } else if (k.equals("bicycle")) {
-            if (input.getAttributeValue(null, "v").equals("no")) {
-                isBikeable = false;
-            }
         } else if (k.equals("building")) {
             building = true;
         } else if (k.equals("landuse")) {
@@ -796,7 +780,7 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline"))) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -817,8 +801,6 @@ public class Model implements Serializable {
             way.clear();
             roadName = null;
             isOneWay = false;
-            // isBikeable = true;
-            // isDriveable = true;
             maxSpeed = null;
             place = false;
             building = false;
@@ -836,7 +818,7 @@ public class Model implements Serializable {
             } else if (highway) {
 
                 // When we incounter a highway, we want to run it through the vertexParser.
-                Highway highway = new Highway(way, isBikeable, isDriveable, maxSpeed, roadName, v, isOneWay, wayId);
+                Highway highway = new Highway(way, maxSpeed, roadName, v, isOneWay, wayId);
                 if (parsingHighways) {
                     vertexParser(way);
                     highways.add(highway);
@@ -874,12 +856,7 @@ public class Model implements Serializable {
         else if (roadType.equals("primary") || roadType.equals("primary_link")) {
             return true;
         }
-        // else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
-        // return true;
-        // }
-        // else if (roadType.equals("tertiary") || roadType.equals("tertiary_link")) {
-        // return true;
-        // }
+
         else {
             return false;
         }
@@ -950,8 +927,6 @@ public class Model implements Serializable {
                 return true;
             case "salt_pond":
                 return true;
-            case "port":
-                return true;
             case "aquaculture":
                 return true;
 
@@ -980,6 +955,10 @@ public class Model implements Serializable {
             case "greenhouse_horticulture":
                 return false;
             case "farmland":
+                return false;
+            case "military":
+                return false;
+            case "port":
                 return false;
 
             default:

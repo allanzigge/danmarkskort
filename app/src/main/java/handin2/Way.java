@@ -34,25 +34,7 @@ public class Way implements Serializable {
         }
     }
 
-    // public Way trimmedWay(Node from, Node to) {
-    //     boolean insideFrom = false;
-    //     for (int i = 0 ; i < coords.length ; i += 2) {
-    //         if(coords[i] == from.lat && coords[i+1] == from.lon) {
-    //             insideFrom = true;
-    //         }
-    //         if(insideFrom) {
-    //             if(coords[i] == to.lat && coords[i+1] == to.lon) {
-    //                 insideFrom = false;
-    //             }
-    //         }
-    //     }
-
-    //     for(int j = 0; i < coords.length; i++) {
-    //         if(coord)
-    //     }
-
-    // }
-
+    
     //Returns shortest distance from way to a given point. Point is specified in a float[] in order lon lat
     public float distanceToPoint(float[] point) {
         float shortestDist = Float.MAX_VALUE;
@@ -65,22 +47,6 @@ public class Way implements Serializable {
         return shortestDist;
     }
 
-    // public Node nearest(float[] point) {
-    //     for(Node node : model.id2way.get(highway.getWayId())))
-    //     float shortestDist = Float.MAX_VALUE;
-    //     float[] nearest = new float[2];
-    //      for(int i=0 ; i < (coords.length)/2 ; i++) {
-    //         float dist = (float) (Math.pow(Math.abs(point[0]-(-coords[2*i+1])),2.0) + Math.pow(((point[1]*0.56)-(coords[2*i])),2.0));
-    //         if (dist < shortestDist) {
-    //             shortestDist = dist;
-    //             nearest[0] = coords[i];
-    //             nearest[1] = coords[i+1];
-    //         }
-    //     }
-    //     return nearest;
-    // }
-
-
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.beginPath();
         gc.moveTo(coords[0], coords[1]);
@@ -88,7 +54,6 @@ public class Way implements Serializable {
             gc.lineTo(coords[i], coords[i+1]);
         }
     }
-
 
     @Override
     public boolean equals(Object o) {

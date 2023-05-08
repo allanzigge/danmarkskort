@@ -1,42 +1,21 @@
 package handin2;
 
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.Stack;
-
-import org.checkerframework.checker.units.qual.h;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
 
 public class Controller {
     float lastX;
@@ -390,9 +369,9 @@ public class Controller {
             });
             
             StackPane stackPane = new StackPane(vBox,button);
-            stackPane.setAlignment(vBox, Pos.CENTER_LEFT);
-            stackPane.setAlignment(button, Pos.TOP_RIGHT);
-            stackPane.setMargin(vBox, new Insets(0, 0, 0, 10));
+            StackPane.setAlignment(vBox, Pos.CENTER_LEFT);
+            StackPane.setAlignment(button, Pos.TOP_RIGHT);
+            StackPane.setMargin(vBox, new Insets(0, 0, 0, 10));
             Separator separator = new Separator();
             separator.setOrientation(Orientation.HORIZONTAL);
             separator.setMaxWidth(340);

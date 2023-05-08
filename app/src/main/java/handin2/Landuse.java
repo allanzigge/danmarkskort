@@ -17,11 +17,8 @@ public class Landuse extends Way {
 
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
-        if(!type.equals("military") && !type.equals("port")) {
         gc.setFill(colors.getLanduse(type));
         super.draw(gc, colors, determinant);
         gc.fill();
-       }
-        
     }
 }

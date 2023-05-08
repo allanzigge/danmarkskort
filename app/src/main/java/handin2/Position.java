@@ -166,25 +166,6 @@ public class Position {
         Float middleLon = (minLon+maxLon)/2;
         
         panPosition(middleLat, middleLon);
-        // if (searchToNode != null) {
-        //     float xDiff = maxLon - minLon;
-        //     float yDiff = maxLat - minLat;
-        //     float distance = (float) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-            
-        //     zoomPosition(distance);
-        // }
-    }
-
-    private void zoomPosition(Float distance) {
-        float currentXlength = canvasBoarder[1]-canvasBoarder[0];
-        System.out.println("canvas " + currentXlength);
-        System.out.println("distance " + distance);
-        float diffFac = currentXlength/distance;
-        System.out.println("scale " +diffFac);
-
-        zoomOut = diffFac;
-        this.factor = zoomOut;
-        System.out.println(zoomOut);
     }
 
     private void panPosition(Float middleLat, Float middleLon) {
@@ -205,8 +186,5 @@ public class Position {
         dragged(panX, panY);
         setCanvas();
 
-    }
-
-
-   
+    } 
 }
