@@ -68,8 +68,8 @@ public class Position {
     }
     public void setFactor() {
         this.factor = newScale/startScale;
-        System.out.println("new Scale" + newScale);
-        System.out.println("factor" + factor);
+        //System.out.println("new Scale" + newScale);
+        //System.out.println("factor" + factor);
     }
 
     //tells the current mouseposition on the canvas

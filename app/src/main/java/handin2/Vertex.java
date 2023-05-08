@@ -3,13 +3,11 @@ import java.util.*;
 
 public class Vertex extends Node{
     double finalCost;
-    // Node node;
     ArrayList<Edge> neigbors;
 
     
     public Vertex(Node node){
         super(node.lat, node.lon, node.nodeID);
-        // this.node = node;
         neigbors = new ArrayList<>();
     }
         

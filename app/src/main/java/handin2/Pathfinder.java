@@ -17,10 +17,12 @@ public class Pathfinder implements Serializable {
     double estimatedGoalCost;
     double costToNode;
     Double finalCost;
+    ArrayList<ArrayList<String>> guide;
 
     public Pathfinder(HashMap<Long, Vertex> vertexMap) {
         this.vertexMap = vertexMap;
         closed = new HashSet<>();
+        guide = new ArrayList<>();
     }
 
     public ArrayList<Edge> findPathCar(Vertex from, Vertex to) {
@@ -46,6 +48,8 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
+                System.out.println("før return");
+                createTextRoute(edges);
                 return edges;
             } else {
                 for (Edge edge : next.originalNode.neigbors) {
@@ -99,6 +103,7 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
+                
                 return edges;
             } else {
                 for (Edge edge : next.originalNode.neigbors) {
@@ -125,8 +130,113 @@ public class Pathfinder implements Serializable {
             }
         }
         throw new IllegalStateException("No route found");
-
     }
+
+    private void createTextRoute(ArrayList<Edge> edges) {
+        guide.clear();
+        ArrayList<Edge> uniqueRoads = new ArrayList<>();
+        ArrayList<Double> lengths = new ArrayList<>();
+        ArrayList<String> tempList = new ArrayList<>();
+        double tempLength = 0; //Used for counting length of each road
+        double totalLength = 0;
+
+        //a, b som kendt fra y=ax+b - c,d som hjælpevariabler
+        double a, b, c, d = 0; 
+        Edge thisRoad;
+        Edge nextRoad;
+
+        uniqueRoads.add(edges.get(0));
+
+
+        for(int i = 0; i < edges.size()-1;i++){ //When turning from thisRoad to nextRoad
+            thisRoad = edges.get(i); //Peeking to the next road 
+            tempLength += thisRoad.getCost(); //Counter for the total length
+            totalLength += thisRoad.getCost();
+            String thisRoadName = thisRoad.getName();
+            if(!uniqueRoads.get(uniqueRoads.size()-1).getName().equals(thisRoadName)){ //If next roadnames ! equal, a shift is indicated
+                tempList.clear();
+                nextRoad = thisRoad;        // Save the reference for the road we turn to
+                thisRoad = edges.get(i-1);  // Take the known road as thisRoad 
+                float thisRoadFromLat = vertexMap.get(thisRoad.getFromID()).getLat();
+                float thisRoadFromLon = vertexMap.get(thisRoad.getFromID()).getLon();
+                float thisRoadToLat = vertexMap.get(thisRoad.getToID()).getLat();
+                float thisRoadToLon = vertexMap.get(thisRoad.getToID()).getLon();
+
+                float nextRoadToLat = vertexMap.get(nextRoad.getToID()).getLat();
+                float nextRoadToLon = vertexMap.get(nextRoad.getToID()).getLon();
+              
+                //c, d helpers to determine what way the line goes
+                c = thisRoadToLat - thisRoadFromLat; // Delta lat -> to-from
+                d = thisRoadToLon - thisRoadFromLon; // Delta lon -> to-from
+
+                a = (d)/(c);
+                b = (thisRoadToLon) - a * (thisRoadToLat);
+
+                tempList.add(String.valueOf(tempLength*111139));
+                tempList.add(thisRoad.getName());
+
+                if(0 < c && 0 < d){ 
+                    //System.out.println("op, højre");
+                    if( (a * (nextRoadToLat) + b) < nextRoadToLon){
+                        tempList.add("højre");
+                    } else{
+                        tempList.add("venstre");
+                    }   
+                } else if(c < 0 && d < 0){
+                    //System.out.println("ned, venstre");
+                    if( (a * (nextRoadToLat) + b) < nextRoadToLon){
+                        tempList.add("venstre");
+                    } else{
+                        tempList.add("højre");
+                    }   
+                } else if(0 < c && d < 0){
+                    //System.out.println("ned, højre");
+                    if( (a * (nextRoadToLat) + b) < nextRoadToLon){
+                        tempList.add("højre");
+                    } else{
+                        tempList.add("venstre");
+                    }   
+                } else if(c < 0 && 0 < d){
+                    //System.out.println("op, venstre");
+                    if( (a * (nextRoadToLat) + b) < nextRoadToLon){
+                        tempList.add("venstre");
+                    } else{
+                        tempList.add("højre");
+                    }   
+                } 
+
+               //Koordinater i kryds
+                /* System.out.println(thisRoadFromLat +" "+ thisRoadFromLon);
+                System.out.println(thisRoadToLat +" "+ thisRoadToLon);
+                System.out.println(nextRoadToLat +" "+ thisRoadToLon + "\n"); */
+
+                uniqueRoads.add(thisRoad);
+                
+                tempLength = 0; 
+                
+                guide.add(new ArrayList<>(tempList));
+                tempList.clear();
+            }
+        }
+        
+
+         for(int i = 0; i<lengths.size()-1;i++){
+            //Estimat lidt for kort...??
+            tempLength += Math.round(.5 + lengths.get(i)*111139); //Calcute total length 
+        } 
+
+        //forsæt [0] m af [1]. Drej derefter til [2]
+        for(int i = 0; i < guide.size()-1;i++){
+            //System.out.println((i));
+            System.out.println("Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0))) +"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2));
+        }        
+        System.out.println("Længde: " + Math.round(.5 + totalLength*111139));
+    }
+
+    public ArrayList<ArrayList<String>> getTextRoute(){
+        return guide;
+    }
+
 
     public double distCalc(Node from, Node to) {
         double dist = (Math.pow(Math.abs(from.getLat() - (to.getLat())), 2.0)

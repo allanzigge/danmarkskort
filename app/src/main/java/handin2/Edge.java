@@ -15,11 +15,26 @@ public class Edge extends Way {
         this.fromID = fromID;
         this.toID = toID;
         this.road = road;
-        this.isDrivable = isDrivable;
+        this.isDrivable = isDriveable;
         this.isBikeable = isBikeable;
         this.cost = cost;
     }
 
+    public String getName(){
+        return road.getName();
+    }
+
+    public double getCost(){
+        return cost;
+    }
+
+    public Long getFromID(){
+        return fromID;
+    }
+   
+    public Long getToID(){
+        return toID;
+    }
    
     
 }

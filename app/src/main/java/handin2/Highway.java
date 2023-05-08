@@ -94,7 +94,9 @@ public class Highway extends Way {
         gc.stroke();
     }
 
-
+    public String getName(){
+        return roadName;
+    }
 
     public String getWayId() {
         return wayId;
