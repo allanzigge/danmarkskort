@@ -21,6 +21,7 @@ public class Pathfinder implements Serializable {
     ArrayList<ArrayList<String>> guide;
     ArrayList<String[]>ruteVejledning;
     String travelTime; 
+    String travelLength;
 
 
     public Pathfinder(HashMap<Long, Vertex> vertexMap) {
@@ -53,7 +54,6 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
-                System.out.println("før return");
                 createTextRoute(edges);
                 return edges;
             } else {
@@ -110,7 +110,7 @@ public class Pathfinder implements Serializable {
                     }
                     current = current.previousNode;
                 }
-                
+                createTextRoute(edges);
                 return edges;
             } else {
                 for (Edge edge : next.originalNode.neigbors) {
@@ -242,8 +242,7 @@ public class Pathfinder implements Serializable {
         } else{
             travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
         }
-        System.out.println(timeEstimate);
-        System.out.println("traveltime: " + travelTime);
+
 
         //forsæt [0] m af [1]. Drej derefter til [2]
         for(int i = 0; i < guide.size()-1;i++){
@@ -254,7 +253,7 @@ public class Pathfinder implements Serializable {
             ruteVejledning.add(strings);
             
         }        
-        System.out.println("Længde: " + Math.round(.5 + totalLength*111139));
+       travelLength = "Længde: " + Math.round(.5 + totalLength*111139);
     }
 
     public ArrayList<String[]> getTextRoute(){

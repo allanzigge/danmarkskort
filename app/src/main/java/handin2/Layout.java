@@ -118,8 +118,4 @@ public class Layout {
 
     }
 
-	public ScrollPane getScrollpane(VBox routeDescriptionInstruction) {
-        ScrollPane scrollPane = new ScrollPane(routeDescriptionInstruction);        
-        return scrollPane;
-    }
 }
