@@ -523,7 +523,7 @@ public class View {
 
         if (searchFromNode != null) {
             double radius = 5 / Math.sqrt(trans.determinant());
-            gc.setFill(Color.RED);
+            gc.setFill(Color.GREEN);
 
             // gc.fillOval(searchFromNode.getLon()-radius, searchFromNode.getLat()-radius,
             // radius * 2, radius * 2);

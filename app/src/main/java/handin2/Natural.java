@@ -16,11 +16,12 @@ public class Natural extends Way {
     
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
-        gc.setFill(colors.getNatural(type));
-        super.draw(gc, colors, determinant);
-        
-        
-        gc.fill();
+        if(!type.equals("cliff") && !type.equals("tree_row")) {
+            gc.setFill(colors.getNatural(type));
+            super.draw(gc, colors, determinant);
+            gc.fill();
+        }
+       
         
     }
 }

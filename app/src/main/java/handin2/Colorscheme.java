@@ -166,8 +166,10 @@ public class Colorscheme implements Serializable {
         return rock;
       case "rock":
         return rock;
+      case "scree":
+        return rock;
 
-      case "island":
+      case "island":  
         return farmland;
 
       case "coastline":

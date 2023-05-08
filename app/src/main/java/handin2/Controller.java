@@ -171,7 +171,7 @@ public class Controller {
 
             view.swapButton.setOnMouseClicked(e-> {
                 
-                if(!view.findRouteFromTextField.getText().equals("") || !view.findRouteToTextField.getText().equals("")) {
+                if(view.searchFromNode!=null || view.searchToNode != null) {
                 applyButtonPressReleaseEffect(view.swapButton, Color.LIGHTBLUE);
                 String temp = view.findRouteFromTextField.getText();
                 Node tempNode = view.searchFromNode;
@@ -182,18 +182,15 @@ public class Controller {
                 view.findRouteToTextField.setText(temp);
                 view.searchToNode = tempNode;
                 
-                if(!view.findRouteFromTextField.getText().equals("")) {
+                if(view.searchFromNode != null) {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX,view.position.panY);
-                    }
-                }
-                if((view.searchFromNode != null) && (view.searchToNode != null)) {
                     findRoute(model,view);
-                    view.position.findPosition(view.searchFromNode, view.searchToNode);
+                    }
+                } else {
+                    view.position.findPosition(view.searchToNode, view.searchFromNode);
                     view.pan(view.position.panX,view.position.panY);
-                }
-                view.redraw();
-
+                } 
             });
 
             view.favoritesButton.setOnMouseClicked(e-> {
@@ -268,18 +265,27 @@ public class Controller {
             view.carButton.setOnMouseClicked(e-> {
                 veichleTypeSelected(view.carButton, view);
                 transportType = "car";
+                if(view.searchFromNode != null && view.searchToNode != null) {
+                    findRoute(model, view);
+                }
                 view.redraw();
             });
 
             view.bikeButton.setOnMouseClicked(e-> {
                 veichleTypeSelected(view.bikeButton, view);
                 transportType = "bike";
+                if(view.searchFromNode != null && view.searchToNode != null) {
+                    findRoute(model, view);
+                }
                 view.redraw();
             });
 
             view.walkButton.setOnMouseClicked(e-> {
-                veichleTypeSelected(view.walkButton, view);
                 transportType = "walk";
+                veichleTypeSelected(view.walkButton, view);
+                if(view.searchFromNode != null && view.searchToNode != null) {
+                    findRoute(model, view);
+                }
                 view.redraw();
             });
 
