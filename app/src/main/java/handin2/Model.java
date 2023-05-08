@@ -120,7 +120,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-             save(filename + ".obj");
+            save(filename + ".obj");
         }
 
     }

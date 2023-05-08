@@ -478,10 +478,8 @@ public class View {
 
         if (searchFromNode != null) {
             double radius = 5 / Math.sqrt(trans.determinant());
-            gc.setFill(Color.RED);
+            gc.setFill(Color.LIGHTGREEN);
 
-            // gc.fillOval(searchFromNode.getLon()-radius, searchFromNode.getLat()-radius,
-            // radius * 2, radius * 2);
             gc.fillOval(0.56 * searchFromNode.getLon() - radius, -searchFromNode.getLat() - radius, radius * 2,
                     radius * 2);
         }
@@ -510,5 +508,5 @@ public class View {
         pan(dx, dy);
         redraw();
     }
-    
+
 }

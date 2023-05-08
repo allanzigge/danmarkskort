@@ -29,7 +29,7 @@ public class Pathfinder implements Serializable {
         closed.clear();
         PathNode start = new PathNode(from, null, 0.0, distCalc(from, to));
         open.insert(start);
-        map.put(from,start);
+        map.put(from, start);
 
         while (open.size() > 0) {
             PathNode next = open.delMin();
@@ -49,25 +49,27 @@ public class Pathfinder implements Serializable {
                 return edges;
             } else {
                 for (Edge edge : next.originalNode.neigbors) {
-                    if ((!closed.contains(vertexMap.get(edge.toID))) && edge.isDrivable) {
-                        PathNode nextNode; 
-                        if(map.keySet().contains(vertexMap.get(edge.toID))) {
-                            nextNode = map.get(vertexMap.get(edge.toID));
-                        } else {
-                            nextNode = new PathNode(vertexMap.get(edge.toID));
-                        }
-                        double newCost = next.costToNode + (edge.cost/edge.road.maxSpeed);
-                        map.put(vertexMap.get(edge.toID), nextNode);
+                    if (edge.isDrivable) {
+                        if ((!closed.contains(vertexMap.get(edge.toID)))) {
+                            PathNode nextNode;
+                            if (map.keySet().contains(vertexMap.get(edge.toID))) {
+                                nextNode = map.get(vertexMap.get(edge.toID));
+                            } else {
+                                nextNode = new PathNode(vertexMap.get(edge.toID));
+                            }
+                            double newCost = next.costToNode + (edge.cost / edge.road.maxSpeed);
+                            map.put(vertexMap.get(edge.toID), nextNode);
 
-                        if (newCost < nextNode.costToNode) {
-                            nextNode.edgeTo = edge;
-                            nextNode.setPrevious(next);
-                            nextNode.setCostToNode(newCost);
-                            nextNode.setFinalCost(newCost + (distCalc(nextNode, to)/70.0));
-                            open.insert(nextNode);
+                            if (newCost < nextNode.costToNode) {
+                                nextNode.edgeTo = edge;
+                                nextNode.setPrevious(next);
+                                nextNode.setCostToNode(newCost);
+                                nextNode.setFinalCost(newCost + (distCalc(nextNode, to) / 70.0));
+                                open.insert(nextNode);
 
+                            }
                         }
-                    } 
+                    }
                 }
 
             }
@@ -82,7 +84,7 @@ public class Pathfinder implements Serializable {
         closed.clear();
         PathNode start = new PathNode(from, null, 0.0, distCalc(from, to));
         open.insert(start);
-        map.put(from,start);
+        map.put(from, start);
 
         while (open.size() > 0) {
             PathNode next = open.delMin();
@@ -104,7 +106,7 @@ public class Pathfinder implements Serializable {
                 for (Edge edge : next.originalNode.neigbors) {
                     if ((!closed.contains(vertexMap.get(edge.toID))) && edge.isBikeable) {
                         PathNode nextNode;
-                        if(map.keySet().contains(vertexMap.get(edge.toID))) {
+                        if (map.keySet().contains(vertexMap.get(edge.toID))) {
                             nextNode = map.get(vertexMap.get(edge.toID));
                         } else {
                             nextNode = new PathNode(vertexMap.get(edge.toID));
@@ -119,7 +121,7 @@ public class Pathfinder implements Serializable {
                             open.insert(nextNode);
 
                         }
-                    } 
+                    }
                 }
 
             }
@@ -154,11 +156,11 @@ public class Pathfinder implements Serializable {
         double costToNode;
         double finalCost;
 
-        public PathNode(Vertex node) {  
-            this.originalNode = node;  
+        public PathNode(Vertex node) {
+            this.originalNode = node;
             this.previousNode = null;
             this.costToNode = Double.MAX_VALUE;
-            this.finalCost = Double.MAX_VALUE;  
+            this.finalCost = Double.MAX_VALUE;
         }
 
         public PathNode(Vertex node, PathNode previousNode, double costToNode, double finalCost) {
