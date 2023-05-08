@@ -142,7 +142,6 @@ public class RTree implements Serializable {
                 });
                 searchResult.add(way);
             }
-
             return searchResult;
         }
 
@@ -172,7 +171,7 @@ public class RTree implements Serializable {
 
         }
 
-        // Calculate how much the noded has to grow to include a new node/object
+        // Calculate how much the mbr of a node has to grow to include a given new node/object
         public float MBRarealDif(Node node) {
             float minLat;
             float minLon;
@@ -242,20 +241,19 @@ public class RTree implements Serializable {
         Entry entry = new Entry(false, way);
         Node leaf = chooseLeaf(entry);
         entry.setParrent(leaf);
-        if (leaf.size() < M) {
+        if (leaf.size() < M) {  // if the amount of chilren in the node is less than M (maximum amount of children), then we just insert.
             leaf.add(entry);
-            adjustTree(leaf);
-        } else {
+            adjustTree(leaf);   //If no split has happened, then the changes is propogated through this adjustTree call. This makes sure that the MBR is updated throughout the tree.
+        } else {        // if the child list of the node if full, then we need to split.
             leaf.add(entry);
-            Node[] splittedNodes = enchantedSplitNode(leaf);
+            Node[] splittedNodes = enchantedSplitNode(leaf);    //The split happens here, with the call to enchantedSplitNode
             splittedNodes[1].isLeaf = true;
-            adjustTreeSplit(splittedNodes);
+            adjustTreeSplit(splittedNodes);     //After the split, the changes is propogated up through the tree with this call to adjustTreeSplit.
         }
     }
 
     // Adujst all node MBR
     private void adjustTree(Node leaf) {
-
         if (root != leaf) {
             leaf.mbrCalculator();
             adjustTree(leaf.parrent);
@@ -280,11 +278,11 @@ public class RTree implements Serializable {
             Node parrent = splittedNodes[0].parrent;
             if (parrent.size() < M) {
                 parrent.add(splittedNodes[1]);
-                adjustTree(parrent);
-            } else {
+                adjustTree(parrent);            // When propogating the changes of a split, if the parentsnode still have room left in its child array then the adjustTree is called to update mbr
+            } else {                         
                 parrent.add(splittedNodes[1]);
-                Node[] newNodes = enchantedSplitNode(parrent);
-                adjustTreeSplit(newNodes);
+                Node[] newNodes = enchantedSplitNode(parrent); //if the parrent childlist is full, then this is now split.
+                adjustTreeSplit(newNodes);      // Again is the changes after the split propogated up throughout the tree.
             }
 
         }
