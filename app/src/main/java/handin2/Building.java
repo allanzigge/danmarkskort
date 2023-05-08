@@ -11,7 +11,7 @@ public class Building extends Way {
         super(way);
     }
 
-	public Building(ArrayList<Node> way, String v) {
+    public Building(ArrayList<Node> way, String v) {
         super(way);
         this.buildingType = v;
     }
@@ -21,7 +21,5 @@ public class Building extends Way {
         gc.setFill(colors.get("building"));
         super.draw(gc, colors, determinant);
         gc.fill();
-
-        System.out.println("Hej jeg er en test");
     }
 }
