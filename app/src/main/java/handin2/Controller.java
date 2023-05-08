@@ -331,6 +331,10 @@ private void getRouteDescription(Model model, View view) {
     view.routeDescriptionInstruction.getChildren().clear();
     if(model.pathfinder.getTextRoute().size()>0) {
     ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
+    view.routeInfoHBox.getChildren().clear();
+    
+    view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelTime));
+    view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelLength));
 
 
     for (int i = 0; i < ruteVejledning.size(); i++) {
@@ -346,6 +350,8 @@ private void getRouteDescription(Model model, View view) {
         if (newValue.length() > 0) {
             Iterable<String> keys = model.addresses.keysWithPrefix(newValue.toLowerCase());
             int numberOfDropdowns = 0;
+
+            
             for (String key : keys) {
                 Set<Address> setOfAdr = model.addresses.get(key);
 

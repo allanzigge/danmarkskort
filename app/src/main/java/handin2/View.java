@@ -109,6 +109,7 @@ public class View {
 
     StackPane favoriteStackPane;
     VBox favoritListVBox;
+    HBox routeInfoHBox;
 
     StackPane routeDescriptionStackPane;
     Button routeDescriptionCloseButton;
@@ -216,20 +217,20 @@ public class View {
 
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
-        Label routeTitle = new Label("RuteVejledning");
+        routeInfoHBox.setSpacing(20);
         routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
 
         routeDescriptionInstruction = layout.getSearchResultVbox();
         
+        
         routeDescriptionScrollpane = layout.getScrollpane(routeDescriptionInstruction);
-
+        routeInfoHBox = new HBox();
         routeDescriptionStackPane = layout.getStackPane(280, 340);
-        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeDescriptionCloseButton, copyButton,
-                routeTitle, routeDescriptionScrollpane);
+        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeDescriptionCloseButton, copyButton, routeInfoHBox, routeDescriptionScrollpane);
         StackPane.setMargin(routeDescriptionCloseButton, new Insets(0, 0, 0, 300));
-        StackPane.setMargin(routeTitle, new Insets(10, 0, 0, 40));
         StackPane.setMargin(routeDescriptionScrollpane, new Insets(40, 0, 20, 0));
+        StackPane.setMargin(routeInfoHBox, new Insets(10, 0, 0, 40));
 
         Menu fileMenu = new Menu("File");
         File file = new File("data");
