@@ -41,7 +41,7 @@ public class Highway extends Way {
             this.thickness = 4;
             this.driveable = true;
             this.bikeable = false;
-        }else if (roadType.equals("trunk") || roadType.equals("trunk_link")) {
+        } else if (roadType.equals("trunk") || roadType.equals("trunk_link")) {
             this.maxSpeed = 90;
             this.thickness = 4;
             this.driveable = true;
@@ -53,28 +53,23 @@ public class Highway extends Way {
             this.thickness = 3f;
             this.driveable = true;
 
-        }
-        else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
+        } else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
             this.maxSpeed = 80;
             this.thickness = 2.5f;
             this.driveable = true;
-        }
-        else if (roadType.equals("tertiary") || roadType.equals("tertiary_link"))  {
+        } else if (roadType.equals("tertiary") || roadType.equals("tertiary_link")) {
             this.maxSpeed = 80;
             this.thickness = 2f;
             this.driveable = true;
-        }
-        else if (roadType.equals("unclassified")) {
+        } else if (roadType.equals("unclassified")) {
             this.maxSpeed = 50;
             this.thickness = 1f;
             this.driveable = true;
-        }
-        else if (roadType.equals("residential")) {
+        } else if (roadType.equals("residential")) {
             this.maxSpeed = 50;
             this.thickness = 1f;
             this.driveable = true;
-        }
-        else {
+        } else {
             this.maxSpeed = 50;
             this.thickness = 1f;
         }

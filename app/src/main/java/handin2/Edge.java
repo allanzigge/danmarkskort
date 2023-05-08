@@ -1,6 +1,7 @@
 package handin2;
 
 import java.util.ArrayList;
+
 public class Edge extends Way {
     Long fromID;
     Long toID;
@@ -10,7 +11,8 @@ public class Edge extends Way {
     Boolean isDrivable;
     Boolean isBikeable;
 
-    public Edge(Long fromID, Long toID, Highway road, boolean isDriveable, boolean isBikeable, double cost, ArrayList<Node> path) {
+    public Edge(Long fromID, Long toID, Highway road, boolean isDriveable, boolean isBikeable, double cost,
+            ArrayList<Node> path) {
         super(path);
         this.fromID = fromID;
         this.toID = toID;

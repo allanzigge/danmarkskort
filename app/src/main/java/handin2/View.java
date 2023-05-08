@@ -126,7 +126,7 @@ public class View {
         colors = new Colorscheme(); // Creates coclorscheme
 
         primaryStage.setTitle("GoKort");
-        primaryStage.getIcons().add(new Image("file:logo.jpg"));
+        primaryStage.getIcons().add(new Image("file:icon/logo.jpg"));
 
         BorderPane mapBoarderPane = new BorderPane();
 
@@ -156,14 +156,14 @@ public class View {
         searchResultVBox = layout.getSearchResultVbox();
         searchTextField = layout.getTextField("Skriv adresse");
 
-        serachLoopImage = layout.getImageView("file:searchLoop.png");
-        findRouteImage = layout.getImageView("file:findRoute.png");
+        serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
+        findRouteImage = layout.getImageView("file:icons/findRoute.png");
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
-        favoritesButton = layout.getButtonIcon(layout.getImageView("file:starBlack.png"), 20);
+        favoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
         findRouteMenu = layout.getButtonIcon(findRouteImage, 20);
-        favoriteMenu = layout.getButtonIcon(layout.getImageView("file:bookmark.png"), 20);
-        settingsMenu = layout.getButtonIcon(layout.getImageView("file:settings.png"), 20);
-        clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:clear.png"), 20);
+        favoriteMenu = layout.getButtonIcon(layout.getImageView("file:icons/bookmark.png"), 20);
+        settingsMenu = layout.getButtonIcon(layout.getImageView("file:icons/settings.png"), 20);
+        clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
 
         searchStackpan = layout.getStackPane(40, 340);
         searchStackpan.getChildren().addAll(searchTextField, searchResultVBox, favoritesButton);
@@ -171,19 +171,19 @@ public class View {
         StackPane.setMargin(searchResultVBox, new Insets(40, 0, 0, 40));
         StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
-        carButton = layout.getButtonIcon(layout.getImageView("file:car.png"), 20);
+        carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
         carButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-        bikeButton = layout.getButtonIcon(layout.getImageView("file:bike.png"), 20);
-        walkButton = layout.getButtonIcon(layout.getImageView("file:walk.png"), 20);
-        clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:clear.png"), 20);
+        bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
+        walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
+        clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
 
         findRouteFromTextField = layout.getTextField("Find vej fra");
         findRouteToTextField = layout.getTextField("Find vej til");
         searchResultFromVBox = layout.getSearchResultVbox();
         searchResultToVBox = layout.getSearchResultVbox();
-        favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:starBlack.png"), 20);
-        routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:description.png"), 20);
-        swapButton = layout.getButtonIcon(layout.getImageView("file:swap.png"), 20);
+        favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:icons/description.png"), 20);
+        swapButton = layout.getButtonIcon(layout.getImageView("file:icons/swap.png"), 20);
 
         HBox veichleOption = new HBox(carButton, bikeButton, walkButton);
         veichleOption.setSpacing(10);
@@ -217,8 +217,8 @@ public class View {
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
         Label routeTitle = new Label("RuteVejledning");
-        routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:close.png"), 20);
-        copyButton = layout.getButtonIcon(layout.getImageView("file:copy.png"), 20);
+        routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
+        copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
 
         routeDescriptionInstruction = layout.getSearchResultVbox();
         for (int i = 0; i < 100; i++) {
@@ -478,10 +478,8 @@ public class View {
 
         if (searchFromNode != null) {
             double radius = 5 / Math.sqrt(trans.determinant());
-            gc.setFill(Color.RED);
+            gc.setFill(Color.LIGHTGREEN);
 
-            // gc.fillOval(searchFromNode.getLon()-radius, searchFromNode.getLat()-radius,
-            // radius * 2, radius * 2);
             gc.fillOval(0.56 * searchFromNode.getLon() - radius, -searchFromNode.getLat() - radius, radius * 2,
                     radius * 2);
         }
@@ -499,16 +497,16 @@ public class View {
 
     }
 
-    void pan(float dx, float dy) {
+    void pan(double dx, double dy) {
         trans.prependTranslation(dx, dy);
         redraw();
     }
 
-    void zoom(float dx, float dy, float factor) {
+    void zoom(double dx, double dy, double factor) {
         pan(-dx, -dy);
         trans.prependScale(factor, factor);
         pan(dx, dy);
         redraw();
     }
-    
+
 }

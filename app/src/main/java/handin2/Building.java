@@ -11,7 +11,7 @@ public class Building extends Way {
         super(way);
     }
 
-	public Building(ArrayList<Node> way, String v) {
+    public Building(ArrayList<Node> way, String v) {
         super(way);
         this.buildingType = v;
     }
