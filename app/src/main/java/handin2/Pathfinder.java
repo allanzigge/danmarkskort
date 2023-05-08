@@ -19,12 +19,15 @@ public class Pathfinder implements Serializable {
     double costToNode;
     Double finalCost;
     ArrayList<ArrayList<String>> guide;
+    ArrayList<String[]>ruteVejledning;
     String travelTime; 
+
 
     public Pathfinder(HashMap<Long, Vertex> vertexMap) {
         this.vertexMap = vertexMap;
         closed = new HashSet<>();
         guide = new ArrayList<>();
+        ruteVejledning = new ArrayList<>();
     }
 
     public ArrayList<Edge> findPathCar(Vertex from, Vertex to) {
@@ -138,6 +141,7 @@ public class Pathfinder implements Serializable {
 
     private void createTextRoute(ArrayList<Edge> edges) {
         guide.clear();
+        ruteVejledning.clear();
         ArrayList<Edge> uniqueRoads = new ArrayList<>();
         ArrayList<Double> lengths = new ArrayList<>();
         ArrayList<String> tempList = new ArrayList<>();
@@ -243,14 +247,18 @@ public class Pathfinder implements Serializable {
 
         //forsæt [0] m af [1]. Drej derefter til [2]
         for(int i = 0; i < guide.size()-1;i++){
-            //System.out.println((i));
-            //System.out.println("Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0))) +"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2));
+       
+            String rutevejledning = "Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0)))+"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2);
+            String retning =  guide.get(i).get(2);
+            String[] strings = {rutevejledning,retning};
+            ruteVejledning.add(strings);
+            
         }        
         System.out.println("Længde: " + Math.round(.5 + totalLength*111139));
     }
 
-    public ArrayList<ArrayList<String>> getTextRoute(){
-        return guide;
+    public ArrayList<String[]> getTextRoute(){
+        return ruteVejledning;
     }
 
     public String getTime(){
