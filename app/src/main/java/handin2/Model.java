@@ -120,7 +120,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-            save(filename + ".obj");
+            // save(filename + ".obj");
         }
 
     }
@@ -340,7 +340,8 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row") && !v.equals("bay")
+                    && !v.equals("strait")) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -408,7 +409,8 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row") && !v.equals("bay")
+                    && !v.equals("strait")) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -780,7 +782,8 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row")) {
+            } else if (!(v.equals("coastline")) && !v.equals("cliff") && !v.equals("tree_row") && !v.equals("bay")
+                    && !v.equals("strait")) {
                 natural = true;
             }
         } else if (k.equals("place")) {

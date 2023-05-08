@@ -126,7 +126,7 @@ public class View {
         colors = new Colorscheme(); // Creates coclorscheme
 
         primaryStage.setTitle("GoKort");
-        primaryStage.getIcons().add(new Image("file:icon/logo.jpg"));
+        primaryStage.getIcons().add(new Image("file:icons/logo.jpg"));
 
         BorderPane mapBoarderPane = new BorderPane();
 
@@ -221,11 +221,7 @@ public class View {
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
 
         routeDescriptionInstruction = layout.getSearchResultVbox();
-        for (int i = 0; i < 100; i++) {
-            Label label = new Label("hej");
-            routeDescriptionInstruction.getChildren().add(label);
-
-        }
+        
         routeDescriptionScrollpane = layout.getScrollpane(routeDescriptionInstruction);
 
         routeDescriptionStackPane = layout.getStackPane(280, 340);
@@ -368,11 +364,9 @@ public class View {
         }
 
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -396,11 +390,9 @@ public class View {
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -416,11 +408,9 @@ public class View {
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -436,11 +426,9 @@ public class View {
             }
 
         } else {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
 
             if (model.route.size() > 0) {
                 gc.setStroke(Color.PURPLE);

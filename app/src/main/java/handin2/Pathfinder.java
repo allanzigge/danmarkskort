@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Pathfinder implements Serializable {
+    private static final long serialVersionUID = 2463027208108695228L;
     MinPQ<PathNode> open;
     HashSet<Vertex> closed;
     ArrayList<PathNode> path;
@@ -18,11 +19,15 @@ public class Pathfinder implements Serializable {
     double costToNode;
     Double finalCost;
     ArrayList<ArrayList<String>> guide;
+    ArrayList<String[]>ruteVejledning;
+    String travelTime; 
+
 
     public Pathfinder(HashMap<Long, Vertex> vertexMap) {
         this.vertexMap = vertexMap;
         closed = new HashSet<>();
         guide = new ArrayList<>();
+        ruteVejledning = new ArrayList<>();
     }
 
     public ArrayList<Edge> findPathCar(Vertex from, Vertex to) {
@@ -136,11 +141,13 @@ public class Pathfinder implements Serializable {
 
     private void createTextRoute(ArrayList<Edge> edges) {
         guide.clear();
+        ruteVejledning.clear();
         ArrayList<Edge> uniqueRoads = new ArrayList<>();
         ArrayList<Double> lengths = new ArrayList<>();
         ArrayList<String> tempList = new ArrayList<>();
         double tempLength = 0; //Used for counting length of each road
         double totalLength = 0;
+        float timeEstimate = 0; //time in seconds
 
         //a, b som kendt fra y=ax+b - c,d som hjælpevariabler
         double a, b, c, d = 0; 
@@ -153,8 +160,17 @@ public class Pathfinder implements Serializable {
         for(int i = 0; i < edges.size()-1;i++){ //When turning from thisRoad to nextRoad
             thisRoad = edges.get(i); //Peeking to the next road 
             totalLength += thisRoad.getCost();
+
+            timeEstimate += (thisRoad.getCost()*111139)/ (thisRoad.getRoad().getSpeed()/3.6);
+
             String thisRoadName = thisRoad.getName();
-            if(!uniqueRoads.get(uniqueRoads.size()-1).getName().equals(thisRoadName)){ //If next roadnames ! equal, a shift is indicated
+            String nextRoadName = uniqueRoads.get(uniqueRoads.size()-1).getName();
+            if(!(nextRoadName != null))
+                nextRoadName = "Unnamed Road";
+            if(!(thisRoadName != null))
+                thisRoadName = "Unnamed Road";
+            
+            if(!nextRoadName.equals(thisRoadName)){ //If next roadnames ! equal, a shift is indicated
                 tempList.clear();
                 nextRoad = thisRoad;        // Save the reference for the road we turn to
                 thisRoad = edges.get(i-1);  // Take the known road as thisRoad 
@@ -174,7 +190,7 @@ public class Pathfinder implements Serializable {
                 b = (thisRoadToLon) - a * (thisRoadToLat);
 
                 tempList.add(String.valueOf(tempLength*111139));
-                tempList.add(thisRoad.getName());
+                tempList.add(thisRoadName);
 
                 if(0 < c && 0 < d){ 
                     //System.out.println("op, højre");
@@ -220,23 +236,33 @@ public class Pathfinder implements Serializable {
             }
             tempLength += thisRoad.getCost(); //Counter for the total length
         }
-        
 
-         for(int i = 0; i<lengths.size()-1;i++){
-            //Estimat lidt for kort...??
-            tempLength += Math.round(.5 + lengths.get(i)*111139); //Calcute total length 
-        } 
+        if(3600 < timeEstimate){
+            travelTime = Float.toString(timeEstimate/3600) + " time(r) " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
+        } else{
+            travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
+        }
+        System.out.println(timeEstimate);
+        System.out.println("traveltime: " + travelTime);
 
         //forsæt [0] m af [1]. Drej derefter til [2]
         for(int i = 0; i < guide.size()-1;i++){
-            //System.out.println((i));
-            System.out.println("Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0))) +"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2));
+       
+            String rutevejledning = "Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0)))+"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2);
+            String retning =  guide.get(i).get(2);
+            String[] strings = {rutevejledning,retning};
+            ruteVejledning.add(strings);
+            
         }        
         System.out.println("Længde: " + Math.round(.5 + totalLength*111139));
     }
 
-    public ArrayList<ArrayList<String>> getTextRoute(){
-        return guide;
+    public ArrayList<String[]> getTextRoute(){
+        return ruteVejledning;
+    }
+
+    public String getTime(){
+        return travelTime;
     }
 
 

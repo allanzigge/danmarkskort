@@ -11,6 +11,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+
         String filename = "data/fyn.osm.zip";
 
         // String filename = "data/map.osm";
