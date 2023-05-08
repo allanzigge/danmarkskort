@@ -233,8 +233,6 @@ public class Controller {
             view.routeDescriptionStackPane.setMouseTransparent(true);
         });
 
-        
-
         view.clearFavoritesButton.setOnMouseClicked(e -> {
             applyButtonPressReleaseEffect(view.clearFavoritesButton, Color.RED);
             view.favoritListVBox.getChildren().clear();
@@ -380,16 +378,17 @@ public class Controller {
 
     }
 
-    private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode, Node searchToNode) {
+    private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode,
+            Node searchToNode) {
         button.setOnMouseClicked(i -> {
             view.searchFromNode = searchFromNode;
             view.searchToNode = searchToNode;
-            if(view.searchFromNode != null && view.searchToNode != null) {
+            if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.panX, view.position.panY);
-            
+
         });
 
         StackPane stackPane = new StackPane(vBox, button);
