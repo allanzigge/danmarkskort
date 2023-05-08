@@ -163,15 +163,19 @@ public class Controller {
                 view.findRouteToTextField.setText(temp);
                 view.searchToNode = tempNode;
 
-                if (view.searchFromNode != null) {
+                if (view.searchFromNode != null && view.searchToNode != null) {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX, view.position.panY);
                     findRoute(model, view);
+                } else {
+                    if(view.searchToNode != null) {
+                    view.position.findPosition(view.searchToNode, view.searchFromNode);
+                    } else {
+                    view.position.findPosition(view.searchFromNode,view.searchToNode);
+                    }
+                    view.pan(view.position.panX, view.position.panY);
                 }
-            } else {
-                view.position.findPosition(view.searchToNode, view.searchFromNode);
-                view.pan(view.position.panX, view.position.panY);
-            }
+            } 
         });
 
         view.favoritesButton.setOnMouseClicked(e -> {
