@@ -497,12 +497,12 @@ public class View {
 
     }
 
-    void pan(float dx, float dy) {
+    void pan(double dx, double dy) {
         trans.prependTranslation(dx, dy);
         redraw();
     }
 
-    void zoom(float dx, float dy, float factor) {
+    void zoom(double dx, double dy, double factor) {
         pan(-dx, -dy);
         trans.prependScale(factor, factor);
         pan(dx, dy);

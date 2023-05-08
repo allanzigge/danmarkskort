@@ -30,8 +30,8 @@ public class Controller {
 
         view.canvas.setOnMouseDragged(e -> {
             if (e.isPrimaryButtonDown()) { // LEFT MOUSEBUTTON
-                float dx = (float) e.getX() - lastX;
-                float dy = (float) e.getY() - lastY;
+                double dx = e.getX() - lastX;
+                double dy = e.getY() - lastY;
                 view.position.dragged(dx, dy);
 
                 view.pan(dx, dy); // MOVE THE MAP
@@ -51,35 +51,38 @@ public class Controller {
             float zoomSpeed = (float) (Math.pow(1.01, factor));
 
             // Does the zoom and set the label
-            zoomSpeed = view.scalebar.setScale((float) zoomSpeed);
-            view.zoom((float) e.getX(), (float) e.getY(), (float) zoomSpeed);
+            zoomSpeed = view.scalebar.setScale(zoomSpeed);
+            view.zoom(e.getX(), e.getY(), zoomSpeed);
             view.scaleLabel.setText(view.scalebar.getScaleLabel());
 
             view.position.setNewScale(view.scalebar.getScale());
-            view.position.mouseZoom((float) e.getX(), (float) e.getY());
+            view.position.mouseZoom(e.getX(), e.getY());
 
         });
 
         view.canvas.setOnMouseMoved(e -> {
-            view.position.setPosition((float) e.getX(), (float) e.getY());
+            view.position.setPosition(e.getX(), e.getY());
             view.mousePositionLabel.setText("lat: " + view.position.latPosition + " lon: " + view.position.lonPosition);
 
             if ((view.scalebar.getScale() * view.canvasHeighScale * view.canvasWidthScale) < 500) {
                 if (!model.smallRoadRtree.isEmpty) {
                     view.nearestRoad.setText(((Highway) model.smallRoadRtree
-                            .NNSearch(new float[] { view.position.latPosition, view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.latPosition,
+                                    (float) view.position.lonPosition }))
                             .toString());
                 }
             } else if ((view.scalebar.getScale() * view.canvasHeighScale * view.canvasWidthScale) < 5000) {
                 if (!model.mediumRoadRTree.isEmpty) {
                     view.nearestRoad.setText(((Highway) model.mediumRoadRTree
-                            .NNSearch(new float[] { view.position.latPosition, view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.latPosition,
+                                    (float) view.position.lonPosition }))
                             .toString());
                 }
             } else {
                 if (!model.bigRoadRTree.isEmpty) {
                     view.nearestRoad.setText(((Highway) model.bigRoadRTree
-                            .NNSearch(new float[] { view.position.latPosition, view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.latPosition,
+                                    (float) view.position.lonPosition }))
                             .toString());
                 }
             }
