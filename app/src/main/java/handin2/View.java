@@ -126,7 +126,7 @@ public class View {
         colors = new Colorscheme(); // Creates coclorscheme
 
         primaryStage.setTitle("GoKort");
-        primaryStage.getIcons().add(new Image("file:icon/logo.jpg"));
+        primaryStage.getIcons().add(new Image("file:icons/logo.jpg"));
 
         BorderPane mapBoarderPane = new BorderPane();
 
