@@ -166,15 +166,19 @@ public class Controller {
                 view.findRouteToTextField.setText(temp);
                 view.searchToNode = tempNode;
 
-                if (view.searchFromNode != null) {
+                if (view.searchFromNode != null && view.searchToNode != null) {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX, view.position.panY);
                     findRoute(model, view);
+                } else {
+                    if(view.searchToNode != null) {
+                    view.position.findPosition(view.searchToNode, view.searchFromNode);
+                    } else {
+                    view.position.findPosition(view.searchFromNode,view.searchToNode);
+                    }
+                    view.pan(view.position.panX, view.position.panY);
                 }
-            } else {
-                view.position.findPosition(view.searchToNode, view.searchFromNode);
-                view.pan(view.position.panX, view.position.panY);
-            }
+            } 
         });
 
         view.favoritesButton.setOnMouseClicked(e -> {
@@ -232,8 +236,6 @@ public class Controller {
             view.routeDescriptionStackPane.setVisible(false);
             view.routeDescriptionStackPane.setMouseTransparent(true);
         });
-
-        
 
         view.clearFavoritesButton.setOnMouseClicked(e -> {
             applyButtonPressReleaseEffect(view.clearFavoritesButton, Color.RED);
@@ -380,16 +382,17 @@ public class Controller {
 
     }
 
-    private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode, Node searchToNode) {
+    private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode,
+            Node searchToNode) {
         button.setOnMouseClicked(i -> {
             view.searchFromNode = searchFromNode;
             view.searchToNode = searchToNode;
-            if(view.searchFromNode != null && view.searchToNode != null) {
+            if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.panX, view.position.panY);
-            
+
         });
 
         StackPane stackPane = new StackPane(vBox, button);
