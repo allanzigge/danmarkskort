@@ -21,5 +21,7 @@ public class Building extends Way {
         gc.setFill(colors.get("building"));
         super.draw(gc, colors, determinant);
         gc.fill();
+
+        System.out.println("Hej jeg er en test");
     }
 }
