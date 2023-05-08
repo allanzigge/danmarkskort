@@ -8,14 +8,15 @@ import java.util.List;
 
 public class RTree implements Serializable {
     Boolean isEmpty = true;
-    private int dims = 2; // dimentions
+    private int dims = 2; // dimentions of the R-Tree
     private Node root;
     private int M = 50; //Maximum amount of children pr. Node
-    private int m = (M*40)/100;
-    private float[] nearPoint;
+    private int m = (M*40)/100; // Minimum amount of children pr. Node
+    private float[] nearPoint; // The point that are used as "searchPoint" for nearestNeighborSearch (NNSearch)
 
+    //A new R-tree start with just one Node, the root. Which is initialised with a new Node. 
     public RTree() {
-        root = new Node(true);
+        root = new Node(true); //isLeaf is true, because up untill the first split, the rootNode is a leaf node. (read: a node that contains Entries instead of Nodes as children)
     }
 
     // Helper class used for testing
@@ -26,9 +27,10 @@ public class RTree implements Serializable {
 
 
     // Helper class
+    //This is an R-tree node class, which is used to represent the nodes of the Rtree.
     private class Node implements Serializable {
 
-        private boolean isLeaf;
+        private boolean isLeaf;   // isLeaf tells whether or not the node is at the "bottum" of the rTree. leaf-nodes contains entries (with object) as children, instead of refs to other nodes.
         private List<Node> children;
         private float[] mbr = new float[dims * 2]; // Minimum bound rectangle of either node or object. (minLat, minLon,
                                                    // maxLat,maxLon)
@@ -40,6 +42,7 @@ public class RTree implements Serializable {
             mbrCalculator();
         }
 
+        //Calculates the minimum-bound-rectangle (MBR) of the node. read: the smallest rectangle that can contain all of the nodes children.
         public void mbrCalculator() {
             float[] mbr = new float[dims * 2];
             float minLon = Float.MAX_VALUE;
@@ -69,19 +72,23 @@ public class RTree implements Serializable {
             this.mbr = mbr;
         }
 
+        //Sets parrent node of a node
         public void setParrent(Node node) {
             parrent = node;
         }
 
+        //Adds a Node to the children list of another node.
         public void add(Node entry) {
             children.add(entry);
-            mbrCalculator();
+            mbrCalculator();    //recalculates the MBR after adding the new child.
         }
 
+        //returns size of children list.
         public int size() {
             return children.size();
         }
 
+        //clears children list.
         public void clear() {
             children.clear();
         }
@@ -93,8 +100,8 @@ public class RTree implements Serializable {
             if (!isLeaf) {
                 for (Node node : children) {
                     if (node.isOverlapping(searchField)) {
-                        for (Way object : node.nodeSearcher(searchField)) {
-                            searchResult.add(object);
+                        for (Way object : node.nodeSearcher(searchField)) {  //If the node is not a leaf, call recursively on any child that overlaps the searchField.
+                            searchResult.add(object);   //Add the result of the recursive call to the result list.
                         }
                     }
                 }
@@ -102,7 +109,7 @@ public class RTree implements Serializable {
                 for (Node entry : children) {
                     if (entry.isOverlapping(searchField)) {
                         Entry e = (Entry) entry;
-                        searchResult.add(e.getObject());
+                        searchResult.add(e.getObject());  //if the node is a leaf node, check each entry. If any entry overlaps with the searchfield, add the object of this entry to the result.
                     }
                 }
             }
@@ -110,6 +117,7 @@ public class RTree implements Serializable {
 
         }
 
+        // Helper class made for debuging. Returns the mbr of all leafnodes visited during the search.
         private List<Way> mbrSearcher(float[] searchField) {
             List<Way> searchResult = new ArrayList<Way>();
             if (!isLeaf) {
@@ -134,7 +142,6 @@ public class RTree implements Serializable {
                 });
                 searchResult.add(way);
             }
-
             return searchResult;
         }
 
@@ -164,7 +171,7 @@ public class RTree implements Serializable {
 
         }
 
-        // Calculate how much the noded has to grow to include a new node/object
+        // Calculate how much the mbr of a node has to grow to include a given new node/object
         public float MBRarealDif(Node node) {
             float minLat;
             float minLon;
@@ -234,20 +241,19 @@ public class RTree implements Serializable {
         Entry entry = new Entry(false, way);
         Node leaf = chooseLeaf(entry);
         entry.setParrent(leaf);
-        if (leaf.size() < M) {
+        if (leaf.size() < M) {  // if the amount of chilren in the node is less than M (maximum amount of children), then we just insert.
             leaf.add(entry);
-            adjustTree(leaf);
-        } else {
+            adjustTree(leaf);   //If no split has happened, then the changes is propogated through this adjustTree call. This makes sure that the MBR is updated throughout the tree.
+        } else {        // if the child list of the node if full, then we need to split.
             leaf.add(entry);
-            Node[] splittedNodes = enchantedSplitNode(leaf);
+            Node[] splittedNodes = enchantedSplitNode(leaf);    //The split happens here, with the call to enchantedSplitNode
             splittedNodes[1].isLeaf = true;
-            adjustTreeSplit(splittedNodes);
+            adjustTreeSplit(splittedNodes);     //After the split, the changes is propogated up through the tree with this call to adjustTreeSplit.
         }
     }
 
     // Adujst all node MBR
     private void adjustTree(Node leaf) {
-
         if (root != leaf) {
             leaf.mbrCalculator();
             adjustTree(leaf.parrent);
@@ -272,11 +278,11 @@ public class RTree implements Serializable {
             Node parrent = splittedNodes[0].parrent;
             if (parrent.size() < M) {
                 parrent.add(splittedNodes[1]);
-                adjustTree(parrent);
-            } else {
+                adjustTree(parrent);            // When propogating the changes of a split, if the parentsnode still have room left in its child array then the adjustTree is called to update mbr
+            } else {                         
                 parrent.add(splittedNodes[1]);
-                Node[] newNodes = enchantedSplitNode(parrent);
-                adjustTreeSplit(newNodes);
+                Node[] newNodes = enchantedSplitNode(parrent); //if the parrent childlist is full, then this is now split.
+                adjustTreeSplit(newNodes);      // Again is the changes after the split propogated up throughout the tree.
             }
 
         }

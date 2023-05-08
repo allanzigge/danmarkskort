@@ -13,11 +13,11 @@ public class Way implements Serializable {
     float thickness;
 
     public Way(ArrayList<Node> way) {
-        coords = new float[way.size() * 2];
+        coords = new float[way.size() * 2];         //Creates new float[] with the length of 2* number of nodes.
         for (int i = 0 ; i < way.size() ; ++i) {
             var node = way.get(i);
-            coords[2 * i] = (float)(0.56 * node.lon);
-            coords[2 * i + 1] = -node.lat;
+            coords[2 * i] = (float)(0.56 * node.lon);   //Loads all of the lons in from nodes to everyother field in float[]. 
+            coords[2 * i + 1] = -node.lat;          // Same as above, but with lats. (lon is multiplied by 0.56 to flatten out the curvature of the glove)
 
             if((node.lon) < minLon) {
                 minLon = node.lon;
@@ -25,7 +25,7 @@ public class Way implements Serializable {
             if((node.lon) > maxLon){
                 maxLon = node.lon;
             }
-            if((node.lat < minLat)){
+            if((node.lat < minLat)){    // Here the min and max value of lon and lats are calculated. This is to be used in R-Tree for calculation of MBR.
                 minLat = node.lat;
             } 
             if((node.lat > maxLat)){
@@ -36,6 +36,7 @@ public class Way implements Serializable {
 
     
     //Returns shortest distance from way to a given point. Point is specified in a float[] in order lon lat
+    //This is done by finding the distance between each pair of coordinates in way, and the point.
     public float distanceToPoint(float[] point) {
         float shortestDist = Float.MAX_VALUE;
         for(int i=0 ; i < (coords.length)/2 ; i++) {
@@ -47,6 +48,9 @@ public class Way implements Serializable {
         return shortestDist;
     }
 
+
+    //This method traces the way, but without drawing it. It is the basis for all filling and drawing. 
+    //After this is done, the subclasses can call either stroke() or fill().
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.beginPath();
         gc.moveTo(coords[0], coords[1]);
