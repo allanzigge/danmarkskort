@@ -100,9 +100,6 @@ public class Relation implements Serializable {
             // checks if it went through the whole list without adding to the trace. Should
             // only happen if something went wrong
             if (size == counter) {
-                // listOfNodes.addAll(createWayOuter(outerList));
-                System.out.println(v);
-                System.out.println(lastNode);
                 listOfNodes.clear();
                 outerList.clear();
             }
