@@ -166,11 +166,18 @@ public class View {
         serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
         findRouteImage = layout.getImageView("file:icons/findRoute.png");
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
+        searchMenu.setTooltip(new Tooltip("Find address"));
         favoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        favoritesButton.setTooltip(new Tooltip("Add address to favoritelist"));
+
         findRouteMenu = layout.getButtonIcon(findRouteImage, 20);
+        findRouteMenu.setTooltip(new Tooltip("Find route"));
         favoriteMenu = layout.getButtonIcon(layout.getImageView("file:icons/bookmark.png"), 20);
+        favoriteMenu.setTooltip(new Tooltip("Favoritelist"));
         settingsMenu = layout.getButtonIcon(layout.getImageView("file:icons/settings.png"), 20);
+        settingsMenu.setTooltip(new Tooltip("Settings"));
         clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
+        clearFavoritesButton.setTooltip(new Tooltip("Delete favoritelist"));
 
         searchStackpan = layout.getStackPane(40, 340);
         searchStackpan.getChildren().addAll(searchTextField, searchResultVBox, favoritesButton);
@@ -183,15 +190,19 @@ public class View {
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
         walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
         clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
+        clearFindRouteButton.setTooltip(new Tooltip("Delete search"));
+
 
         findRouteFromTextField = layout.getTextField("Find vej fra");
         findRouteToTextField = layout.getTextField("Find vej til");
         searchResultFromVBox = layout.getSearchResultVbox();
         searchResultToVBox = layout.getSearchResultVbox();
         favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        favoritesButton2.setTooltip(new Tooltip("Add route to favoritelist"));
         routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:icons/description.png"), 20);
         routeDescriptionButton.setTooltip(new Tooltip("Show directions"));
         swapButton = layout.getButtonIcon(layout.getImageView("file:icons/swap.png"), 20);
+        swapButton.setTooltip(new Tooltip("Swap destinations"));
 
         HBox veichleOption = new HBox(carButton, bikeButton, walkButton);
         veichleOption.setSpacing(10);
@@ -225,6 +236,7 @@ public class View {
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
         routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
+        routeDescriptionCloseButton.setTooltip(new Tooltip("Hide routedescription"));
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
         copyButton.setTooltip(new Tooltip("Copy to clipboard"));
         routeDescriptionInstruction = layout.getSearchResultVbox();

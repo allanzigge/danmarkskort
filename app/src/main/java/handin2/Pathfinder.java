@@ -250,7 +250,7 @@ public class Pathfinder implements Serializable {
             
         }         
         //System.out.println("Laengde: " + Math.round(.5 + totalLength*114900));
-        System.out.println(guide);
+       
        travelLength = "Længde: " + Math.round(.5 + totalLength*114900); //Tweaked value a bit to make length estimate a bit more precise
     }
 
