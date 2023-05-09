@@ -166,11 +166,18 @@ public class View {
         serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
         findRouteImage = layout.getImageView("file:icons/findRoute.png");
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
+        searchMenu.setTooltip(new Tooltip("Find address"));
         favoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        favoritesButton.setTooltip(new Tooltip("Add address to favoritelist"));
+
         findRouteMenu = layout.getButtonIcon(findRouteImage, 20);
+        findRouteMenu.setTooltip(new Tooltip("Find route"));
         favoriteMenu = layout.getButtonIcon(layout.getImageView("file:icons/bookmark.png"), 20);
+        favoriteMenu.setTooltip(new Tooltip("Favoritelist"));
         settingsMenu = layout.getButtonIcon(layout.getImageView("file:icons/settings.png"), 20);
+        settingsMenu.setTooltip(new Tooltip("Settings"));
         clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
+        clearFavoritesButton.setTooltip(new Tooltip("Delete favoritelist"));
 
         searchStackpan = layout.getStackPane(40, 340);
         searchStackpan.getChildren().addAll(searchTextField, searchResultVBox, favoritesButton);
@@ -183,15 +190,19 @@ public class View {
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
         walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
         clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
+        clearFindRouteButton.setTooltip(new Tooltip("Delete search"));
+
 
         findRouteFromTextField = layout.getTextField("Find vej fra");
         findRouteToTextField = layout.getTextField("Find vej til");
         searchResultFromVBox = layout.getSearchResultVbox();
         searchResultToVBox = layout.getSearchResultVbox();
         favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        favoritesButton2.setTooltip(new Tooltip("Add route to favoritelist"));
         routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:icons/description.png"), 20);
         routeDescriptionButton.setTooltip(new Tooltip("Show directions"));
         swapButton = layout.getButtonIcon(layout.getImageView("file:icons/swap.png"), 20);
+        swapButton.setTooltip(new Tooltip("Swap destinations"));
 
         HBox veichleOption = new HBox(carButton, bikeButton, walkButton);
         veichleOption.setSpacing(10);
@@ -225,6 +236,7 @@ public class View {
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
         routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
+        routeDescriptionCloseButton.setTooltip(new Tooltip("Hide routedescription"));
         copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
         copyButton.setTooltip(new Tooltip("Copy to clipboard"));
         routeDescriptionInstruction = layout.getSearchResultVbox();
@@ -357,77 +369,68 @@ public class View {
 
     }
 
+    //Draws everything seen on the map.
     void redraw() {
-        long startTimer = System.currentTimeMillis();
+        long startTimer = System.currentTimeMillis();  //Timer for tracking how long time it takes to redraw. Used for debugging features, and to determine runtime smoothness
 
         gc.setTransform(new Affine());
-        // gc.setFill(colors.get("other")); //GAINSBORO
         gc.setFill(colors.get("background")); // GAINSBORO
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setTransform(trans);
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
         float zoom = scalebar.getScale();
 
-        if (!freezeFrame.isSelected()) {
+        if (!freezeFrame.isSelected()) {    //If the freezeframe debugger method is used, then the current canvas is saved.
             position.setCanvas();
         }
 
+        //What to draw is determined by the zoom level. Depending on the zoom level, different rtrees are searched, and the result is drawn.
+
+        //The background land (islands, peninsula, islets osv, is allways drawn)
+        for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
+            way.draw(gc, colors, (float) trans.determinant());
+        }
+
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {    //Naturals
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   //Landuses
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {   //Buildings
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.fithLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-            for (Way way : model.smallRoadRtree.search(position.getCanvas())) {
+            for (Way way : model.smallRoadRtree.search(position.getCanvas())) {     //All roads
                 way.draw(gc, colors, (float) trans.determinant());
 
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
+            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {    //Medium and big roads
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   
                 way.draw(gc, colors, (float) trans.determinant());
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
-        } else {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-
         }
 
-        for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {
+        //And the bigroad r tree is allways drawn ontop    
+        for (Way way : model.bigRoadRTree.search(position.getCanvas())) {   //Only big roads
 
             way.draw(gc, colors, (float) trans.determinant());
         }
 
-        for (Way way : model.bigRoadRTree.search(position.getCanvas())) {
-
-            way.draw(gc, colors, (float) trans.determinant());
-        }
+        //Draws the route, if there is a route
         if (model.route.size() > 0) {  
             if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
             else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
@@ -438,6 +441,7 @@ public class View {
             }
         }
 
+        
         if (freezeFrame.isSelected()) {
             gc.setStroke(Color.RED);
             position.getCanvasOutline().draw(gc, colors, (float) trans.determinant());
