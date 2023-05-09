@@ -34,6 +34,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -352,6 +353,7 @@ public class View {
                                                       // debugging features, and to determine runtime smoothness
 
         gc.setTransform(new Affine());
+        gc.setFillRule(FillRule.EVEN_ODD);
         gc.setFill(colors.get("background")); // GAINSBORO
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setTransform(trans);
