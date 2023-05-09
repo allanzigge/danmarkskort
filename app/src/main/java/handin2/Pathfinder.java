@@ -21,13 +21,15 @@ public class Pathfinder implements Serializable {
     ArrayList<ArrayList<String>> guide;
     String travelTime; 
     String travelLength;
-
+    double travelSpeed;
+    String travelType;                                       //String for cal. traveltime for bike/walk
     // This is our pathfinding implementation, based on the A* [A star] algorithm \\
     
     public Pathfinder(HashMap<Long, Vertex> vertexMap) {
         this.vertexMap = vertexMap; 
         closed = new HashSet<>();   
         guide = new ArrayList<>();
+        travelType = "default"; 
     }
 
     //method for finding path by car - difference is the expected speed 
@@ -94,7 +96,7 @@ public class Pathfinder implements Serializable {
         closed.clear();
         PathNode start = new PathNode(from, null, 0.0, distCalc(from, to));
         open.insert(start);
-        map.put(from, start);
+        map.put(from, start);       
 
         while (open.size() > 0) {
             PathNode next = open.delMin();
@@ -162,7 +164,10 @@ public class Pathfinder implements Serializable {
             thisRoad = edges.get(i);                        //Peeking to the next road 
             totalLength += thisRoad.getCost();              //Calculation total length
                                                             //Calculation of this edge's cost in seconds
-            timeEstimate += (thisRoad.getCost()*111139)/ (thisRoad.getRoad().getSpeed()/3.6);
+            
+            if(!travelType.equals("bike"))
+                travelSpeed = thisRoad.getRoad().getSpeed()/3.6;// In m/s
+            timeEstimate += (thisRoad.getCost()*114500)/ (travelSpeed*0.9);
 
             String thisRoadName = thisRoad.getName();
             String nextRoadName = uniqueRoads.get(uniqueRoads.size()-1).getName();
@@ -241,9 +246,10 @@ public class Pathfinder implements Serializable {
         }
        
         
-       totalLength = (.5 + totalLength*114900)/1000;                // Format to kilometres 
+       totalLength = (.5 + totalLength*114500)/1000;                // Format to kilometres 
        totalLength = Math.round(totalLength * 10) / 10;             // One decimal number
        travelLength = "Laengde: " + totalLength + " km"; //Tweaked value a bit to make length estimate a bit more precise
+       travelType = "default";
     }
 
     public ArrayList<ArrayList<String>> getTextRoute(){
@@ -254,6 +260,15 @@ public class Pathfinder implements Serializable {
         return travelTime;
     }
 
+    public void setType(String type){
+        if(type != null){
+            travelType = type;
+            if(type.equals("bike"))
+            travelSpeed = 4.1;                              // Avg. speed for bike ~15km/t
+        if(type.equals("walk"))
+            travelSpeed = 1.3;                              // Avg. speed for walk ~ 5km/t
+        }
+    }
 
     public double distCalc(Node from, Node to) {
         double dist = (Math.pow(Math.abs(from.getLat() - (to.getLat())), 2.0)

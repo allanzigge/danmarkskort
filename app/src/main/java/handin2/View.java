@@ -477,5 +477,4 @@ public class View {
         pan(dx, dy);
         redraw();
     }
-
 }
