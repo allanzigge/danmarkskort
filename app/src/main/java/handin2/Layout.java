@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -98,7 +97,6 @@ public class Layout {
         StackPane stackPane = new StackPane();
         stackPane.setMaxHeight(height);
         stackPane.setMaxWidth(width);
-        //stackPane.setBackground(new Background(new BackgroundFill(Color.PINK,CornerRadii.EMPTY, Insets.EMPTY)));
         stackPane.setVisible(false);
         stackPane.setMouseTransparent(true);
         stackPane.setAlignment(Pos.TOP_LEFT);

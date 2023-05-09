@@ -2,6 +2,7 @@ package handin2;
 
 import java.util.ArrayList;
 
+//This class models the "path" between two vertices. An edge in graph so to speak.
 public class Edge extends Way {
     private static final long serialVersionUID = 6218782255583747084L;
     Long fromID;

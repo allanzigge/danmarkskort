@@ -221,8 +221,6 @@ public class Pathfinder implements Serializable {
                 /* System.out.println(thisRoadFromLat +" "+ thisRoadFromLon);
                 System.out.println(thisRoadToLat +" "+ thisRoadToLon);
                 System.out.println(nextRoadToLat +" "+ thisRoadToLon + "\n"); */
-
-               
                 
                 String rutevejledning = "Fortsaet " +  (int)Math.round(tempLength*111139)+"m af " + nextRoadName + " og drej derefter til " + retning;
                 tempList.add(rutevejledning);
@@ -241,17 +239,11 @@ public class Pathfinder implements Serializable {
         } else{
             travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
         }
-
-         for(int i = 0; i < guide.size()-1;i++){
        
-            //String rutevejledning = "Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0)))+"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2);
-           // String[] strings = {rutevejledning,retning};
-            //ruteVejledning.add(strings);
-            
-        }         
-        //System.out.println("Laengde: " + Math.round(.5 + totalLength*114900));
-       
-       travelLength = "Længde: " + Math.round(.5 + totalLength*114900); //Tweaked value a bit to make length estimate a bit more precise
+        
+       totalLength = (.5 + totalLength*114900)/1000;                // Format to kilometres 
+       totalLength = Math.round(totalLength * 10) / 10;             // One decimal number
+       travelLength = "Laengde: " + totalLength + " km"; //Tweaked value a bit to make length estimate a bit more precise
     }
 
     public ArrayList<ArrayList<String>> getTextRoute(){
