@@ -45,8 +45,6 @@ public class View {
     TextField toSearch = new TextField("");
     Address TSTadr = null;
     
-
-
     Colorscheme colors;
     Canvas canvas = new Canvas(640, 480);
     double canvasHeighScale = 1;
@@ -181,7 +179,7 @@ public class View {
         StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
         carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
-        carButton.setBackground(new Background(new BackgroundFill(Color.PURPLE, null, null)));
+        carButton.setBackground(new Background(new BackgroundFill(Color.MAGENTA, null, null)));
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
         walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
         clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
@@ -256,7 +254,7 @@ public class View {
             File file2 = fileChooser.showOpenDialog(primaryStage);
             if (file2 != null) {
                 try {
-                    Model model2 = new Model(file2.getPath());
+                    Model model2 = Model.load(file2.getPath());
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
                 } catch (ClassNotFoundException | IOException | XMLStreamException | FactoryConfigurationError e1) {
@@ -271,7 +269,9 @@ public class View {
             MenuItem menuItem = new MenuItem(name);
             menuItem.setOnAction(e -> {
                 try {
-                    var model2 = new Model("data/" + name);
+                    System.out.println(name);
+                    var model2 = Model.load("data/" + name);
+                    System.out.println("data/" + name);
 
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
@@ -411,13 +411,6 @@ public class View {
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
 
         } else {
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
@@ -436,9 +429,9 @@ public class View {
             way.draw(gc, colors, (float) trans.determinant());
         }
         if (model.route.size() > 0) {  
-            if(transportType.equals("walk")) gc.setStroke(Color.LIGHTBLUE);
-            else if (transportType.equals("bike"))  gc.setStroke(Color.PINK);
-            else gc.setStroke(Color.PURPLE);
+            if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
+            else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
+            else gc.setStroke(Color.MAGENTA);
             for (Edge edge : model.route) {
                 edge.draw(gc, colors, (float) trans.determinant());
                 gc.stroke();

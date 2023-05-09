@@ -14,7 +14,6 @@ public class App extends Application {
 
         String filename = "data/fyn.osm.obj";
 
-        // String filename = "data/map.osm";
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);

@@ -292,7 +292,7 @@ public class RTree implements Serializable {
     private Node[] enchantedSplitNode(Node leaf) {
 
         Node[] seeds = linearPickSeed(leaf);
-        Node[] newNodes = new Node[] { leaf, new Node(false) };
+        Node[] newNodes = new Node[] { leaf, new Node(false) }; //Splits to two nodes by creating one additional node. 
         List<Node> listOfEntries = new LinkedList<>(leaf.children);
         leaf.clear();
         newNodes[0].add(seeds[0]);
@@ -301,8 +301,8 @@ public class RTree implements Serializable {
         listOfEntries.remove(seeds[0]);
         listOfEntries.remove(seeds[1]);
 
-        // Fills each node with m amount of children. (minimum amount)
-
+        // Fills each of the two node with m amount of children. (minimum amount)
+        //They fill up with the nodes that require the minimum increase in mbr. 
         for(Node node : newNodes){
             for(int i = 0 ; i < m-1; i++){
                 float minDefAreal = Float.MAX_VALUE;
@@ -319,6 +319,7 @@ public class RTree implements Serializable {
             }
         }
 
+        //When each nodes is filled to the minimum amount, the remaining entries are each given to the nodes that results in the least increase in mbr.
         for (Node entry : listOfEntries) {
             float minDefAreal = Float.MAX_VALUE;
             Node best = null;
@@ -420,6 +421,8 @@ public class RTree implements Serializable {
         return n;
     }
 
+    //This is the initial call to the nearest neighborSearch 
+    //Calls the helper method on the root of the rtree.
     public Way NNSearch(float[] point) {
         this.nearPoint = point;
         return nearestNeighborSearch(root);
@@ -427,6 +430,7 @@ public class RTree implements Serializable {
     }
 
     //Helper class
+    //This is the method that provides the actual functionality of the nearestneighborsearch
     private Way nearestNeighborSearch(Node node) {
         float nearestDist = Float.MAX_VALUE;
         Way nearestWay = null;
@@ -436,16 +440,16 @@ public class RTree implements Serializable {
                 Entry e = (Entry) entry;
                 if(e.getObject().distanceToPoint(nearPoint) < nearestDist) {
                     nearestWay = e.getObject();
-                    nearestDist = e.getObject().distanceToPoint(nearPoint);
+                    nearestDist = e.getObject().distanceToPoint(nearPoint);   // Checks the distance between an object and the searchpoint. if we are in a leaf
                 }
             }
         } else {
             List<Node> abl = new ArrayList<Node>();
-            for(Node child : node.children) {
+            for(Node child : node.children) {   // stores all children in a list (abl), so we can prune and sort.
                 abl.add(child);
             }
-            abl.sort(new AblSort());
-            abl = downWardPrune(abl, nearPoint);
+            abl.sort(new AblSort());    //sorts the abl based on minMaxDist to searchpoint
+            abl = downWardPrune(abl, nearPoint); //if the mindistance of one child is greater than the minmacdist of another, this can be removed. Shortens the recursive call
             for(Node child : abl) {
                 if(nearestNeighborSearch(child).distanceToPoint(nearPoint)<nearestDist) {
                     nearestWay = nearestNeighborSearch(child);
@@ -458,6 +462,7 @@ public class RTree implements Serializable {
         return nearestWay;
     }
 
+    //The implementation of the pruning (removing undesired children.)
     private List<Node> downWardPrune(List<Node> abl, float[] point) {
         float minMinMaxDist = Float.MAX_VALUE;
         List<Node> aux = new ArrayList<>(abl);
@@ -482,6 +487,7 @@ public class RTree implements Serializable {
         }
     }
 
+    //calculates the minimum distance from a mbr to a searchpoint
     private float minDist(float[] point, float[] mbr) {
         float rlat;
         if(point[0] < mbr[0]) {
