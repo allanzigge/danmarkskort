@@ -36,20 +36,20 @@ public class Colorscheme implements Serializable {
 
   public Colorscheme() {
     defaultMode();
-    //Allows for new themes to be added automatically via View
-    //For each theme added below, a new option is added to the GUI
+    // Allows for new themes to be added automatically via View
+    // For each theme added below, a new option is added to the GUI
     this.themes = new ArrayList<>();
     themes.add("Default Mode");
     themes.add("Dark Mode");
     themes.add("Color Blind");
   }
 
-  //Used in View to determine what options to show the user
+  // Used in View to determine what options to show the user
   public ArrayList<String> getThemes() {
     return themes;
   }
 
-  //This method assigns a color for drawing based off of a string
+  // This method assigns a color for drawing based off of a string
   public Color get(String element) {
     switch (element) {
       case "background":
@@ -63,7 +63,7 @@ public class Colorscheme implements Serializable {
     }
   }
 
-  //This method is used in Highway to assign a color based off of the type
+  // This method is used in Highway to assign a color based off of the type
   public Color getHighway(String element) {
     switch (element) {
       case "motorway":
@@ -88,7 +88,7 @@ public class Colorscheme implements Serializable {
     }
   }
 
-  //This method is used in Landuse to assign a color based off of the type
+  // This method is used in Landuse to assign a color based off of the type
   public Color getLanduse(String element) {
     switch (element) {
       case "basin":
@@ -130,7 +130,7 @@ public class Colorscheme implements Serializable {
     }
   }
 
-  //This method is used in Natural to assign a color based off of the type
+  // This method is used in Natural to assign a color based off of the type
   public Color getNatural(String element) {
     switch (element) {
       case "bay":
@@ -186,7 +186,7 @@ public class Colorscheme implements Serializable {
     }
   }
 
-  //This method allows View to change theme based off of user input
+  // This method allows View to change theme based off of user input
   public void setColorscheme(String theme) {
     if (theme.equals("Default Mode")) {
       defaultMode();
@@ -199,7 +199,7 @@ public class Colorscheme implements Serializable {
     }
   }
 
-  //Sets all the colors needed for the default mode
+  // Sets all the colors needed for the default mode
   public void defaultMode() {
 
     building = Color.DARKGRAY;
@@ -223,28 +223,28 @@ public class Colorscheme implements Serializable {
     secondary = Color.LIGHTYELLOW;
   }
 
-  //Sets all the colors needed for the colorblind mode
+  // Sets all the colors needed for the colorblind mode
   private void colorblindMode() {
 
-    water = Color.BLACK;
-    building = Color.DARKGRAY;
-    landuse = Color.rgb(155, 164, 181);
-    meadow = Color.rgb(57, 72, 103);
-    grass = Color.rgb(66, 66, 66);
-    residential = Color.rgb(43, 43, 43);
-    other = Color.rgb(8, 8, 8);
+    water = Color.rgb(139, 171, 241);
+    building = Color.rgb(179, 199, 247);
+    landuse = Color.rgb(245, 118, 0);
+    meadow = Color.rgb(207, 235, 182);
+    grass = Color.rgb(137, 206, 0);
+    residential = Color.rgb(217, 228, 255);
+    other = Color.rgb(252, 201, 181);
 
     highway = Color.WHITE;
-    motorway = Color.WHITE;
-    trunk = Color.WHITE;
-    primary = Color.WHITE;
+    motorway = Color.rgb(141, 210, 221);
+    trunk = Color.rgb(141, 210, 221);
+    primary = Color.rgb(230, 48, 138);
     secondary = Color.WHITE;
 
-    farmland = Color.rgb(146, 154, 171);
-    forest = Color.rgb(146, 154, 171);
+    farmland = Color.rgb(252, 201, 181);
+    forest = Color.rgb(144, 216, 178);
   }
 
-  //Sets all the colors needed for the darkmode mode
+  // Sets all the colors needed for the darkmode mode
   public void darkMode() {
     scrub = Color.rgb(42, 66, 40);
     water = Color.rgb(31, 29, 54);

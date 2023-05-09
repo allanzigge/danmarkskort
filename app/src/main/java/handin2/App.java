@@ -10,7 +10,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String filename = "data/bornholm.osm.zip.obj";
+
+        String filename = "data/bornholm.osm";
+
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);
