@@ -19,7 +19,6 @@ public class Pathfinder implements Serializable {
     double costToNode;
     Double finalCost;
     ArrayList<ArrayList<String>> guide;
-    ArrayList<String[]>ruteVejledning;
     String travelTime; 
     String travelLength;
 
@@ -29,7 +28,6 @@ public class Pathfinder implements Serializable {
         this.vertexMap = vertexMap; 
         closed = new HashSet<>();   
         guide = new ArrayList<>();
-        ruteVejledning = new ArrayList<>();
     }
 
     //method for finding path by car - difference is the expected speed 
@@ -144,12 +142,13 @@ public class Pathfinder implements Serializable {
 
     private void createTextRoute(ArrayList<Edge> edges) {
         guide.clear();
-        ruteVejledning.clear();
+        
         ArrayList<Edge> uniqueRoads = new ArrayList<>();
         ArrayList<String> tempList = new ArrayList<>();
         double tempLength = 0;                              //Used for counting length of each road
         double totalLength = 0;
         float timeEstimate = 0;                             //Time in seconds
+        String retning = new String();
 
         //a, b as we know from 2d lines: y=ax+b  
         //c,d are helping variables
@@ -192,32 +191,29 @@ public class Pathfinder implements Serializable {
                 a = (d)/(c);                                // Gradient of the virtual line of the current road
                 b = (thisRoadToLon) - a * (thisRoadToLat);  // From 2d line: y = ax + b
 
-                tempList.add(String.valueOf(tempLength*111139));    // The length before initiating this turn
-                tempList.add(thisRoadName);    
-
                 if(0 < c && 0 < d){                                 // Line going up and right
                     if( (a * (nextRoadToLat) + b) < nextRoadToLon){
-                        tempList.add("højre");
+                        retning = "højre";
                     } else{
-                        tempList.add("venstre");
+                        retning = "venstre";
                     }   
                 } else if(c < 0 && d < 0){                          // Line going down and left
                     if( (a * (nextRoadToLat) + b) < nextRoadToLon){
-                        tempList.add("venstre");
+                        retning = "venstre";
                     } else{
-                        tempList.add("højre");
+                        retning = "højre";
                     }   
                 } else if(0 < c && d < 0){                          // Line going down and right
                     if( (a * (nextRoadToLat) + b) < nextRoadToLon){
-                        tempList.add("højre");
+                        retning = "højre";
                     } else{
-                        tempList.add("venstre");
+                        retning = "venstre";
                     }   
                 } else if(c < 0 && 0 < d){                          // Line going up and left
                     if( (a * (nextRoadToLat) + b) < nextRoadToLon){
-                        tempList.add("venstre");
+                        retning = "venstre";
                     } else{
-                        tempList.add("højre");
+                        retning = "højre";
                     }   
                 } 
 
@@ -226,11 +222,16 @@ public class Pathfinder implements Serializable {
                 System.out.println(thisRoadToLat +" "+ thisRoadToLon);
                 System.out.println(nextRoadToLat +" "+ thisRoadToLon + "\n"); */
 
-                uniqueRoads.add(thisRoad);                          // Now adding this road to the list of uniqes
-                tempLength = 0;                                     //Reset counter for the next part of the route
+               
+                
+                String rutevejledning = "Fortsaet " +  (int)Math.round(tempLength*111139)+"m af " + nextRoadName + " og drej derefter til " + retning;
+                tempList.add(rutevejledning);
+                tempList.add(retning);
                 
                 guide.add(new ArrayList<>(tempList));               //Deep copying the information stored
                 tempList.clear();
+                uniqueRoads.add(thisRoad);                          // Now adding this road to the list of uniqes
+                tempLength = 0;                                     //Reset counter for the next part of the route
             }
             tempLength += thisRoad.getCost();                       
         }
@@ -241,21 +242,20 @@ public class Pathfinder implements Serializable {
             travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
         }
 
-        /* for(int i = 0; i < guide.size()-1;i++){
+         for(int i = 0; i < guide.size()-1;i++){
        
-            String rutevejledning = "Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0)))+"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2);
-            String retning =  guide.get(i).get(2);
-            String[] strings = {rutevejledning,retning};
-            ruteVejledning.add(strings);
+            //String rutevejledning = "Fortsaet " +  Math.round(Float.parseFloat(guide.get(i).get(0)))+"m af " +guide.get(i).get(1) + " og drej derefter til " + guide.get(i).get(2);
+           // String[] strings = {rutevejledning,retning};
+            //ruteVejledning.add(strings);
             
-        }         */
+        }         
         //System.out.println("Laengde: " + Math.round(.5 + totalLength*114900));
-
+        System.out.println(guide);
        travelLength = "Længde: " + Math.round(.5 + totalLength*114900); //Tweaked value a bit to make length estimate a bit more precise
     }
 
-    public ArrayList<String[]> getTextRoute(){
-        return ruteVejledning;
+    public ArrayList<ArrayList<String>> getTextRoute(){
+        return guide;
     }
 
     public String getTime(){

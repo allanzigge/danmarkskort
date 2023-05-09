@@ -262,5 +262,4 @@ public class Colorscheme implements Serializable {
     primary = Color.LIGHTGOLDENRODYELLOW;
     secondary = Color.LIGHTYELLOW;
   }
-
 }
