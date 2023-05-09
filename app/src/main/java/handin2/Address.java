@@ -45,6 +45,8 @@ public class Address implements Serializable {
         return city;
     }
 
+    //Prints the address in the format addresses are usually written in.
+    //This is done by checking what parts of the address are available and then placing a comma accordingly
     @Override
     public String toString() {
         boolean hasLet = !adrLet.isEmpty();

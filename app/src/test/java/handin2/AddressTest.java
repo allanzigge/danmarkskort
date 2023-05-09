@@ -1,6 +1,5 @@
 package handin2;
 
-import handin2.Address;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

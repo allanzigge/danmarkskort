@@ -11,8 +11,9 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        String filename = "data/bornholm.osm";
-        // String filename = "data/map.osm";
+
+        String filename = "data/fyn.osm.obj";
+
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);

@@ -7,23 +7,26 @@ public class Highway extends Way {
     private static final long serialVersionUID = 6151634051727665976L;
     String roadType;
     boolean isOneWay;
-    boolean isBikeable;
-    boolean isDriveable;
-    String roadName;
+    boolean bikeable;
+    boolean driveable;
+    String roadName = "Unnamed Road";
     int maxSpeed;
     String wayId;
 
     float thickness;
 
-    public Highway(ArrayList<Node> way, boolean isBikeable, Boolean isDriveable, String maxSpeed, String roadName,
+    public Highway(ArrayList<Node> way, String maxSpeed, String roadName,
             String roadType, boolean isOneWay, String wayId) {
         super(way);
         this.isOneWay = isOneWay;
         this.wayId = wayId;
         this.roadType = roadType;
-        this.roadName = roadName;
-        this.isBikeable = true;
-        this.isDriveable = false;
+        if(roadName != null) {
+
+            this.roadName = roadName;
+        }
+        this.bikeable = true;
+        this.driveable = false;
         setProperty();
         try {
             if (maxSpeed != null)
@@ -35,51 +38,50 @@ public class Highway extends Way {
 
     }
 
+    //sets the Highway object's fields needed for pathfinding depending on the OSM tags
     private void setProperty() {
         if (roadType.equals("motorway") || roadType.equals("motorway_link")) {
             this.maxSpeed = 110;
             this.thickness = 4;
-            this.isDriveable = true;
-            this.isBikeable = false;
-        }else if (roadType.equals("trunk") || roadType.equals("trunk_link")) {
+            this.driveable = true;
+            this.bikeable = false;
+        } else if (roadType.equals("trunk") || roadType.equals("trunk_link")) {
             this.maxSpeed = 90;
             this.thickness = 4;
-            this.isDriveable = true;
-            this.isBikeable = false;
+            this.driveable = true;
+            this.bikeable = false;
         }
 
         else if (roadType.equals("primary") || roadType.equals("primary_link")) {
             this.maxSpeed = 80;
             this.thickness = 3f;
-            this.isDriveable = true;
+            this.driveable = true;
 
-        }
-        else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
+        } else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
             this.maxSpeed = 80;
             this.thickness = 2.5f;
-            this.isDriveable = true;
-        }
-        else if (roadType.equals("tertiary") || roadType.equals("tertiary_link"))  {
+            this.driveable = true;
+        } else if (roadType.equals("tertiary") || roadType.equals("tertiary_link")) {
             this.maxSpeed = 80;
             this.thickness = 2f;
-            this.isDriveable = true;
-        }
-        else if (roadType.equals("unclassified")) {
+            this.driveable = true;
+        } else if (roadType.equals("unclassified")) {
             this.maxSpeed = 50;
             this.thickness = 1f;
-            this.isDriveable = true;
-        }
-        else if (roadType.equals("residential")) {
+            this.driveable = true;
+        } else if (roadType.equals("residential")) {
             this.maxSpeed = 50;
             this.thickness = 1f;
-            this.isDriveable = true;
-        }
-        else {
+            this.driveable = true;
+        } else {
             this.maxSpeed = 50;
             this.thickness = 1f;
         }
     }
 
+    //Sets the line width settings depending on the determinant
+    //and draws the highway path with stroke() instead of just making the path
+    //Used in the View redraw() method
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         if (determinant < 2.e9 && determinant > 2.e6) {
@@ -94,7 +96,13 @@ public class Highway extends Way {
         gc.stroke();
     }
 
+    public String getName(){
+        return roadName;
+    }
 
+    public int getSpeed(){
+        return maxSpeed;
+    }
 
     public String getWayId() {
         return wayId;
@@ -102,6 +110,14 @@ public class Highway extends Way {
 
     public boolean isOneWay() {
         return isOneWay;
+    }
+
+    public boolean isDriveable() {
+        return driveable;
+    }
+
+    public boolean isBikeable() {
+        return bikeable;
     }
 
     @Override

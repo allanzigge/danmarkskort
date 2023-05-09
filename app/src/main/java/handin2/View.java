@@ -1,86 +1,50 @@
 package handin2;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.OverlayLayout;
-import javax.swing.plaf.basic.BasicBorders;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
-
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-
-import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
-
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.annotation.RegEx;
-import javax.lang.model.element.Element;
-
-import java.util.regex.Matcher;
-import java.util.regex.MatchResult;
-
-import org.checkerframework.checker.regex.qual.Regex;
-import org.checkerframework.checker.units.qual.s;
-import org.checkerframework.common.value.qual.MatchesRegex;
 
 public class View {
     Layout layout = new Layout();
     TextField fromSearch = new TextField("");
     TextField toSearch = new TextField("");
     Address TSTadr = null;
-
+    
     Colorscheme colors;
     Canvas canvas = new Canvas(640, 480);
     double canvasHeighScale = 1;
@@ -117,6 +81,8 @@ public class View {
     // search elements
     ImageView serachLoopImage;
     ImageView findRouteImage;
+    ImageView turnLeftImage;
+    ImageView turnRightImage;
 
     StackPane searchStackpan;
 
@@ -147,6 +113,7 @@ public class View {
 
     StackPane favoriteStackPane;
     VBox favoritListVBox;
+    HBox routeInfoHBox;
 
     StackPane routeDescriptionStackPane;
     Button routeDescriptionCloseButton;
@@ -164,7 +131,7 @@ public class View {
         colors = new Colorscheme(); // Creates coclorscheme
 
         primaryStage.setTitle("GoKort");
-        primaryStage.getIcons().add(new Image("file:logo.jpg"));
+        primaryStage.getIcons().add(new Image("file:icons/logo.jpg"));
 
         BorderPane mapBoarderPane = new BorderPane();
 
@@ -194,34 +161,37 @@ public class View {
         searchResultVBox = layout.getSearchResultVbox();
         searchTextField = layout.getTextField("Skriv adresse");
 
-        serachLoopImage = layout.getImageView("file:searchLoop.png");
-        findRouteImage = layout.getImageView("file:findRoute.png");
+        turnLeftImage = layout.getImageView("file:icons/turnLeft.png");
+        turnRightImage = layout.getImageView("file:icons/turnRight.png");
+        serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
+        findRouteImage = layout.getImageView("file:icons/findRoute.png");
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
-        favoritesButton = layout.getButtonIcon(layout.getImageView("file:starBlack.png"), 20);
+        favoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
         findRouteMenu = layout.getButtonIcon(findRouteImage, 20);
-        favoriteMenu = layout.getButtonIcon(layout.getImageView("file:bookmark.png"), 20);
-        settingsMenu = layout.getButtonIcon(layout.getImageView("file:settings.png"), 20);
-        clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:clear.png"), 20);
+        favoriteMenu = layout.getButtonIcon(layout.getImageView("file:icons/bookmark.png"), 20);
+        settingsMenu = layout.getButtonIcon(layout.getImageView("file:icons/settings.png"), 20);
+        clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
 
         searchStackpan = layout.getStackPane(40, 340);
         searchStackpan.getChildren().addAll(searchTextField, searchResultVBox, favoritesButton);
-        searchStackpan.setMargin(searchTextField, new Insets(0, 0, 0, 20));
-        searchStackpan.setMargin(searchResultVBox, new Insets(40, 0, 0, 40));
-        searchStackpan.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
+        StackPane.setMargin(searchTextField, new Insets(0, 0, 0, 20));
+        StackPane.setMargin(searchResultVBox, new Insets(40, 0, 0, 40));
+        StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
-        carButton = layout.getButtonIcon(layout.getImageView("file:car.png"), 20);
-        carButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-        bikeButton = layout.getButtonIcon(layout.getImageView("file:bike.png"), 20);
-        walkButton = layout.getButtonIcon(layout.getImageView("file:walk.png"), 20);
-        clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:clear.png"), 20);
+        carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
+        carButton.setBackground(new Background(new BackgroundFill(Color.MAGENTA, null, null)));
+        bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
+        walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
+        clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
 
         findRouteFromTextField = layout.getTextField("Find vej fra");
         findRouteToTextField = layout.getTextField("Find vej til");
         searchResultFromVBox = layout.getSearchResultVbox();
         searchResultToVBox = layout.getSearchResultVbox();
-        favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:starBlack.png"), 20);
-        routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:description.png"), 20);
-        swapButton = layout.getButtonIcon(layout.getImageView("file:swap.png"), 20);
+        favoritesButton2 = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
+        routeDescriptionButton = layout.getButtonIcon(layout.getImageView("file:icons/description.png"), 20);
+        routeDescriptionButton.setTooltip(new Tooltip("Show directions"));
+        swapButton = layout.getButtonIcon(layout.getImageView("file:icons/swap.png"), 20);
 
         HBox veichleOption = new HBox(carButton, bikeButton, walkButton);
         veichleOption.setSpacing(10);
@@ -233,45 +203,40 @@ public class View {
                 searchResultFromVBox, searchResultToVBox, favoritesButton2, swapButton, routeDescriptionButton,
                 clearFindRouteButton);
 
-        findRouteStackPane.setMargin(clearFindRouteButton, new Insets(0, 0, 90, 300));
-        findRouteStackPane.setMargin(favoritesButton2, new Insets(45, 0, 45, 300));
-        findRouteStackPane.setMargin(routeDescriptionButton, new Insets(90, 0, 0, 300));
-        findRouteStackPane.setMargin(findRouteFromTextField, new Insets(0, 0, 0, 20));
-        findRouteStackPane.setMargin(searchResultFromVBox, new Insets(40, 0, 0, 40));
-        findRouteStackPane.setMargin(swapButton, new Insets(45, 0, 0, 0));
+        StackPane.setMargin(clearFindRouteButton, new Insets(0, 0, 90, 300));
+        StackPane.setMargin(favoritesButton2, new Insets(45, 0, 45, 300));
+        StackPane.setMargin(routeDescriptionButton, new Insets(90, 0, 0, 300));
+        StackPane.setMargin(findRouteFromTextField, new Insets(0, 0, 0, 20));
+        StackPane.setMargin(searchResultFromVBox, new Insets(40, 0, 0, 40));
+        StackPane.setMargin(swapButton, new Insets(45, 0, 0, 0));
 
-        findRouteStackPane.setMargin(veichleOption, new Insets(90, 0, 0, 0));
-        findRouteStackPane.setMargin(findRouteToTextField, new Insets(45, 0, 0, 20));
-        findRouteStackPane.setMargin(searchResultToVBox, new Insets(85, 0, 0, 40));
+        StackPane.setMargin(veichleOption, new Insets(90, 0, 0, 0));
+        StackPane.setMargin(findRouteToTextField, new Insets(45, 0, 0, 20));
+        StackPane.setMargin(searchResultToVBox, new Insets(85, 0, 0, 40));
 
         favoriteStackPane = layout.getStackPane(40, 340);
         favoritBackgound = layout.getRegtangle(40, 340);
         favoritListVBox = new VBox();
 
         favoriteStackPane.getChildren().addAll(favoritBackgound, favoritListVBox, clearFavoritesButton);
-        favoriteStackPane.setMargin(favoritListVBox, new Insets(40, 0, 0, 0));
-        favoriteStackPane.setMargin(clearFavoritesButton, new Insets(0, 0, 0, 300));
+        StackPane.setMargin(favoritListVBox, new Insets(40, 0, 0, 0));
+        StackPane.setMargin(clearFavoritesButton, new Insets(0, 0, 0, 300));
 
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
-        Label routeTitle = new Label("RuteVejledning");
-        routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:close.png"), 20);
-        copyButton = layout.getButtonIcon(layout.getImageView("file:copy.png"), 20);
-
+        routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
+        copyButton = layout.getButtonIcon(layout.getImageView("file:icons/copy.png"), 20);
+        copyButton.setTooltip(new Tooltip("Copy to clipboard"));
         routeDescriptionInstruction = layout.getSearchResultVbox();
-        for (int i = 0; i < 100; i++) {
-            Label label = new Label("hej");
-            routeDescriptionInstruction.getChildren().add(label);
-
-        }
-        routeDescriptionScrollpane = layout.getScrollpane(routeDescriptionInstruction);
-
+       
+        
+        routeDescriptionScrollpane = new ScrollPane(routeDescriptionInstruction);
+        routeInfoHBox = new HBox();
         routeDescriptionStackPane = layout.getStackPane(280, 340);
-        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeDescriptionCloseButton, copyButton,
-                routeTitle, routeDescriptionScrollpane);
-        routeDescriptionStackPane.setMargin(routeDescriptionCloseButton, new Insets(0, 0, 0, 300));
-        routeDescriptionStackPane.setMargin(routeTitle, new Insets(10, 0, 0, 40));
-        routeDescriptionStackPane.setMargin(routeDescriptionScrollpane, new Insets(40, 0, 20, 0));
+        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeInfoHBox, routeDescriptionScrollpane,routeDescriptionCloseButton, copyButton);
+        StackPane.setMargin(routeDescriptionCloseButton, new Insets(0, 0, 0, 300));
+        StackPane.setMargin(routeDescriptionScrollpane, new Insets(40, 0, 20, 0));
+        StackPane.setMargin(routeInfoHBox, new Insets(10, 0, 0, 40));
 
         Menu fileMenu = new Menu("File");
         File file = new File("data");
@@ -289,7 +254,7 @@ public class View {
             File file2 = fileChooser.showOpenDialog(primaryStage);
             if (file2 != null) {
                 try {
-                    Model model2 = new Model(file2.getPath());
+                    Model model2 = Model.load(file2.getPath());
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
                 } catch (ClassNotFoundException | IOException | XMLStreamException | FactoryConfigurationError e1) {
@@ -304,7 +269,9 @@ public class View {
             MenuItem menuItem = new MenuItem(name);
             menuItem.setOnAction(e -> {
                 try {
-                    var model2 = new Model("data/" + name);
+                    System.out.println(name);
+                    var model2 = Model.load("data/" + name);
+                    System.out.println("data/" + name);
 
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
@@ -334,7 +301,7 @@ public class View {
 
         settingStackPane = layout.getStackPane(40, 200);
         settingStackPane.getChildren().add(menuBar);
-        settingStackPane.setMargin(menuBar, new Insets(10, 0, 0, 30));
+        StackPane.setMargin(menuBar, new Insets(10, 0, 0, 30));
 
         StackPane stackPane = new StackPane(mapBoarderPane, searchStackpan, settingStackPane, settingsMenu,
                 favoriteStackPane, favoriteMenu, findRouteStackPane, routeDescriptionStackPane, findRouteMenu,
@@ -342,20 +309,20 @@ public class View {
         stackPane.setAlignment(Pos.TOP_LEFT);
         int buttonDistance = 45;
         // top, right, bottom, left
-        stackPane.setMargin(searchMenu, new Insets(10, 0, 0, 10));
-        stackPane.setMargin(searchStackpan, new Insets(10, 0, 0, 10));
+        StackPane.setMargin(searchMenu, new Insets(10, 0, 0, 10));
+        StackPane.setMargin(searchStackpan, new Insets(10, 0, 0, 10));
 
-        stackPane.setMargin(findRouteMenu, new Insets(buttonDistance + 10, 0, 0, 10));
-        stackPane.setMargin(findRouteStackPane, new Insets(buttonDistance + 10, 0, 0, 10));
-        stackPane.setMargin(routeDescriptionStackPane, new Insets(190, 0, 0, 10));
+        StackPane.setMargin(findRouteMenu, new Insets(buttonDistance + 10, 0, 0, 10));
+        StackPane.setMargin(findRouteStackPane, new Insets(buttonDistance + 10, 0, 0, 10));
+        StackPane.setMargin(routeDescriptionStackPane, new Insets(190, 0, 0, 10));
 
-        stackPane.setMargin(favoriteStackPane, new Insets(buttonDistance * 2 + 10, 0, 0, 10));
-        stackPane.setMargin(favoriteMenu, new Insets(buttonDistance * 2 + 10, 0, 0, 10));
+        StackPane.setMargin(favoriteStackPane, new Insets(buttonDistance * 2 + 10, 0, 0, 10));
+        StackPane.setMargin(favoriteMenu, new Insets(buttonDistance * 2 + 10, 0, 0, 10));
 
-        stackPane.setMargin(settingsMenu, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
-        stackPane.setMargin(settingStackPane, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
+        StackPane.setMargin(settingsMenu, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
+        StackPane.setMargin(settingStackPane, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
 
-        stackPane.setAlignment(debuggerOverlay, Pos.BOTTOM_LEFT);
+        StackPane.setAlignment(debuggerOverlay, Pos.BOTTOM_LEFT);
 
         int scalebarLineStart = 5;
         int scalebarLineWidth = (int) (canvas.getHeight() * 0.1) + scalebarLineStart;
@@ -390,13 +357,6 @@ public class View {
 
     }
 
-    private Node mkNodeFromAddress(Address a) {
-        Float lat = a.getLat();
-        Float lon = a.getLon();
-        Node node = new Node(lat, lon, 0);
-        return node;
-    }
-
     void redraw() {
         long startTimer = System.currentTimeMillis();
 
@@ -413,11 +373,9 @@ public class View {
         }
 
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
@@ -432,67 +390,31 @@ public class View {
 
             }
 
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
-
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
-            }
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            gc.setFillRule(FillRule.EVEN_ODD);
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
 
         } else {
-            gc.setFillRule(FillRule.NON_ZERO);
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
-            }
-            gc.setFillRule(FillRule.EVEN_ODD);
-
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
             }
 
         }
@@ -506,8 +428,10 @@ public class View {
 
             way.draw(gc, colors, (float) trans.determinant());
         }
-        if (model.route.size() > 0) {
-            gc.setStroke(Color.PURPLE);
+        if (model.route.size() > 0) {  
+            if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
+            else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
+            else gc.setStroke(Color.MAGENTA);
             for (Edge edge : model.route) {
                 edge.draw(gc, colors, (float) trans.determinant());
                 gc.stroke();
@@ -523,10 +447,8 @@ public class View {
 
         if (searchFromNode != null) {
             double radius = 5 / Math.sqrt(trans.determinant());
-            gc.setFill(Color.RED);
+            gc.setFill(Color.GREEN);
 
-            // gc.fillOval(searchFromNode.getLon()-radius, searchFromNode.getLat()-radius,
-            // radius * 2, radius * 2);
             gc.fillOval(0.56 * searchFromNode.getLon() - radius, -searchFromNode.getLat() - radius, radius * 2,
                     radius * 2);
         }
@@ -544,16 +466,16 @@ public class View {
 
     }
 
-    void pan(float dx, float dy) {
+    void pan(double dx, double dy) {
         trans.prependTranslation(dx, dy);
         redraw();
     }
 
-    void zoom(float dx, float dy, float factor) {
+    void zoom(double dx, double dy, double factor) {
         pan(-dx, -dy);
         trans.prependScale(factor, factor);
         pan(dx, dy);
         redraw();
     }
-    
+
 }

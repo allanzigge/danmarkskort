@@ -11,11 +11,13 @@ public class Building extends Way {
         super(way);
     }
 
-	public Building(ArrayList<Node> way, String v) {
+    public Building(ArrayList<Node> way, String v) {
         super(way);
         this.buildingType = v;
     }
 
+    //The draw method is overwritten so that paths that are buildings get drawn using fill()
+    //Used in the View redraw() method
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.setFill(colors.get("building"));

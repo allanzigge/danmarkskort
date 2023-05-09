@@ -1,7 +1,6 @@
 package handin2;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -64,7 +63,6 @@ public class Model implements Serializable {
 
     // Global attributes
     int counter = 0;
-    List<Line> lines = new ArrayList<Line>();
     TST<Set<Address>> addresses = new TST<Set<Address>>();
 
     float minlat, maxlat, minlon, maxlon;
@@ -76,8 +74,6 @@ public class Model implements Serializable {
     ArrayList<Node> way = new ArrayList<Node>();
     String roadName = null;
     boolean isOneWay = false;
-    boolean isBikeable = true;
-    Boolean isDriveable = false;
     String maxSpeed = null;
     Boolean place = false;
     Boolean building = false;
@@ -124,7 +120,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-            // save(filename + ".obj");
+            save(filename + ".obj");
         }
 
     }
@@ -135,6 +131,9 @@ public class Model implements Serializable {
         }
     }
 
+    // =====================================================================================================================================================
+    // by parsing multible times we ease the load of objects created at once, by
+    // clearing sets, id2node and id2way every time we go throug the parser.
     private void parseZIP(String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
         var time = java.lang.System.currentTimeMillis() / 1000;
         var input = new ZipInputStream(new FileInputStream(filename));
@@ -190,6 +189,9 @@ public class Model implements Serializable {
         System.out.print("s to parse " + filename);
     }
 
+    // =====================================================================================================================================================
+    // by parsing multible times we ease the load of objects created at once, by
+    // clearing sets, id2node and id2way every time we go throug the parser.
     private void parseOSM(String filename) throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
         var time = java.lang.System.currentTimeMillis() / 1000;
         FileInputStream inputStream = new FileInputStream(filename);
@@ -237,6 +239,9 @@ public class Model implements Serializable {
 
     }
 
+    // =====================================================================================================================================================
+    // the first parsing: finds all the wayRefs necerssary to create the relations
+    // we wish to create, based on there member refs.
     private void parseOSMWays(InputStream inputStream)
             throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
         var input = XMLInputFactory.newInstance().createXMLStreamReader(new InputStreamReader(inputStream));
@@ -269,10 +274,48 @@ public class Model implements Serializable {
         }
     }
 
+    // Is only used in parseOSMWays, cause we are only interested in the tags
+    // regarding relations
+    private void reltaionTagParser(XMLStreamReader input) {
+        var k = input.getAttributeValue(null, "k").intern();
+        if (k.equals("building")) {
+            building = true;
+        } else if (k.equals("landuse")) {
+            v = input.getAttributeValue(null, "v");
+            if (landuseParser(v)) {
+                landuse = true;
+            }
+        } else if (k.equals("natural")) {
+            v = input.getAttributeValue(null, "v");
+            if (v.equals("peninsula")) {
+                place = true;
+            } else if (naturalParser(v)) {
+                natural = true;
+            }
+        } else if (k.equals("place")) {
+            v = input.getAttributeValue(null, "v");
+            if (v.equals("islet")) {
+                place = true;
+            } else if (v.equals("island")) {
+                place = true;
+            }
+        } else if (k.equals("addr:street")) {
+            v = input.getAttributeValue(null, "v");
+            street = v;
+        }
+    }
+
+    // Finds the coordinates (bounds) for the map file.
+    private void boundsParser(XMLStreamReader input) {
+        minlat = Float.parseFloat(input.getAttributeValue(null, "minlat"));
+        maxlat = Float.parseFloat(input.getAttributeValue(null, "maxlat"));
+        minlon = Float.parseFloat(input.getAttributeValue(null, "minlon"));
+        maxlon = Float.parseFloat(input.getAttributeValue(null, "maxlon"));
+    }
+
     // fills up a tempoary List of the member references, which, if we are
-    // interested in the realtion that
-    // contains the members, wwill be filled in an appropriate set containing its
-    // references
+    // interested in the realtion that contains the members, wwill be filled in an
+    // appropriate set containing its references
     private void getRefsMembers(XMLStreamReader input) {
         if (input.getAttributeValue(null, "type").equals("way")) {
             if (input.getAttributeValue(null, "role").equals("outer")) {
@@ -329,37 +372,9 @@ public class Model implements Serializable {
         }
     }
 
-    // Is only used in parseOSMWays, cause we are only interested in the tags
-    // regarding relations
-    private void reltaionTagParser(XMLStreamReader input) {
-        var k = input.getAttributeValue(null, "k").intern();
-        if (k.equals("building")) {
-            building = true;
-        } else if (k.equals("landuse")) {
-            v = input.getAttributeValue(null, "v");
-            if (landuseParser(v)) {
-                landuse = true;
-            }
-        } else if (k.equals("natural")) {
-            v = input.getAttributeValue(null, "v");
-            if (v.equals("peninsula")) {
-                place = true;
-            } else if (!(v.equals("coastline"))) {
-                natural = true;
-            }
-        } else if (k.equals("place")) {
-            v = input.getAttributeValue(null, "v");
-            if (v.equals("islet")) {
-                place = true;
-            } else if (v.equals("island")) {
-                place = true;
-            }
-        } else if (k.equals("addr:street")) {
-            v = input.getAttributeValue(null, "v");
-            street = v;
-        }
-    }
-
+    // =====================================================================================================================================================
+    // the second parsing: finds all the nodeRefs necerssary to create the ways
+    // we wish to create, based on memberRefs and booleans from the wayTagParser.
     private void parseOSMNodes(InputStream inputStream)
             throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
         var input = XMLInputFactory.newInstance().createXMLStreamReader(new InputStreamReader(inputStream));
@@ -412,7 +427,7 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             if (v.equals("peninsula")) {
                 place = true;
-            } else if (!(v.equals("coastline"))) {
+            } else if (naturalParser(v)) {
                 natural = true;
             }
         } else if (k.equals("place")) {
@@ -442,14 +457,17 @@ public class Model implements Serializable {
             v = input.getAttributeValue(null, "v");
             city = v;
         }
-
     }
 
+    // adds Nd to ndRefs
     private void getNdRefs(XMLStreamReader input) {
         var ref = Long.parseLong(input.getAttributeValue(null, "ref"));
         ndRefs.add(ref);
     }
 
+    // We add the way refrences to the apropiate sets, if the way ref is in af set,
+    // created under relation/member parsing, and if the wayTagParser has set a
+    // boolean true
     private void getWaysRefs(XMLStreamReader input, String element) {
         if (element.equals("start")) {
             ndRefs.clear();
@@ -514,7 +532,33 @@ public class Model implements Serializable {
         }
     }
 
-    // Parses OSM files, by filter given as sets, utilizing helpermethods.
+    // parses all adresses from the XML document
+    private void addressParser() {
+
+        Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), street, adrNum, adrLet,
+                postcode, city);
+        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase();
+        var value = addresses.get(key);
+
+        if (addresses.get(key) != null) {
+            value.add(adr);
+            addresses.put(key, value);
+        } else {
+            value = new HashSet<>();
+            value.add(adr);
+            addresses.put(key, value);
+        }
+
+        street = "";
+        adrNum = "";
+        adrLet = "";
+        postcode = "";
+        city = "";
+    }
+
+    // =====================================================================================================================================================
+    // The thrid parsing: Parses OSM files, by filter given as sets, utilizing
+    // helpermethods.
     private void parseOSM(InputStream inputStream, Set<Long> nodeRef, Set<String> wayRef, Set<String> relationRef)
             throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
         var input = XMLInputFactory.newInstance().createXMLStreamReader(new InputStreamReader(inputStream));
@@ -584,84 +628,113 @@ public class Model implements Serializable {
         // obejcts, since they now is stored as Ways
         id2node.clear();
         id2way.clear();
-
     }
 
-    private void edgeParser() {
-        for (Highway highway : highways) {
-            Vertex startVertex = null;
-            Vertex endVertex = null;
-            double cost = 0.0;
-            ArrayList<Node> way = new ArrayList<>();
-            Node lastNode = null;
-            for (Node node : id2way.get(highway.getWayId())) {
-                if (startVertex == null) {
-                    if (vertexMap.containsKey(node.getID())) {
-                        startVertex = vertexMap.get(node.getID());
-                        way.add(startVertex);
-                        lastNode = startVertex;
-                    }
-                } else {
-                    if (lastNode != null) {
-                        cost = cost + lastNode.distToVertex(node);
-                    }
-                    way.add(node);
-                    lastNode = node;
-
-                    if (vertexMap.keySet().contains(node.getID())) {
-
-                        endVertex = vertexMap.get(node.getID());
-                        way.add(endVertex);
-                    }
-                }
-                if (endVertex != null && startVertex != null) {
-                    if (!highway.isOneWay) {
-                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
-                                new ArrayList<Node>(way));
-                        startVertex.addNeigbor(startVertexEdge);
-                        Edge endVertexEdge = new Edge(endVertex.nodeID, startVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
-                                new ArrayList<Node>(way));
-                        endVertex.addNeigbor(endVertexEdge);
-                        if (highway.isDriveable) {
-                            edgeTreeCar.insert(endVertexEdge);
-                            edgeTreeCar.insert(startVertexEdge);
-                        }
-                        if (highway.isBikeable) {
-                            edgeTreeBike.insert(endVertexEdge);
-                            edgeTreeBike.insert(startVertexEdge);
-                        }
-
-                        startVertex = endVertex;
-                        endVertex = null;
-                        lastNode = startVertex;
-                        cost = 0.0;
-                        way.clear();
-                        way.add(startVertex);
-                    } else {
-                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
-                                highway.isDriveable, highway.isBikeable, cost,
-                                new ArrayList<Node>(way));
-
-                        startVertex.addNeigbor(startVertexEdge);
-                        if (highway.isDriveable) {
-                            edgeTreeCar.insert(startVertexEdge);
-                        }
-                        if (highway.isBikeable) {
-                            edgeTreeBike.insert(startVertexEdge);
-                        }
-                        startVertex = endVertex;
-                        endVertex = null;
-                        lastNode = startVertex;
-                        cost = 0.0;
-                        way.clear();
-                        way.add(startVertex);
-                    }
-                }
+    // Updates attributes (booleans m.m.) related to parsed ways and relations.
+    private void tagParser(XMLStreamReader input) {
+        var k = input.getAttributeValue(null, "k").intern();
+        if (k.equals("highway")) {
+            v = input.getAttributeValue(null, "v").intern();
+            highway = true;
+        } else if (k.equals("name")) {
+            roadName = input.getAttributeValue(null, "v");
+        } else if (k.equals("oneway")) {
+            if (v.equals("yes")) {
+                isOneWay = true;
+            }
+        } else if (k.equals("junction")) {
+            isOneWay = true;
+        } else if (k.equals("maxspeed")) {
+            maxSpeed = input.getAttributeValue(null, "v");
+        } else if (k.equals("building")) {
+            building = true;
+        } else if (k.equals("landuse")) {
+            v = input.getAttributeValue(null, "v");
+            if (landuseParser(v)) {
+                landuse = true;
+            }
+        } else if (k.equals("natural")) {
+            v = input.getAttributeValue(null, "v");
+            if (v.equals("peninsula")) {
+                place = true;
+            } else if (naturalParser(v)) {
+                natural = true;
+            }
+        } else if (k.equals("place")) {
+            v = input.getAttributeValue(null, "v");
+            if (v.equals("islet")) {
+                place = true;
+            } else if (v.equals("island")) {
+                place = true;
             }
         }
-        System.out.println(vertexMap.get(Long.parseLong("33677811")));
+    }
+
+    // nd is an element containing a ref to a node.
+    // Parses all nd's in a given way, and adds these to way(List<Node>)
+    private void ndParser(XMLStreamReader input) {
+        var ref = Long.parseLong(input.getAttributeValue(null, "ref"));
+        var node = id2node.get(ref);
+        way.add(node);
+    }
+
+    // Parses all nodes from XMLfile and maps these with their id's.
+    private void nodeParser(XMLStreamReader input) {
+        nodeID = Long.parseLong(input.getAttributeValue(null, "id"));
+        var lat = Float.parseFloat(input.getAttributeValue(null, "lat"));
+        var lon = Float.parseFloat(input.getAttributeValue(null, "lon"));
+        id2node.put(nodeID, new Node(lat, lon, nodeID));
+    }
+
+    // Parsing of ways from XMLfile
+    private void wayParser(XMLStreamReader input, String element) {
+
+        // Resets all attributes related to way.
+        if (element.equals("start")) {
+            way.clear();
+            roadName = null;
+            isOneWay = false;
+            maxSpeed = null;
+            place = false;
+            building = false;
+            highway = false;
+            landuse = false;
+            natural = false;
+
+            // Creates ways(object) from the list<Node> and stores these in R-trees
+            // categories
+        } else if (element.equals("end")) {
+            id2way.put(wayId, new ArrayList<Node>(way)); // maps all ways with their ref's. To be used by relations.
+
+            if (building) {
+                fithLayerRTree.insert(new Building(way));
+            } else if (highway) {
+
+                // When we incounter a highway, we want to run it through the vertexParser.
+                Highway highway = new Highway(way, maxSpeed, roadName, v, isOneWay, wayId);
+                if (parsingHighways) {
+                    vertexParser(way);
+                    highways.add(highway);
+                }
+                if (bigRoad(v)) {
+                    bigRoadRTree.insert(highway);
+                    mediumRoadRTree.insert(highway);
+                    smallRoadRtree.insert(highway);
+                } else if (mediumRoad(v)) {
+                    mediumRoadRTree.insert(highway);
+                    smallRoadRtree.insert(highway);
+                } else {
+                    smallRoadRtree.insert(highway);
+                }
+
+            } else if (landuse) {
+                secondLayerRTree.insert(new Landuse(way, v));
+            } else if (natural && !v.equals("coastline")) {
+                thirdLayerRTree.insert(new Natural(way, v));
+            } else if (place) {
+                firstLayerRTree.insert(new Natural(way, "island"));
+            }
+        }
     }
 
     // Checks to see if relations have inner- and outer-lists. If so, updates the
@@ -727,141 +800,10 @@ public class Model implements Serializable {
         }
     }
 
-    // nd is an element containing a ref to a node.
-    // Parses all nd's in a given way, and adds these to way(List<Node>)
-    private void ndParser(XMLStreamReader input) {
-        var ref = Long.parseLong(input.getAttributeValue(null, "ref"));
-        var node = id2node.get(ref);
-        way.add(node);
-    }
+    // =====================================================================================================================================================
+    // road helper methodes
 
-    private void addressParser() {
-
-        Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), street, adrNum, adrLet,
-                postcode, city);
-        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase();
-        var value = addresses.get(key);
-
-        if (addresses.get(key) != null) {
-            value.add(adr);
-            addresses.put(key, value);
-        } else {
-            value = new HashSet<>();
-            value.add(adr);
-            addresses.put(key, value);
-        }
-
-        street = "";
-        adrNum = "";
-        adrLet = "";
-        postcode = "";
-        city = "";
-    }
-
-    // Updates attributes (booleans m.m.) related to parsed ways and relations.
-    private void tagParser(XMLStreamReader input) {
-        var k = input.getAttributeValue(null, "k").intern();
-        if (k.equals("highway")) {
-            v = input.getAttributeValue(null, "v").intern();
-            if (v.equals("cycleway")) {
-                isDriveable = false;
-            } else if (v.equals("motorway")) {
-                isBikeable = false;
-            } else if (v.equals("trunk")) {
-                isBikeable = false;
-            }
-            highway = true;
-        } else if (k.equals("name")) {
-            roadName = input.getAttributeValue(null, "v");
-        } else if (k.equals("oneway")) {
-            if (v.equals("yes")) {
-                isOneWay = true;
-            }
-        } else if (k.equals("junction")) {
-            isOneWay = true;
-        } else if (k.equals("maxspeed")) {
-            maxSpeed = input.getAttributeValue(null, "v");
-        } else if (k.equals("bicycle")) {
-            if (input.getAttributeValue(null, "v").equals("no")) {
-                isBikeable = false;
-            }
-        } else if (k.equals("building")) {
-            building = true;
-        } else if (k.equals("landuse")) {
-            v = input.getAttributeValue(null, "v");
-            if (landuseParser(v)) {
-                landuse = true;
-            }
-        } else if (k.equals("natural")) {
-            v = input.getAttributeValue(null, "v");
-            if (v.equals("peninsula")) {
-                place = true;
-            } else if (!(v.equals("coastline"))) {
-                natural = true;
-            }
-        } else if (k.equals("place")) {
-            v = input.getAttributeValue(null, "v");
-            if (v.equals("islet")) {
-                place = true;
-            } else if (v.equals("island")) {
-                place = true;
-            }
-        }
-    }
-
-    // Parsing of ways from XMLfile
-    private void wayParser(XMLStreamReader input, String element) {
-
-        // Resets all attributes related to way.
-        if (element.equals("start")) {
-            way.clear();
-            roadName = null;
-            isOneWay = false;
-            // isBikeable = true;
-            // isDriveable = true;
-            maxSpeed = null;
-            place = false;
-            building = false;
-            highway = false;
-            landuse = false;
-            natural = false;
-
-            // Creates ways(object) from the list<Node> and stores these in R-trees
-            // categories
-        } else if (element.equals("end")) {
-            id2way.put(wayId, new ArrayList<Node>(way)); // maps all ways with their ref's. To be used by relations.
-
-            if (building) {
-                fithLayerRTree.insert(new Building(way));
-            } else if (highway) {
-
-                // When we incounter a highway, we want to run it through the vertexParser.
-                Highway highway = new Highway(way, isBikeable, isDriveable, maxSpeed, roadName, v, isOneWay, wayId);
-                if (parsingHighways) {
-                    vertexParser(way);
-                    highways.add(highway);
-                }
-                if (bigRoad(v)) {
-                    bigRoadRTree.insert(highway);
-                    mediumRoadRTree.insert(highway);
-                    smallRoadRtree.insert(highway);
-                } else if (mediumRoad(v)) {
-                    mediumRoadRTree.insert(highway);
-                    smallRoadRtree.insert(highway);
-                } else {
-                    smallRoadRtree.insert(highway);
-                }
-
-            } else if (landuse) {
-                secondLayerRTree.insert(new Landuse(way, v));
-            } else if (natural && !v.equals("coastline")) {
-                thirdLayerRTree.insert(new Natural(way, v));
-            } else if (place) {
-                firstLayerRTree.insert(new Natural(way, "island"));
-            }
-        }
-    }
-
+    // helper methode used to determinant the "size" of the road
     private boolean bigRoad(String roadType) {
         if (roadType.equals("motorway") || roadType.equals("motorway_link")) {
             return true;
@@ -874,17 +816,13 @@ public class Model implements Serializable {
         else if (roadType.equals("primary") || roadType.equals("primary_link")) {
             return true;
         }
-        // else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
-        // return true;
-        // }
-        // else if (roadType.equals("tertiary") || roadType.equals("tertiary_link")) {
-        // return true;
-        // }
+
         else {
             return false;
         }
     }
 
+    // helper methode used to determinant the "size" of the road
     private boolean mediumRoad(String roadType) {
         if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
             return true;
@@ -894,6 +832,9 @@ public class Model implements Serializable {
             return false;
         }
     }
+
+    // =====================================================================================================================================================
+    // helper methodes for creating vertices and edges for the A* implementation
 
     // This methode detects how many Vertices there is on a highway, and updates the
     // vertexMap
@@ -926,22 +867,89 @@ public class Model implements Serializable {
         }
     }
 
-    // Parses all nodes from XMLfile and maps these with their id's.
-    private void nodeParser(XMLStreamReader input) {
-        nodeID = Long.parseLong(input.getAttributeValue(null, "id"));
-        var lat = Float.parseFloat(input.getAttributeValue(null, "lat"));
-        var lon = Float.parseFloat(input.getAttributeValue(null, "lon"));
-        id2node.put(nodeID, new Node(lat, lon, nodeID));
+    // runs throug the list of highways, and the vertexMap contains one og it nodes,
+    // makes it af start or end node of a vertex.
+    private void edgeParser() {
+        for (Highway highway : highways) {
+            Vertex startVertex = null;
+            Vertex endVertex = null;
+            double cost = 0.0;
+            ArrayList<Node> way = new ArrayList<>();
+            Node lastNode = null;
+            for (Node node : id2way.get(highway.getWayId())) {
+                if (startVertex == null) {
+                    if (vertexMap.containsKey(node.getID())) {
+                        startVertex = vertexMap.get(node.getID());
+                        way.add(startVertex);
+                        lastNode = startVertex;
+                    }
+                } else {
+                    if (lastNode != null) {
+                        cost = cost + lastNode.distToVertex(node);
+                    }
+                    way.add(node);
+                    lastNode = node;
+
+                    if (vertexMap.keySet().contains(node.getID())) {
+
+                        endVertex = vertexMap.get(node.getID());
+                        way.add(endVertex);
+                    }
+                }
+                if (endVertex != null && startVertex != null) {
+                    if (!highway.isOneWay()) {
+                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
+                                highway.isDriveable(), highway.isBikeable(), cost,
+                                new ArrayList<Node>(way));
+                        startVertex.addNeigbor(startVertexEdge);
+                        Edge endVertexEdge = new Edge(endVertex.nodeID, startVertex.nodeID, highway,
+                                highway.isDriveable(), highway.isBikeable(), cost,
+                                new ArrayList<Node>(way));
+                        endVertex.addNeigbor(endVertexEdge);
+                        if (highway.isDriveable()) {
+                            edgeTreeCar.insert(endVertexEdge);
+                            edgeTreeCar.insert(startVertexEdge);
+                        }
+                        if (highway.isBikeable()) {
+                            edgeTreeBike.insert(endVertexEdge);
+                            edgeTreeBike.insert(startVertexEdge);
+                        }
+
+                        startVertex = endVertex;
+                        endVertex = null;
+                        lastNode = startVertex;
+                        cost = 0.0;
+                        way.clear();
+                        way.add(startVertex);
+                    } else {
+                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
+                                highway.isDriveable(), highway.isBikeable(), cost,
+                                new ArrayList<Node>(way));
+
+                        startVertex.addNeigbor(startVertexEdge);
+                        if (highway.isDriveable()) {
+                            edgeTreeCar.insert(startVertexEdge);
+                        }
+                        if (highway.isBikeable()) {
+                            edgeTreeBike.insert(startVertexEdge);
+                        }
+                        startVertex = endVertex;
+                        endVertex = null;
+                        lastNode = startVertex;
+                        cost = 0.0;
+                        way.clear();
+                        way.add(startVertex);
+                    }
+                }
+            }
+        }
     }
 
-    // Finds the coordinates (bounds) for the map file.
-    private void boundsParser(XMLStreamReader input) {
-        minlat = Float.parseFloat(input.getAttributeValue(null, "minlat"));
-        maxlat = Float.parseFloat(input.getAttributeValue(null, "maxlat"));
-        minlon = Float.parseFloat(input.getAttributeValue(null, "minlon"));
-        maxlon = Float.parseFloat(input.getAttributeValue(null, "maxlon"));
-    }
+    // =====================================================================================================================================================
+    // TagParser helper methodes
 
+    // helper methode used by the tagparseres do determinate the boolean state when
+    // meeting a landuse tag
     private boolean landuseParser(String element) {
         switch (element) {
             case "basin":
@@ -949,8 +957,6 @@ public class Model implements Serializable {
             case "reservoir":
                 return true;
             case "salt_pond":
-                return true;
-            case "port":
                 return true;
             case "aquaculture":
                 return true;
@@ -981,10 +987,32 @@ public class Model implements Serializable {
                 return false;
             case "farmland":
                 return false;
+            case "military":
+                return false;
+            case "port":
+                return false;
 
             default:
                 return false;
         }
     }
 
+    // helper methode used by the tagparseres do determinate the boolean state when
+    // meeting a natural tag
+    private boolean naturalParser(String element) {
+        switch (element) {
+            case "coastline":
+                return false;
+            case "cliff":
+                return false;
+            case "tree_row":
+                return false;
+            case "bay":
+                return false;
+            case "strait":
+                return false;
+            default:
+                return true;
+        }
+    }
 }

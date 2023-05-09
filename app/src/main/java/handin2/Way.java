@@ -13,11 +13,11 @@ public class Way implements Serializable {
     float thickness;
 
     public Way(ArrayList<Node> way) {
-        coords = new float[way.size() * 2];
+        coords = new float[way.size() * 2];         //Creates new float[] with the length of 2* number of nodes.
         for (int i = 0 ; i < way.size() ; ++i) {
             var node = way.get(i);
-            coords[2 * i] = (float)(0.56 * node.lon);
-            coords[2 * i + 1] = -node.lat;
+            coords[2 * i] = (float)(0.56 * node.lon);   //Loads all of the lons in from nodes to everyother field in float[]. 
+            coords[2 * i + 1] = -node.lat;          // Same as above, but with lats. (lon is multiplied by 0.56 to flatten out the curvature of the glove)
 
             if((node.lon) < minLon) {
                 minLon = node.lon;
@@ -25,7 +25,7 @@ public class Way implements Serializable {
             if((node.lon) > maxLon){
                 maxLon = node.lon;
             }
-            if((node.lat < minLat)){
+            if((node.lat < minLat)){    // Here the min and max value of lon and lats are calculated. This is to be used in R-Tree for calculation of MBR.
                 minLat = node.lat;
             } 
             if((node.lat > maxLat)){
@@ -34,26 +34,9 @@ public class Way implements Serializable {
         }
     }
 
-    // public Way trimmedWay(Node from, Node to) {
-    //     boolean insideFrom = false;
-    //     for (int i = 0 ; i < coords.length ; i += 2) {
-    //         if(coords[i] == from.lat && coords[i+1] == from.lon) {
-    //             insideFrom = true;
-    //         }
-    //         if(insideFrom) {
-    //             if(coords[i] == to.lat && coords[i+1] == to.lon) {
-    //                 insideFrom = false;
-    //             }
-    //         }
-    //     }
-
-    //     for(int j = 0; i < coords.length; i++) {
-    //         if(coord)
-    //     }
-
-    // }
-
+    
     //Returns shortest distance from way to a given point. Point is specified in a float[] in order lon lat
+    //This is done by finding the distance between each pair of coordinates in way, and the point.
     public float distanceToPoint(float[] point) {
         float shortestDist = Float.MAX_VALUE;
         for(int i=0 ; i < (coords.length)/2 ; i++) {
@@ -65,22 +48,9 @@ public class Way implements Serializable {
         return shortestDist;
     }
 
-    // public Node nearest(float[] point) {
-    //     for(Node node : model.id2way.get(highway.getWayId())))
-    //     float shortestDist = Float.MAX_VALUE;
-    //     float[] nearest = new float[2];
-    //      for(int i=0 ; i < (coords.length)/2 ; i++) {
-    //         float dist = (float) (Math.pow(Math.abs(point[0]-(-coords[2*i+1])),2.0) + Math.pow(((point[1]*0.56)-(coords[2*i])),2.0));
-    //         if (dist < shortestDist) {
-    //             shortestDist = dist;
-    //             nearest[0] = coords[i];
-    //             nearest[1] = coords[i+1];
-    //         }
-    //     }
-    //     return nearest;
-    // }
 
-
+    //This method traces the way, but without drawing it. It is the basis for all filling and drawing. 
+    //After this is done, the subclasses can call either stroke() or fill().
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.beginPath();
         gc.moveTo(coords[0], coords[1]);
@@ -88,7 +58,6 @@ public class Way implements Serializable {
             gc.lineTo(coords[i], coords[i+1]);
         }
     }
-
 
     @Override
     public boolean equals(Object o) {

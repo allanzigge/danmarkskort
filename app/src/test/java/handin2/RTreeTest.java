@@ -1,11 +1,7 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
-import com.google.common.annotations.VisibleForTesting;
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import org.junit.jupiter.api.BeforeEach;
 import java.util.*;
 
 public class RTreeTest {
@@ -17,7 +13,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -44,7 +40,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -68,7 +64,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -93,7 +89,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -115,7 +111,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -137,7 +133,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -158,7 +154,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -182,7 +178,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -206,7 +202,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -231,7 +227,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -253,7 +249,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -275,7 +271,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);
@@ -296,7 +292,7 @@ public class RTreeTest {
         Node node2 = new Node(54.0f, 16.0f, 2);
         Node node3 = new Node(56.0f, 15.0f, 3);
         Node node4 = new Node(55.0f, 15.0f, 4);
-        ArrayList<Node> list = new ArrayList();
+        ArrayList<Node> list = new ArrayList<>();
         list.add(node1);
         list.add(node2);
         list.add(node3);

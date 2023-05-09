@@ -1,11 +1,7 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
-import com.google.common.annotations.VisibleForTesting;
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import org.junit.jupiter.api.BeforeEach;
 import java.util.*;
 
 
@@ -19,7 +15,7 @@ public class NNSearchTest {
         RTree rtree = new RTree();
         Node node1 = new Node(5.0f,3.0f,1);
         Node node2 = new Node(4.0f,4.0f,2);
-        ArrayList<Node> list1 = new ArrayList();
+        ArrayList<Node> list1 = new ArrayList<>();
         list1.add(node1);
         list1.add(node2);
         Way way1 = new Way(list1);
@@ -27,7 +23,7 @@ public class NNSearchTest {
 
         Node node3 = new Node(12.0f,4.0f,3);
         Node node4 = new Node(4.0f,12.0f,4);
-        ArrayList<Node> list2 = new ArrayList();
+        ArrayList<Node> list2 = new ArrayList<>();
         list2.add(node3);
         list2.add(node4);
         Way way2 = new Way(list2);
@@ -37,7 +33,7 @@ public class NNSearchTest {
         Node node6 = new Node(11.0f,8.0f,6);
         Node node7 = new Node(12.0f,9.0f,7);
         Node node8 = new Node(13.0f,8.0f,8);
-        ArrayList<Node> list3 = new ArrayList();
+        ArrayList<Node> list3 = new ArrayList<>();
         list3.add(node5);
         list3.add(node6);
         list3.add(node7);
@@ -100,14 +96,5 @@ public class NNSearchTest {
 
         float[] searchPoint10 = new float[]{10f,11f};
         assertEquals(way10,rtree.NNSearch(searchPoint10));
-
-        // float[] searchPoint11 = new float[]{100f,5.9f};
-        // assertEquals(way5,rtree.NNSearch(searchPoint11));
-
-        // float[] searchPoint12 = new float[]{1f,7f};
-        // assertEquals(way5,rtree.NNSearch(searchPoint12));
-
-
-        
     }
 }
