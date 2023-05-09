@@ -233,6 +233,8 @@ public class Model implements Serializable {
 
     }
 
+    // finds all the wayRefs necerssary to create the relations we wish to create,
+    // based on there member refs.
     private void parseOSMWays(InputStream inputStream)
             throws FileNotFoundException, XMLStreamException, FactoryConfigurationError {
         var input = XMLInputFactory.newInstance().createXMLStreamReader(new InputStreamReader(inputStream));
@@ -441,11 +443,15 @@ public class Model implements Serializable {
 
     }
 
+    // adds Nd to ndRefs
     private void getNdRefs(XMLStreamReader input) {
         var ref = Long.parseLong(input.getAttributeValue(null, "ref"));
         ndRefs.add(ref);
     }
 
+    // We add the way refrences to the apropiate sets, if the way ref is in af set,
+    // created under relation/member parsing, and if the wayTagParser has set a
+    // boolean true
     private void getWaysRefs(XMLStreamReader input, String element) {
         if (element.equals("start")) {
             ndRefs.clear();
@@ -583,6 +589,8 @@ public class Model implements Serializable {
 
     }
 
+    // runs throug the list of highways, and the vertexMap contains one og it nodes,
+    // makes it af start or end node of a vertex.
     private void edgeParser() {
         for (Highway highway : highways) {
             Vertex startVertex = null;
