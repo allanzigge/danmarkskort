@@ -357,77 +357,68 @@ public class View {
 
     }
 
+    //Draws everything seen on the map.
     void redraw() {
-        long startTimer = System.currentTimeMillis();
+        long startTimer = System.currentTimeMillis();  //Timer for tracking how long time it takes to redraw. Used for debugging features, and to determine runtime smoothness
 
         gc.setTransform(new Affine());
-        // gc.setFill(colors.get("other")); //GAINSBORO
         gc.setFill(colors.get("background")); // GAINSBORO
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setTransform(trans);
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
         float zoom = scalebar.getScale();
 
-        if (!freezeFrame.isSelected()) {
+        if (!freezeFrame.isSelected()) {    //If the freezeframe debugger method is used, then the current canvas is saved.
             position.setCanvas();
         }
 
+        //What to draw is determined by the zoom level. Depending on the zoom level, different rtrees are searched, and the result is drawn.
+
+        //The background land (islands, peninsula, islets osv, is allways drawn)
+        for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
+            way.draw(gc, colors, (float) trans.determinant());
+        }
+
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {    //Naturals
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   //Landuses
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {   //Buildings
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.fithLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-            for (Way way : model.smallRoadRtree.search(position.getCanvas())) {
+            for (Way way : model.smallRoadRtree.search(position.getCanvas())) {     //All roads
                 way.draw(gc, colors, (float) trans.determinant());
 
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 2000) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
+            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {    //Medium and big roads
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   
                 way.draw(gc, colors, (float) trans.determinant());
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
-        } else {
-            for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
-                way.draw(gc, colors, (float) trans.determinant());
-            }
-
         }
 
-        for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {
+        //And the bigroad r tree is allways drawn ontop    
+        for (Way way : model.bigRoadRTree.search(position.getCanvas())) {   //Only big roads
 
             way.draw(gc, colors, (float) trans.determinant());
         }
 
-        for (Way way : model.bigRoadRTree.search(position.getCanvas())) {
-
-            way.draw(gc, colors, (float) trans.determinant());
-        }
+        //Draws the route, if there is a route
         if (model.route.size() > 0) {  
             if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
             else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
@@ -438,6 +429,7 @@ public class View {
             }
         }
 
+        
         if (freezeFrame.isSelected()) {
             gc.setStroke(Color.RED);
             position.getCanvasOutline().draw(gc, colors, (float) trans.determinant());

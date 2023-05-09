@@ -19,17 +19,17 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 public class Model implements Serializable {
+    private static final long serialVersionUID = -957910089775557868L;
     List<Edge> route = new ArrayList<>();
     RTree edgeTreeBike = new RTree();
     RTree edgeTreeCar = new RTree();
-    RTree bigRoadRTree = new RTree();
-    RTree mediumRoadRTree = new RTree();
-    RTree smallRoadRtree = new RTree();
-    RTree firstLayerRTree = new RTree();
-    RTree secondLayerRTree = new RTree();
-    RTree thirdLayerRTree = new RTree();
-    RTree fourthLayerRTree = new RTree();
-    RTree fithLayerRTree = new RTree();
+    RTree bigRoadRTree = new RTree();   //moterway, trunk and primary
+    RTree mediumRoadRTree = new RTree();    //Secundary and tertiary
+    RTree smallRoadRtree = new RTree();     //The remaining of the drivable highways (residential, unclassified, mm.)
+    RTree firstLayerRTree = new RTree();    //Background land ("islands")
+    RTree secondLayerRTree = new RTree();   // Landuses
+    RTree thirdLayerRTree = new RTree();    // Naturals  
+    RTree fourthLayerRTree = new RTree();     //Buildings
     Pathfinder pathfinder;
 
     List<Way> testList = new ArrayList<>();
@@ -707,7 +707,7 @@ public class Model implements Serializable {
             id2way.put(wayId, new ArrayList<Node>(way)); // maps all ways with their ref's. To be used by relations.
 
             if (building) {
-                fithLayerRTree.insert(new Building(way));
+                fourthLayerRTree.insert(new Building(way));
             } else if (highway) {
 
                 // When we incounter a highway, we want to run it through the vertexParser.
@@ -791,7 +791,7 @@ public class Model implements Serializable {
                                 .getRelationTrace(),
                         v));
             } else if (building) {
-                fithLayerRTree.insert(new Building(
+                fourthLayerRTree.insert(new Building(
                         new Relation(new ArrayList<List<Node>>(outerList), new ArrayList<List<Node>>(innerList), v)
                                 .getRelationTrace(),
                         v));

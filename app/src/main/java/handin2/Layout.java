@@ -97,7 +97,6 @@ public class Layout {
         StackPane stackPane = new StackPane();
         stackPane.setMaxHeight(height);
         stackPane.setMaxWidth(width);
-        //stackPane.setBackground(new Background(new BackgroundFill(Color.PINK,CornerRadii.EMPTY, Insets.EMPTY)));
         stackPane.setVisible(false);
         stackPane.setMouseTransparent(true);
         stackPane.setAlignment(Pos.TOP_LEFT);
