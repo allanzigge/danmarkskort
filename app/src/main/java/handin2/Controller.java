@@ -316,11 +316,11 @@ public class Controller {
 
             ClipboardContent clipboardContent = new ClipboardContent();
             ArrayList<String> strings = new ArrayList<>();
-            ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
+            ArrayList<ArrayList<String>> ruteVejledning = model.pathfinder.getTextRoute();
 
 
             for (int i = 0; i < ruteVejledning.size(); i++) {
-                String string = ruteVejledning.get(i)[0];
+                String string = ruteVejledning.get(i).get(0);
                 strings.add(string);
             }
 
@@ -369,7 +369,7 @@ public class Controller {
     private void getRouteDescription(Model model, View view) {
         view.routeDescriptionInstruction.getChildren().clear();
         if(model.pathfinder.getTextRoute().size()>0) {
-            ArrayList<String[]> ruteVejledning = model.pathfinder.getTextRoute();
+            ArrayList<ArrayList<String>> ruteVejledning = model.pathfinder.getTextRoute();
             view.routeInfoHBox.getChildren().clear();
 
             view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelTime));
@@ -379,17 +379,17 @@ public class Controller {
 
             for (int i = 0; i < ruteVejledning.size(); i++) {
 
-                Text text = new Text(ruteVejledning.get(i)[0]);
+                Text text = new Text(ruteVejledning.get(i).get(0));
                 TextFlow textFlow = new TextFlow(text);
                 textFlow.setPrefWidth(300); 
 
                 ImageView imageView = new ImageView();
-                if(ruteVejledning.get(i)[1].equals("venstre")) {
+                 if(ruteVejledning.get(i).get(1).equals("venstre")) {
                     imageView = view.layout.copyImageView(view.turnLeftImage);
                 } 
-                else if (ruteVejledning.get(i)[1].equals("højre")) {
+                else if (ruteVejledning.get(i).get(1).equals("højre")) {
                     imageView = view.layout.copyImageView(view.turnRightImage);
-                }
+                } 
                 HBox hBox = new HBox(textFlow, imageView);
                 view.routeDescriptionInstruction.getChildren().add(hBox);
                 view.routeDescriptionInstruction.setSpacing(10);
