@@ -254,7 +254,7 @@ public class View {
             File file2 = fileChooser.showOpenDialog(primaryStage);
             if (file2 != null) {
                 try {
-                    Model model2 = new Model(file2.getPath());
+                    Model model2 = Model.load(file2.getPath());
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
                 } catch (ClassNotFoundException | IOException | XMLStreamException | FactoryConfigurationError e1) {
