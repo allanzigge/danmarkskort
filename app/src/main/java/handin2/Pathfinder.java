@@ -165,7 +165,7 @@ public class Pathfinder implements Serializable {
             totalLength += thisRoad.getCost();              //Calculation total length
                                                             //Calculation of this edge's cost in seconds
             
-            if(!travelType.equals("bike"))
+            if(!travelType.equals("bike") && !travelType.equals("walk"))
                 travelSpeed = thisRoad.getRoad().getSpeed()/3.6;// In m/s
             timeEstimate += (thisRoad.getCost()*114500)/ (travelSpeed*0.9);
 
@@ -240,15 +240,15 @@ public class Pathfinder implements Serializable {
         }
 
         if(3600 < timeEstimate){                                    //Formating the text description 
-            travelTime = Float.toString( (float) Math.floor(timeEstimate/3600)) + " time(r) " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
+            travelTime = Float.toString( (float) Math.floor(timeEstimate/3600)) + " t " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m";
         } else{
-            travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " minutter";
+            travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m";
         }
        
         
        totalLength = (.5 + totalLength*114500)/1000;                // Format to kilometres 
        totalLength = Math.round(totalLength * 10) / 10;             // One decimal number
-       travelLength = "Laengde: " + totalLength + " km"; //Tweaked value a bit to make length estimate a bit more precise
+       travelLength = "Længde: " + totalLength + " km"; //Tweaked value a bit to make length estimate a bit more precise
        travelType = "default";
     }
 
@@ -267,6 +267,7 @@ public class Pathfinder implements Serializable {
             travelSpeed = 4.1;                              // Avg. speed for bike ~15km/t
         if(type.equals("walk"))
             travelSpeed = 1.3;                              // Avg. speed for walk ~ 5km/t
+        System.out.println("traavaelspeed " + travelSpeed);
         }
     }
 

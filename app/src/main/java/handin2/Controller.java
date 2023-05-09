@@ -268,6 +268,7 @@ public class Controller {
         view.carButton.setOnMouseClicked(e -> {
             veichleTypeSelected(view.carButton, view, Color.MAGENTA);
             view.transportType = "car";
+            model.pathfinder.setType("car");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
@@ -277,6 +278,7 @@ public class Controller {
         view.bikeButton.setOnMouseClicked(e -> {
             veichleTypeSelected(view.bikeButton, view, Color.TOMATO);
             view.transportType = "bike";
+            model.pathfinder.setType("bike");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
@@ -285,6 +287,8 @@ public class Controller {
         });
         view.walkButton.setOnMouseClicked(e -> {
             view.transportType = "walk";
+            model.pathfinder.setType("walk");
+
             veichleTypeSelected(view.walkButton, view, Color.CYAN);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
@@ -296,6 +300,9 @@ public class Controller {
         //hides the other menues when selectig another or the an already selected menu
         view.findRouteMenu.setOnMouseClicked(e -> {
             menuSelected(view.findRouteMenu, view.findRouteStackPane, view, model);
+            view.transportType = "car";
+            model.pathfinder.setType("car");
+
         });
 
         view.favoriteMenu.setOnMouseClicked(e -> {
