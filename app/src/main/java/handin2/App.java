@@ -12,7 +12,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        String filename = "data/fyn.osm.zip";
+        String filename = "data/bornholm.osm.zip.obj";
 
         // String filename = "data/map.osm";
 

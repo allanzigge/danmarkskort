@@ -177,6 +177,7 @@ public class Controller {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX, view.position.panY);
                     findRoute(model, view);
+                    view.redraw();   //Maybe not
                     getRouteDescription(model,view);
                 } else {
                     if(view.searchToNode != null) {
