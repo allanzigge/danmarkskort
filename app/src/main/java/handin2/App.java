@@ -13,7 +13,6 @@ public class App extends Application {
 
         String filename = "data/bornholm.osm";
 
-        // String filename = "data/map.osm";
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);
