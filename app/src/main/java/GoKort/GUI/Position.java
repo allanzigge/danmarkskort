@@ -2,7 +2,6 @@
 package GoKort.GUI;
 
 import java.util.ArrayList;
-
 import GoKort.Model;
 import GoKort.Objects.Node;
 import GoKort.Objects.Way;
@@ -61,38 +60,6 @@ public class Position {
         this.canvasBoarder = new float[4];
     }
 
-    public double getPanY() {
-        return panY;
-    }
-
-    public void setPanY(double panY) {
-        this.panY = panY;
-    }
-
-    public double getPanX() {
-        return panX;
-    }
-
-    public void setPanX(double panX) {
-        this.panX = panX;
-    }
-
-    public double getLatPosition() {
-        return latPosition;
-    }
-
-    public void setLatPosition(double latPosition) {
-        this.latPosition = latPosition;
-    }
-
-    public double getLonPosition() {
-        return lonPosition;
-    }
-
-    public void setLonPosition(double lonPosition) {
-        this.lonPosition = lonPosition;
-    }
-
     // updates the canvas when user expands the size of the window
     public void setnewCanvas(Canvas canvas) {
         this.canvasHeight = canvas.getHeight();
@@ -106,7 +73,7 @@ public class Position {
         setFactor();
     }
 
-    //Calculates the new factor to calculate with after zoom input
+    // Calculates the new factor to calculate with after zoom input
     public void setFactor() {
         this.factor = newScale / startScale;
     }
@@ -183,7 +150,7 @@ public class Position {
     // Used to for calculating the pan when finding an address. Used for both
     // searching, and finding route
     public void findPosition(Node searchFromNode, Node searchToNode) {
-        
+
         Float maxLat = searchFromNode.getLat();
         Float minLat = searchFromNode.getLat();
         Float minLon = searchFromNode.getLon();
@@ -209,7 +176,8 @@ public class Position {
         panPosition(middleLat, middleLon);
     }
 
-    //sets up the canvas for the r-tree and panX and panY are the input for the method pan() in View
+    // sets up the canvas for the r-tree and panX and panY are the input for the
+    // method pan() in View
     private void panPosition(double middleLat, double middleLon) {
         double minLat = canvasBoarder[0];
         double maxLat = canvasBoarder[1];
@@ -228,5 +196,39 @@ public class Position {
         dragged(getPanX(), getPanY());
         setCanvas();
 
+    }
+
+    // Getter and Setter
+
+    public double getPanY() {
+        return panY;
+    }
+
+    public void setPanY(double panY) {
+        this.panY = panY;
+    }
+
+    public double getPanX() {
+        return panX;
+    }
+
+    public void setPanX(double panX) {
+        this.panX = panX;
+    }
+
+    public double getLatPosition() {
+        return latPosition;
+    }
+
+    public void setLatPosition(double latPosition) {
+        this.latPosition = latPosition;
+    }
+
+    public double getLonPosition() {
+        return lonPosition;
+    }
+
+    public void setLonPosition(double lonPosition) {
+        this.lonPosition = lonPosition;
     }
 }

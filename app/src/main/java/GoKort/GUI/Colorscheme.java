@@ -44,87 +44,7 @@ public class Colorscheme implements Serializable {
     themes.add("Color Blind");
   }
 
-  public Color getSecondary() {
-    return secondary;
-}
-
-public void setSecondary(Color secondary) {
-    this.secondary = secondary;
-}
-
-public Color getPrimary() {
-    return primary;
-}
-
-public void setPrimary(Color primary) {
-    this.primary = primary;
-}
-
-public Color getTrunk() {
-    return trunk;
-}
-
-public void setTrunk(Color trunk) {
-    this.trunk = trunk;
-}
-
-public Color getMotorway() {
-    return motorway;
-}
-
-public void setMotorway(Color motorway) {
-    this.motorway = motorway;
-}
-
-public Color getHighway() {
-    return highway;
-}
-
-public void setHighway(Color highway) {
-    this.highway = highway;
-}
-
-public Color getOther() {
-    return other;
-}
-
-public void setOther(Color other) {
-    this.other = other;
-}
-
-public Color getResidential() {
-    return residential;
-}
-
-public void setResidential(Color residential) {
-    this.residential = residential;
-}
-
-public Color getGrass() {
-    return grass;
-}
-
-public void setGrass(Color grass) {
-    this.grass = grass;
-}
-
-public Color getBuilding() {
-    return building;
-}
-
-public void setBuilding(Color building) {
-    this.building = building;
-}
-
-public Color getWater() {
-    return water;
-}
-
-public void setWater(Color water) {
-    this.water = water;
-}
-
-// Used in View to determine what options to show the user
+  // Used in View to determine what options to show the user
   public ArrayList<String> getThemes() {
     return themes;
   }
@@ -343,11 +263,92 @@ public void setWater(Color water) {
     setSecondary(Color.LIGHTYELLOW);
   }
 
-public Object getDefaultLanduse() {
+  // Getter and setter
+  public Object getDefaultLanduse() {
     return defaultLanduse;
-}
+  }
 
-public Object getMeadow() {
+  public Object getMeadow() {
     return meadow;
-}
+  }
+
+  public Color getSecondary() {
+    return secondary;
+  }
+
+  public void setSecondary(Color secondary) {
+    this.secondary = secondary;
+  }
+
+  public Color getPrimary() {
+    return primary;
+  }
+
+  public void setPrimary(Color primary) {
+    this.primary = primary;
+  }
+
+  public Color getTrunk() {
+    return trunk;
+  }
+
+  public void setTrunk(Color trunk) {
+    this.trunk = trunk;
+  }
+
+  public Color getMotorway() {
+    return motorway;
+  }
+
+  public void setMotorway(Color motorway) {
+    this.motorway = motorway;
+  }
+
+  public Color getHighway() {
+    return highway;
+  }
+
+  public void setHighway(Color highway) {
+    this.highway = highway;
+  }
+
+  public Color getOther() {
+    return other;
+  }
+
+  public void setOther(Color other) {
+    this.other = other;
+  }
+
+  public Color getResidential() {
+    return residential;
+  }
+
+  public void setResidential(Color residential) {
+    this.residential = residential;
+  }
+
+  public Color getGrass() {
+    return grass;
+  }
+
+  public void setGrass(Color grass) {
+    this.grass = grass;
+  }
+
+  public Color getBuilding() {
+    return building;
+  }
+
+  public void setBuilding(Color building) {
+    this.building = building;
+  }
+
+  public Color getWater() {
+    return water;
+  }
+
+  public void setWater(Color water) {
+    this.water = water;
+  }
 }

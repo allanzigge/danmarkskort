@@ -35,6 +35,7 @@ import GoKort.Pathfinding.Vertex;
 public class Model implements Serializable {
     private static final long serialVersionUID = -957910089775557868L;
     List<Edge> route = new ArrayList<>();
+    TST<Address> addresses = new TST<Address>();
     RTree edgeTreeBike = new RTree();
     RTree edgeTreeCar = new RTree();
     RTree bigRoadRTree = new RTree(); // moterway, trunk and primary
@@ -77,12 +78,11 @@ public class Model implements Serializable {
 
     // Global attributes
     int counter = 0;
-    TST<Address> addresses = new TST<Address>();
 
     private float minlat;
     private float maxlat;
     private float minlon;
-    float maxlon;
+    private float maxlon;
 
     // Attributes needed for helper-methods
     Map<Long, Node> id2node = new HashMap<Long, Node>();
@@ -119,38 +119,27 @@ public class Model implements Serializable {
     HashMap<Long, Vertex> vertexMap = new HashMap<>(); // The map of all Vertices incountered so far, with id ref to its
                                                        // Node
 
-    static Model load(String filename) throws FileNotFoundException, IOException, ClassNotFoundException,
+    public void load(String filename) throws FileNotFoundException, IOException, ClassNotFoundException,
             XMLStreamException, FactoryConfigurationError {
-        if (filename.endsWith(".obj")) {
-            try (var in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
-                return (Model) in.readObject();
-            }
+        try (var in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+            minlat = (float) in.readObject();
+            maxlat = (float) in.readObject();
+            minlon = (float) in.readObject();
+            maxlon = (float) in.readObject();
+
+            firstLayerRTree = (RTree) in.readObject();
+            addresses = (TST<Address>) in.readObject();
+            edgeTreeBike = (RTree) in.readObject();
+            edgeTreeCar = (RTree) in.readObject();
+            bigRoadRTree = (RTree) in.readObject();
+            mediumRoadRTree = (RTree) in.readObject();
+            smallRoadRtree = (RTree) in.readObject();
+            secondLayerRTree = (RTree) in.readObject();
+            thirdLayerRTree = (RTree) in.readObject();
+            fourthLayerRTree = (RTree) in.readObject();
+            pathfinder = (Pathfinder) in.readObject();
+
         }
-        return new Model(filename);
-    }
-
-    public float getMinlon() {
-        return minlon;
-    }
-
-    public void setMinlon(float minlon) {
-        this.minlon = minlon;
-    }
-
-    public float getMinlat() {
-        return minlat;
-    }
-
-    public void setMinlat(float minlat) {
-        this.minlat = minlat;
-    }
-
-    public float getMaxlat() {
-        return maxlat;
-    }
-
-    public void setMaxlat(float maxlat) {
-        this.maxlat = maxlat;
     }
 
     public Model(String filename)
@@ -159,6 +148,8 @@ public class Model implements Serializable {
             parseZIP(filename);
         } else if (filename.endsWith(".osm")) {
             parseOSM(filename);
+        } else if (filename.endsWith(".obj")) {
+            load(filename);
         }
         if (!filename.endsWith(".obj")) {
             save(filename + ".obj");
@@ -168,7 +159,36 @@ public class Model implements Serializable {
 
     void save(String filename) throws FileNotFoundException, IOException {
         try (var out = new ObjectOutputStream(new FileOutputStream(filename))) {
-            out.writeObject(this);
+            out.writeObject(minlat);
+            out.writeObject(maxlat);
+            out.writeObject(minlon);
+            out.writeObject(maxlon);
+
+            out.writeObject(firstLayerRTree);
+            System.out.println("first layer done");
+            out.writeObject(addresses);
+            System.out.println("address done");
+            out.writeObject(edgeTreeBike);
+            out.reset();
+            System.out.println("edges bike done");
+            out.writeObject(edgeTreeCar);
+            System.out.println("edge car done");
+            out.writeObject(bigRoadRTree);
+            System.out.println("bigroads done");
+            out.writeObject(mediumRoadRTree);
+            System.out.println("medium road done");
+            out.writeObject(smallRoadRtree);
+            System.out.println("small road done");
+            out.writeObject(secondLayerRTree);
+            System.out.println("second layer done");
+            out.reset();
+            out.writeObject(thirdLayerRTree);
+            System.out.println("third layer done");
+            out.writeObject(fourthLayerRTree);
+            System.out.println("fourth layer done");
+            out.writeObject(pathfinder);
+            System.out.println("wiiii");
+            out.close();
         }
     }
 
@@ -975,6 +995,7 @@ public class Model implements Serializable {
                 }
             }
         }
+        highways.clear();
     }
 
     // =====================================================================================================================================================
@@ -1046,5 +1067,36 @@ public class Model implements Serializable {
             default:
                 return true;
         }
+    }
+
+    // =====================================================================================================================================================
+    // Getter and setter
+
+    public float getMinlon() {
+        return minlon;
+    }
+
+    public void setMinlon(float minlon) {
+        this.minlon = minlon;
+    }
+
+    public float getMinlat() {
+        return minlat;
+    }
+
+    public void setMinlat(float minlat) {
+        this.minlat = minlat;
+    }
+
+    public float getMaxlat() {
+        return maxlat;
+    }
+
+    public float getMaxlon() {
+        return maxlon;
+    }
+
+    public void setMaxlat(float maxlat) {
+        this.maxlat = maxlat;
     }
 }

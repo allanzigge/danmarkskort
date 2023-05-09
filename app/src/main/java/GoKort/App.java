@@ -13,7 +13,7 @@ public class App extends Application {
 
         String filename = "data/denmark-latest.osm.zip";
 
-        var model = Model.load(filename);
+        var model = new Model(filename);
         var view = new View(model, primaryStage);
         new Controller(model, view);
 
