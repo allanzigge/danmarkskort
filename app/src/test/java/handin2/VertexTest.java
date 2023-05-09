@@ -1,6 +1,8 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 //this test class was used under the development of Vertices
@@ -20,7 +22,7 @@ public class VertexTest {
             while (nullpointer) {
                 boolean beenCatched = false;
                 try {
-                    model.vertexMap.get(counter).getVertexID();
+                    model.vertexMap.get(counter).getID();
                 } catch (NullPointerException e) {
                     beenCatched = true;
                 }
@@ -30,7 +32,7 @@ public class VertexTest {
                     nullpointer = false;
                 }
             }
-            actualArray[i] = model.vertexMap.get(counter).getVertexID();
+            actualArray[i] = model.vertexMap.get(counter).getID();
             counter++;
         }
 
@@ -57,6 +59,6 @@ public class VertexTest {
     @Test
     void lookAtOneVertexInVertexMap() throws Exception {
         Model model = new Model("data/vertexTest.osm.zip");
-        assertEquals(18L, model.vertexMap.get(18L).getVertexID());
+        assertEquals(18L, model.vertexMap.get(18L).getID());
     }
 }

@@ -2,6 +2,11 @@ package handin2;
 
 import java.util.ArrayList;
 import java.util.Set;
+
+import handin2.Objects.Highway;
+import handin2.Objects.Node;
+import handin2.Pathfinding.Address;
+import handin2.Pathfinding.Edge;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -69,29 +74,29 @@ public class Controller {
 
         view.canvas.setOnMouseMoved(e -> {
             view.position.setPosition(e.getX(), e.getY());
-            view.mousePositionLabel.setText("lat: " + view.position.latPosition + " lon: " + view.position.lonPosition);
+            view.mousePositionLabel.setText("lat: " + view.position.getLatPosition() + " lon: " + view.position.getLonPosition());
 
             //this calculates how far in you need to be zoomed for stuff to be drawn. If the canvas is bigger, the more you need to zoon in. 
             //It finds the the new nearest visible road, by searching the r-Tree with NNSearch. 
             if ((view.scalebar.getScale() * view.canvasHeighScale * view.canvasWidthScale) < 500) {
-                if (!model.smallRoadRtree.isEmpty) {
+                if (!model.smallRoadRtree.getIsEmpty()) {
                     view.nearestRoad.setText(((Highway) model.smallRoadRtree
-                            .NNSearch(new float[] { (float) view.position.latPosition,
-                                    (float) view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.getLatPosition(),
+                                    (float) view.position.getLonPosition() }))
                             .toString());
                 }
             } else if ((view.scalebar.getScale() * view.canvasHeighScale * view.canvasWidthScale) < 5000) {
-                if (!model.mediumRoadRTree.isEmpty) {
+                if (!model.mediumRoadRTree.getIsEmpty()) {
                     view.nearestRoad.setText(((Highway) model.mediumRoadRTree
-                            .NNSearch(new float[] { (float) view.position.latPosition,
-                                    (float) view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.getLatPosition(),
+                                    (float) view.position.getLonPosition() }))
                             .toString());
                 }
             } else {
-                if (!model.bigRoadRTree.isEmpty) {
+                if (!model.bigRoadRTree.getIsEmpty()) {
                     view.nearestRoad.setText(((Highway) model.bigRoadRTree
-                            .NNSearch(new float[] { (float) view.position.latPosition,
-                                    (float) view.position.lonPosition }))
+                            .NNSearch(new float[] { (float) view.position.getLatPosition(),
+                                    (float) view.position.getLonPosition() }))
                             .toString());
                 }
             }
@@ -199,7 +204,7 @@ public class Controller {
 
                 if (view.searchFromNode != null && view.searchToNode != null) {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
-                    view.pan(view.position.panX, view.position.panY);
+                    view.pan(view.position.getPanX(), view.position.getPanY());
                     findRoute(model, view);
                     view.redraw();   //Maybe not
                     getRouteDescription(model,view);
@@ -209,7 +214,7 @@ public class Controller {
                     } else {
                     view.position.findPosition(view.searchFromNode,view.searchToNode);
                     }
-                    view.pan(view.position.panX, view.position.panY);
+                    view.pan(view.position.getPanX(), view.position.getPanY());
                 }
             } 
         });
@@ -379,8 +384,8 @@ public class Controller {
             ArrayList<ArrayList<String>> ruteVejledning = model.pathfinder.getTextRoute();
             view.routeInfoHBox.getChildren().clear();
 
-            view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelTime));
-            view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelLength));
+            view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.getTravelTime()));
+            view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.getTravelLength()));
             view.routeInfoHBox.setSpacing(40);
 
 
@@ -448,7 +453,7 @@ public class Controller {
         }
 
         view.position.findPosition(view.searchFromNode, view.searchToNode);
-        view.pan(view.position.panX, view.position.panY);
+        view.pan(view.position.getPanX(), view.position.getPanY());
 
         if (view.searchFromNode != null && view.searchToNode != null) {
             findRoute(model, view);
@@ -461,18 +466,18 @@ public class Controller {
     private void findRoute(Model model, View view) {
         if (view.transportType.equals("car")) {
             Edge fromEdge = (Edge) model.edgeTreeCar
-                    .NNSearch(new float[] { view.searchFromNode.lat, view.searchFromNode.lon });
+                    .NNSearch(new float[] { view.searchFromNode.getLat(), view.searchFromNode.getLon() });
             Edge toEdge = (Edge) model.edgeTreeCar
-                    .NNSearch(new float[] { view.searchToNode.lat, view.searchToNode.lon });
-            model.route = model.pathfinder.findPathCar(model.vertexMap.get(fromEdge.toID),
-                    model.vertexMap.get(toEdge.toID));
+                    .NNSearch(new float[] { view.searchToNode.getLat(), view.searchToNode.getLon() });
+            model.route = model.pathfinder.findPathCar(model.vertexMap.get(fromEdge.getFromID()),
+                    model.vertexMap.get(toEdge.getToID()));
         } else if (view.transportType.equals("bike") || view.transportType.equals("walk")) {
             Edge fromEdge = (Edge) model.edgeTreeBike
-                    .NNSearch(new float[] { view.searchFromNode.lat, view.searchFromNode.lon });
+                    .NNSearch(new float[] { view.searchFromNode.getLat(), view.searchFromNode.getLon() });
             Edge toEdge = (Edge) model.edgeTreeBike
-                    .NNSearch(new float[] { view.searchToNode.lat, view.searchToNode.lon });
-            model.route = model.pathfinder.findPathBike(model.vertexMap.get(fromEdge.toID),
-                    model.vertexMap.get(toEdge.toID));
+                    .NNSearch(new float[] { view.searchToNode.getLat(), view.searchToNode.getLon() });
+            model.route = model.pathfinder.findPathBike(model.vertexMap.get(fromEdge.getFromID()),
+                    model.vertexMap.get(toEdge.getToID()));
         }
     }
 
@@ -497,7 +502,7 @@ public class Controller {
                 getRouteDescription(model,view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
-            view.pan(view.position.panX, view.position.panY);
+            view.pan(view.position.getPanX(), view.position.getPanY());
 
         });
 

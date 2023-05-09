@@ -1,4 +1,4 @@
-package handin2;
+package handin2.Objects;
 
 import java.io.Serializable;
 

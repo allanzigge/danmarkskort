@@ -1,7 +1,9 @@
-package handin2;
+package handin2.Objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
+
+import handin2.GUI.Colorscheme;
 
 public class Natural extends Way {
     private static final long serialVersionUID = -1469520736476477560L;

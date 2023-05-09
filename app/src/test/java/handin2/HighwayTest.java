@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import handin2.Objects.Highway;
+import handin2.Objects.Node;
+
 public class HighwayTest {
 
     //setProperty() is above the maxspeed! Could effect route finding
@@ -26,8 +29,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "motorway", false, "");
 
-        assertEquals(110, h.maxSpeed);
-        assertEquals(4, h.thickness);
+        assertEquals(110, h.getSpeed());
+        assertEquals(4, h.getThickness());
     }
 
     @Test
@@ -36,8 +39,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "null", "Adelgade", "trunk", false, "");
 
-        assertEquals(90, h.maxSpeed);
-        assertEquals(4, h.thickness);
+        assertEquals(90, h.getSpeed());
+        assertEquals(4, h.getThickness());
     }
 
     @Test
@@ -46,8 +49,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "primary", false, "");
 
-        assertEquals(80, h.maxSpeed);
-        assertEquals(3, h.thickness);
+        assertEquals(80, h.getSpeed());
+        assertEquals(3, h.getThickness());
     }
 
     @Test
@@ -56,8 +59,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "secondary", false, "");
 
-        assertEquals(80, h.maxSpeed);
-        assertEquals (2.5, h.thickness);
+        assertEquals(80, h.getSpeed());
+        assertEquals (2.5, h.getThickness());
     }
 
     @Test
@@ -66,8 +69,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "tertiary", false, "");
 
-        assertEquals(80, h.maxSpeed);
-        assertEquals(2, h.thickness);
+        assertEquals(80, h.getSpeed());
+        assertEquals(2, h.getThickness());
     }
 
     @Test
@@ -76,8 +79,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "unclassified", false, "");
 
-        assertEquals(50, h.maxSpeed);
-        assertEquals(1, h.thickness);
+        assertEquals(50, h.getSpeed());
+        assertEquals(1, h.getThickness());
     }
 
     @Test
@@ -87,8 +90,8 @@ public class HighwayTest {
         Highway h = new Highway(nodes, "", "Adelgade", "residential", false, "");
 
         
-        assertEquals(50, h.maxSpeed);
-        assertEquals(1, h.thickness);
+        assertEquals(50, h.getSpeed());
+        assertEquals(1, h.getThickness());
     }
 
     @Test
@@ -97,8 +100,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "", "Adelgade", "other", false, "");
 
-        assertEquals(50, h.maxSpeed);
-        assertEquals(1f, h.thickness);
+        assertEquals(50, h.getSpeed());
+        assertEquals(1f, h.getThickness());
     }
 
     @Test
@@ -107,8 +110,8 @@ public class HighwayTest {
 
         Highway h = new Highway(nodes, "200", "Adelgade", "other", false, "");
 
-        assertEquals(200, h.maxSpeed);
-        assertEquals(1f, h.thickness);
+        assertEquals(200, h.getSpeed());
+        assertEquals(1f, h.getThickness());
     }
 
 }

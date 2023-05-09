@@ -1,6 +1,11 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
+
+import handin2.DataStructures.RTree;
+import handin2.Objects.Node;
+import handin2.Objects.Way;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 

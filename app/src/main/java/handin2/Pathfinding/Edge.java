@@ -1,6 +1,10 @@
-package handin2;
+package handin2.Pathfinding;
 
 import java.util.ArrayList;
+
+import handin2.Objects.Highway;
+import handin2.Objects.Node;
+import handin2.Objects.Way;
 
 //This class models the "path" between two vertices. An edge in graph so to speak.
 public class Edge extends Way {

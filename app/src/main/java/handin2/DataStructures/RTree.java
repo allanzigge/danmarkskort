@@ -1,4 +1,4 @@
-package handin2;
+package handin2.DataStructures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,8 +6,10 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import handin2.Objects.Way;
+
 public class RTree implements Serializable {
-    Boolean isEmpty = true;
+    private Boolean isEmpty = true;
     private int dims = 2; // dimentions of the R-Tree
     private Node root;
     private int M = 50; //Maximum amount of children pr. Node
@@ -17,6 +19,14 @@ public class RTree implements Serializable {
     //A new R-tree start with just one Node, the root. Which is initialised with a new Node. 
     public RTree() {
         root = new Node(true); //isLeaf is true, because up untill the first split, the rootNode is a leaf node. (read: a node that contains Entries instead of Nodes as children)
+    }
+
+    public Boolean getIsEmpty() {
+        return isEmpty;
+    }
+
+    public void setIsEmpty(Boolean isEmpty) {
+        this.isEmpty = isEmpty;
     }
 
     // Helper class used for testing
@@ -133,11 +143,11 @@ public class RTree implements Serializable {
                 // Creates a way based on the MBR of the leafNode.
                 Way way = new Way(new ArrayList<>() {
                     {
-                        add(new handin2.Node(mbr[0], mbr[1], 1));
-                        add(new handin2.Node(mbr[2], mbr[1], 1));
-                        add(new handin2.Node(mbr[2], mbr[3], 1));
-                        add(new handin2.Node(mbr[0], mbr[3], 1));
-                        add(new handin2.Node(mbr[0], mbr[1], 1));
+                        add(new handin2.Objects.Node(mbr[0], mbr[1], 1));
+                        add(new handin2.Objects.Node(mbr[2], mbr[1], 1));
+                        add(new handin2.Objects.Node(mbr[2], mbr[3], 1));
+                        add(new handin2.Objects.Node(mbr[0], mbr[3], 1));
+                        add(new handin2.Objects.Node(mbr[0], mbr[1], 1));
                     }
                 });
                 searchResult.add(way);
@@ -237,7 +247,7 @@ public class RTree implements Serializable {
 
     // Metode for inserting an Object to the tree
     public void insert(Way way) {
-        isEmpty = false;
+        setIsEmpty(false);
         Entry entry = new Entry(false, way);
         Node leaf = chooseLeaf(entry);
         entry.setParrent(leaf);

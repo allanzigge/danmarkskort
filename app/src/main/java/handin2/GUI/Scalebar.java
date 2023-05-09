@@ -1,4 +1,4 @@
-package handin2;
+package handin2.GUI;
 
 public class Scalebar {
     //the amount of meters on the scalebar in meters
@@ -8,7 +8,7 @@ public class Scalebar {
     float minZoomlevel = 5;
     float maxZoomlevel = 100000;
 
-    Scalebar(float totalLat, float canvasHeight, float scaleBarsize) {
+    public Scalebar(float totalLat, float canvasHeight, float scaleBarsize) {
         int latInMeters = 111000;
         this.scale = (totalLat*latInMeters)/canvasHeight*scaleBarsize;
     }

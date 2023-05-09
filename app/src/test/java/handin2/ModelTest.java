@@ -2,6 +2,9 @@ package handin2;
 
 import org.junit.jupiter.api.Test;
 
+
+import handin2.Objects.Node;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -12,10 +15,10 @@ public class ModelTest {
     @Test
     public void testParseOSM() throws Exception {
         Model model = new Model(filename);
-        assertEquals(1.0, model.maxlat, 0.0);
-        assertEquals(0.0, model.minlat, 0.0);
+        assertEquals(1.0, model.getMaxlat(), 0.0);
+        assertEquals(0.0, model.getMinlat(), 0.0);
         assertEquals(1.0, model.maxlon, 0.0);
-        assertEquals(0.0, model.minlon, 0.0);
+        assertEquals(0.0, model.getMinlon(), 0.0);
         //assertEquals(1, model.ways.size());
         // assertEquals(0, model.landuseRelations.size());
         // assertEquals(0, model.natRelations.size());

@@ -2,6 +2,10 @@ package handin2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
+import handin2.DataStructures.TST;
+import handin2.Pathfinding.Address;
+
 import org.junit.jupiter.api.BeforeAll;
 
 public class TSTTest {

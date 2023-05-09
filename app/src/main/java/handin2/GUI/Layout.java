@@ -1,5 +1,6 @@
-package handin2;
+package handin2.GUI;
 
+import handin2.Pathfinding.Address;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

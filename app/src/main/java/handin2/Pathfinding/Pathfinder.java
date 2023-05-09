@@ -1,10 +1,14 @@
-package handin2;
+package handin2.Pathfinding;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import handin2.DataStructures.MinPQ;
+import handin2.DataStructures.RTree;
+import handin2.Objects.Node;
 
 public class Pathfinder implements Serializable {
     private static final long serialVersionUID = 2463027208108695228L;
@@ -19,8 +23,8 @@ public class Pathfinder implements Serializable {
     double costToNode;
     Double finalCost;
     ArrayList<ArrayList<String>> guide;
-    String travelTime; 
-    String travelLength;
+    private String travelTime; 
+    private String travelLength;
     double travelSpeed;
     String travelType;                                       //String for cal. traveltime for bike/walk
     // This is our pathfinding implementation, based on the A* [A star] algorithm \\
@@ -30,6 +34,22 @@ public class Pathfinder implements Serializable {
         closed = new HashSet<>();   
         guide = new ArrayList<>();
         travelType = "default"; 
+    }
+
+    public String getTravelLength() {
+        return travelLength;
+    }
+
+    public void setTravelLength(String travelLength) {
+        this.travelLength = travelLength;
+    }
+
+    public String getTravelTime() {
+        return travelTime;
+    }
+
+    public void setTravelTime(String travelTime) {
+        this.travelTime = travelTime;
     }
 
     //method for finding path by car - difference is the expected speed 
@@ -45,7 +65,7 @@ public class Pathfinder implements Serializable {
             PathNode next = open.delMin();                  //Explode the neighbors for the cheapest option so far
             closed.add(next.originalNode);
 
-            if (next.originalNode.nodeID == to.nodeID) {    //If this is the goal:
+            if (next.originalNode.getID() == to.getID()) {    //If this is the goal:
                 ArrayList<Node> path = new ArrayList<>();
                 ArrayList<Edge> edges = new ArrayList<>();
                 PathNode current = next;
@@ -69,7 +89,7 @@ public class Pathfinder implements Serializable {
                                 nextNode = new PathNode(vertexMap.get(edge.toID)); // Else create a new one
                             }
                                                             //Calculate the cost to get from the current node to the next
-                            double newCost = next.costToNode + (edge.cost / edge.road.maxSpeed); //Notice the speed limit affects the cost
+                            double newCost = next.costToNode + (edge.cost / edge.road.getSpeed()); //Notice the speed limit affects the cost
                             map.put(vertexMap.get(edge.toID), nextNode);    //Save this node
 
                             if (newCost < nextNode.costToNode) {    //IF the calculated cost is cheaper than the already known path
@@ -102,7 +122,7 @@ public class Pathfinder implements Serializable {
             PathNode next = open.delMin();
             closed.add(next.originalNode);
 
-            if (next.originalNode.nodeID == to.nodeID) {
+            if (next.originalNode.getID() == to.getID()) {
                 ArrayList<Node> path = new ArrayList<>();
                 ArrayList<Edge> edges = new ArrayList<>();
                 PathNode current = next;
@@ -240,15 +260,15 @@ public class Pathfinder implements Serializable {
         }
 
         if(3600 < timeEstimate){                                    //Formating the text description 
-            travelTime = Float.toString( (float) Math.floor(timeEstimate/3600)) + " t " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m";
+            setTravelTime(Float.toString( (float) Math.floor(timeEstimate/3600)) + " t " + Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m");
         } else{
-            travelTime = Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m";
+            setTravelTime(Float.toString((float) Math.ceil((timeEstimate%3600)/60)) + " m");
         }
        
         
        totalLength = (.5 + totalLength*114500)/1000;                // Format to kilometres 
        totalLength = Math.round(totalLength * 10) / 10;             // One decimal number
-       travelLength = "Længde: " + totalLength + " km"; //Tweaked value a bit to make length estimate a bit more precise
+       setTravelLength("Længde: " + totalLength + " km"); //Tweaked value a bit to make length estimate a bit more precise
        travelType = "default";
     }
 
@@ -257,7 +277,7 @@ public class Pathfinder implements Serializable {
     }
 
     public String getTime(){
-        return travelTime;
+        return getTravelTime();
     }
 
     public void setType(String type){
@@ -267,25 +287,24 @@ public class Pathfinder implements Serializable {
             travelSpeed = 4.1;                              // Avg. speed for bike ~15km/t
         if(type.equals("walk"))
             travelSpeed = 1.3;                              // Avg. speed for walk ~ 5km/t
-        System.out.println("traavaelspeed " + travelSpeed);
         }
     }
 
     public double distCalc(Node from, Node to) {
         double dist = (Math.pow(Math.abs(from.getLat() - (to.getLat())), 2.0)
-                + Math.pow(Math.abs((from.lon - to.lon) * 0.56), 2.0));
+                + Math.pow(Math.abs((from.getLon() - to.getLon()) * 0.56), 2.0));
         return Math.sqrt(dist);
     }
 
     public double distCalc(PathNode from, PathNode to) {
-        double dist = (Math.pow(Math.abs(from.originalNode.lat - (to.originalNode.lat)), 2.0)
-                + Math.pow(Math.abs((from.originalNode.lon - to.originalNode.lon) * 0.56), 2.0));
+        double dist = (Math.pow(Math.abs(from.originalNode.getLat() - (to.originalNode.getLat())), 2.0)
+                + Math.pow(Math.abs((from.originalNode.getLon() - to.originalNode.getLon()) * 0.56), 2.0));
         return Math.sqrt(dist);
     }
 
     public double distCalc(PathNode from, Node to) {
-        double dist = (Math.pow(Math.abs(from.originalNode.lat - (to.lat)), 2.0)
-                + Math.pow(Math.abs((from.originalNode.lon - to.lon) * 0.56), 2.0));
+        double dist = (Math.pow(Math.abs(from.originalNode.getLat() - (to.getLat())), 2.0)
+                + Math.pow(Math.abs((from.originalNode.getLon() - to.getLon()) * 0.56), 2.0));
         return Math.sqrt(dist);
     }
 

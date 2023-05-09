@@ -18,6 +18,20 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import handin2.DataStructures.RTree;
+import handin2.DataStructures.TST;
+import handin2.Objects.Building;
+import handin2.Objects.Highway;
+import handin2.Objects.Landuse;
+import handin2.Objects.Natural;
+import handin2.Objects.Node;
+import handin2.Objects.Relation;
+import handin2.Objects.Way;
+import handin2.Pathfinding.Address;
+import handin2.Pathfinding.Edge;
+import handin2.Pathfinding.Pathfinder;
+import handin2.Pathfinding.Vertex;
+
 public class Model implements Serializable {
     private static final long serialVersionUID = -957910089775557868L;
     List<Edge> route = new ArrayList<>();
@@ -65,7 +79,10 @@ public class Model implements Serializable {
     int counter = 0;
     TST<Set<Address>> addresses = new TST<Set<Address>>();
 
-    float minlat, maxlat, minlon, maxlon;
+    private float minlat;
+    private float maxlat;
+    private float minlon;
+    float maxlon;
 
     // Attributes needed for helper-methods
     Map<Long, Node> id2node = new HashMap<Long, Node>();
@@ -110,6 +127,30 @@ public class Model implements Serializable {
             }
         }
         return new Model(filename);
+    }
+
+    public float getMinlon() {
+        return minlon;
+    }
+
+    public void setMinlon(float minlon) {
+        this.minlon = minlon;
+    }
+
+    public float getMinlat() {
+        return minlat;
+    }
+
+    public void setMinlat(float minlat) {
+        this.minlat = minlat;
+    }
+
+    public float getMaxlat() {
+        return maxlat;
+    }
+
+    public void setMaxlat(float maxlat) {
+        this.maxlat = maxlat;
     }
 
     public Model(String filename)
@@ -307,9 +348,9 @@ public class Model implements Serializable {
 
     // Finds the coordinates (bounds) for the map file.
     private void boundsParser(XMLStreamReader input) {
-        minlat = Float.parseFloat(input.getAttributeValue(null, "minlat"));
-        maxlat = Float.parseFloat(input.getAttributeValue(null, "maxlat"));
-        minlon = Float.parseFloat(input.getAttributeValue(null, "minlon"));
+        setMinlat(Float.parseFloat(input.getAttributeValue(null, "minlat")));
+        setMaxlat(Float.parseFloat(input.getAttributeValue(null, "maxlat")));
+        setMinlon(Float.parseFloat(input.getAttributeValue(null, "minlon")));
         maxlon = Float.parseFloat(input.getAttributeValue(null, "maxlon"));
     }
 
@@ -898,11 +939,11 @@ public class Model implements Serializable {
                 }
                 if (endVertex != null && startVertex != null) {
                     if (!highway.isOneWay()) {
-                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
+                        Edge startVertexEdge = new Edge(startVertex.getID(), endVertex.getID(), highway,
                                 highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
                         startVertex.addNeigbor(startVertexEdge);
-                        Edge endVertexEdge = new Edge(endVertex.nodeID, startVertex.nodeID, highway,
+                        Edge endVertexEdge = new Edge(endVertex.getID(), startVertex.getID(), highway,
                                 highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
                         endVertex.addNeigbor(endVertexEdge);
@@ -922,7 +963,7 @@ public class Model implements Serializable {
                         way.clear();
                         way.add(startVertex);
                     } else {
-                        Edge startVertexEdge = new Edge(startVertex.nodeID, endVertex.nodeID, highway,
+                        Edge startVertexEdge = new Edge(startVertex.getID(), endVertex.getID(), highway,
                                 highway.isDriveable(), highway.isBikeable(), cost,
                                 new ArrayList<Node>(way));
 

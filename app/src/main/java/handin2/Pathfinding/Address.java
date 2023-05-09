@@ -1,4 +1,4 @@
-package handin2;
+package handin2.Pathfinding;
 
 import java.io.Serializable;
 

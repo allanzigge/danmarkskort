@@ -1,7 +1,9 @@
-package handin2;
+package handin2.Objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
+
+import handin2.GUI.Colorscheme;
 
 public class Highway extends Way {
     private static final long serialVersionUID = 6151634051727665976L;
@@ -13,7 +15,7 @@ public class Highway extends Way {
     int maxSpeed;
     String wayId;
 
-    float thickness;
+    private float thickness;
 
     public Highway(ArrayList<Node> way, String maxSpeed, String roadName,
             String roadType, boolean isOneWay, String wayId) {
@@ -38,44 +40,52 @@ public class Highway extends Way {
 
     }
 
+    public float getThickness() {
+        return thickness;
+    }
+
+    public void setThickness(float thickness) {
+        this.thickness = thickness;
+    }
+
     //sets the Highway object's fields needed for pathfinding depending on the OSM tags
     private void setProperty() {
         if (roadType.equals("motorway") || roadType.equals("motorway_link")) {
             this.maxSpeed = 110;
-            this.thickness = 4;
+            this.setThickness(4);
             this.driveable = true;
             this.bikeable = false;
         } else if (roadType.equals("trunk") || roadType.equals("trunk_link")) {
             this.maxSpeed = 90;
-            this.thickness = 4;
+            this.setThickness(4);
             this.driveable = true;
             this.bikeable = false;
         }
 
         else if (roadType.equals("primary") || roadType.equals("primary_link")) {
             this.maxSpeed = 80;
-            this.thickness = 3f;
+            this.setThickness(3f);
             this.driveable = true;
 
         } else if (roadType.equals("secondary") || roadType.equals("secondary_link")) {
             this.maxSpeed = 80;
-            this.thickness = 2.5f;
+            this.setThickness(2.5f);
             this.driveable = true;
         } else if (roadType.equals("tertiary") || roadType.equals("tertiary_link")) {
             this.maxSpeed = 80;
-            this.thickness = 2f;
+            this.setThickness(2f);
             this.driveable = true;
         } else if (roadType.equals("unclassified")) {
             this.maxSpeed = 50;
-            this.thickness = 1f;
+            this.setThickness(1f);
             this.driveable = true;
         } else if (roadType.equals("residential")) {
             this.maxSpeed = 50;
-            this.thickness = 1f;
+            this.setThickness(1f);
             this.driveable = true;
         } else {
             this.maxSpeed = 50;
-            this.thickness = 1f;
+            this.setThickness(1f);
         }
     }
 
@@ -85,11 +95,11 @@ public class Highway extends Way {
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         if (determinant < 2.e9 && determinant > 2.e6) {
-            gc.setLineWidth(thickness / Math.sqrt(determinant));
+            gc.setLineWidth(getThickness() / Math.sqrt(determinant));
         } else if (determinant > 2.e9)
-            gc.setLineWidth(thickness / Math.sqrt(2.e9));
+            gc.setLineWidth(getThickness() / Math.sqrt(2.e9));
         else {
-            gc.setLineWidth(thickness / Math.sqrt(2.e6));
+            gc.setLineWidth(getThickness() / Math.sqrt(2.e6));
         }
         gc.setStroke(colors.getHighway(roadType));
         super.draw(gc, colors, determinant);

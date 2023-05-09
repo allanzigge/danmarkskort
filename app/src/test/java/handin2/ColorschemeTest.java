@@ -8,6 +8,8 @@ import javafx.scene.paint.Color;
 
 import org.junit.jupiter.api.Test;
 
+import handin2.GUI.Colorscheme;
+
 public class ColorschemeTest {
 
     @Test
@@ -30,18 +32,18 @@ public class ColorschemeTest {
             Colorscheme clsm = new Colorscheme();
             clsm.defaultMode();
 
-            assertEquals(clsm.water, Color.rgb(139, 180, 249));
-            assertEquals(clsm.building, Color.DARKGRAY);
-            assertEquals(clsm.defaultLanduse, Color.rgb(222, 220, 220));
-            assertEquals(clsm.meadow, Color.DARKSEAGREEN);
-            assertEquals(clsm.grass, Color.rgb(200, 243, 205));
-            assertEquals(clsm.residential, Color.LIGHTGRAY);
-            assertEquals(clsm.other, Color.GAINSBORO);
-            assertEquals(clsm.highway, Color.WHITE);
-            assertEquals(clsm.motorway, Color.RED);
-            assertEquals(clsm.trunk, Color.ORANGE);
-            assertEquals(clsm.primary, Color.rgb(214, 157, 2));
-            assertEquals(clsm.secondary, Color.LIGHTYELLOW);
+            assertEquals(clsm.getWater(), Color.rgb(139, 180, 249));
+            assertEquals(clsm.getBuilding(), Color.DARKGRAY);
+            assertEquals(clsm.getDefaultLanduse(), Color.rgb(222, 220, 220));
+            assertEquals(clsm.getMeadow(), Color.DARKSEAGREEN);
+            assertEquals(clsm.getGrass(), Color.rgb(200, 243, 205));
+            assertEquals(clsm.getResidential(), Color.LIGHTGRAY);
+            assertEquals(clsm.getOther(), Color.GAINSBORO);
+            assertEquals(clsm.getHighway(), Color.WHITE);
+            assertEquals(clsm.getMotorway(), Color.RED);
+            assertEquals(clsm.getTrunk(), Color.ORANGE);
+            assertEquals(clsm.getPrimary(), Color.rgb(214, 157, 2));
+            assertEquals(clsm.getSecondary(), Color.LIGHTYELLOW);
     }
 
 
@@ -63,7 +65,7 @@ public class ColorschemeTest {
             Colorscheme clsm = new Colorscheme();
             clsm.setColorscheme("Default Mode");
 
-            assertEquals(clsm.water, Color.rgb(139, 180, 249));
+            assertEquals(clsm.getWater(), Color.rgb(139, 180, 249));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class ColorschemeTest {
 
             Colorscheme clsm = new Colorscheme();
             clsm.setColorscheme("Dark Mode");
-            assertEquals(clsm.water, Color.rgb(31, 29, 54));
+            assertEquals(clsm.getWater(), Color.rgb(31, 29, 54));
     }
 
     @Test
@@ -79,6 +81,6 @@ public class ColorschemeTest {
 
             Colorscheme clsm = new Colorscheme();
             clsm.setColorscheme("Color Blind");
-            assertEquals(clsm.water, Color.BLACK);
+            assertEquals(clsm.getWater(), Color.BLACK);
     }
 }

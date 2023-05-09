@@ -1,4 +1,4 @@
-package handin2;
+package handin2.DataStructures;
 
 import java.io.Serializable;
 import java.util.Scanner;

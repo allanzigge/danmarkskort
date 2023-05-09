@@ -5,6 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
+
+import handin2.GUI.*;
+import handin2.GUI.Position;
+import handin2.Objects.Highway;
+import handin2.Objects.Node;
+import handin2.Objects.Way;
+import handin2.Pathfinding.Address;
+import handin2.Pathfinding.Edge;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -46,7 +54,7 @@ public class View {
     Address TSTadr = null;
     
     Colorscheme colors;
-    Canvas canvas = new Canvas(640, 480);
+    public Canvas canvas = new Canvas(640, 480);
     double canvasHeighScale = 1;
     double canvasWidthScale = 1;
 
@@ -345,7 +353,7 @@ public class View {
         Line line3 = new Line(scalebarLineWidth, 0, scalebarLineWidth, scalebarLineHight);
         Group scalebarLine = new Group(line1, line2, line3);
 
-        scalebar = new Scalebar(model.maxlat - model.minlat, (float) (canvas.getHeight()),
+        scalebar = new Scalebar(model.getMaxlat() - model.getMinlat(), (float) (canvas.getHeight()),
                 (float) (line1.getEndX() - line1.getStartX()));
         scaleLabel = new Label(scalebar.getScaleLabel());
         position = new Position(scalebar.getScale(), canvas, model);
@@ -364,8 +372,8 @@ public class View {
         primaryStage.setScene(scene);
         primaryStage.show();
         redraw();
-        pan((float) (-0.56 * model.minlon), model.maxlat);
-        zoom(0, 0, (float) canvas.getHeight() / (model.maxlat - model.minlat));
+        pan((float) (-0.56 * model.getMinlon()), model.getMaxlat());
+        zoom(0, 0, (float) canvas.getHeight() / (model.getMaxlat() - model.getMinlat()));
 
     }
 

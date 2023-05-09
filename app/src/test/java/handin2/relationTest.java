@@ -1,6 +1,10 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
+
+import handin2.Objects.Node;
+import handin2.Objects.Relation;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
@@ -91,7 +95,7 @@ class relationTest {
 
       Relation rel = new Relation(outerList, new ArrayList<List<Node>>(), "hej");
 
-      for(Node node : rel.relationTrace){
+      for(Node node : rel.getRelationTrace()){
          actualString = actualString + node.toString();
       }
       assertEquals(expectedString, actualString);
@@ -131,7 +135,7 @@ class relationTest {
          expectedString = expectedString + node.toString();
       }
       Relation rel = new Relation(outerList, new ArrayList<List<Node>>(), "hej");
-      for(Node node : rel.relationTrace){
+      for(Node node : rel.getRelationTrace()){
          actualString = actualString + node.toString();
       }
       assertEquals(expectedString, actualString);
@@ -149,7 +153,7 @@ class relationTest {
       // to
       // catch the IndexOutOfBoundsException and make relationTrace = null (Relation
       // line 24-28)
-      assertTrue(rel.relationTrace == null);
+      assertTrue(rel.getRelationTrace() == null);
    }
 
    @Test
@@ -209,7 +213,7 @@ class relationTest {
 
       Relation rel = new Relation(outerList, innerList, "hej");
 
-      for(Node node : rel.relationTrace){
+      for(Node node : rel.getRelationTrace()){
          actualString = actualString + node.toString();
       }
       assertEquals(expectedString, actualString);
@@ -286,7 +290,7 @@ class relationTest {
 
       Relation rel = new Relation(outerList, innerList, "hej");
 
-      for(Node node : rel.relationTrace){
+      for(Node node : rel.getRelationTrace()){
          actualString = actualString + node.toString();
       }
       assertEquals(expectedString, actualString);

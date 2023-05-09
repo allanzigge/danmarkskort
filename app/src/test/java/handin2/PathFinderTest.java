@@ -1,6 +1,11 @@
 package handin2;
 
 import org.junit.jupiter.api.Test;
+
+
+import handin2.Pathfinding.Edge;
+import handin2.Pathfinding.Pathfinder;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
@@ -15,7 +20,7 @@ public class PathFinderTest {
                 model.vertexMap.get(Long.parseLong("7")));
         String resultString = "";
         for (Edge edge : result) {
-            resultString = resultString + edge.road.wayId + " ";
+            resultString = resultString + edge.getRoad().getWayId() + " ";
         }
         String expected = "12 121 1112 1011 910 89 78 ";
 

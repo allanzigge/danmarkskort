@@ -1,5 +1,8 @@
-package handin2;
+package handin2.Pathfinding;
 import java.util.*;
+
+import handin2.Objects.Node;
+
 
 public class Vertex extends Node{
     double finalCost;
@@ -7,7 +10,7 @@ public class Vertex extends Node{
 
     
     public Vertex(Node node){
-        super(node.lat, node.lon, node.nodeID);
+        super(node.getLat(), node.getLon(), node.getID());
         neigbors = new ArrayList<>();
     }
         
@@ -15,9 +18,6 @@ public class Vertex extends Node{
         return neigbors;
     }
 
-    public Long getVertexID() {
-        return nodeID;
-    }
 
     public void addNeigbor(Edge vertex){
 

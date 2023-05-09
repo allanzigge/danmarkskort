@@ -1,7 +1,9 @@
-package handin2;
+package handin2.Objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import handin2.GUI.Colorscheme;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Way implements Serializable {

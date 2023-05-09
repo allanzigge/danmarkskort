@@ -1,8 +1,10 @@
-package handin2;
+package handin2.Objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import java.util.ArrayList;
+
+import handin2.GUI.Colorscheme;
 
 public class Landuse extends Way {
     private static final long serialVersionUID = -8734915653076753419L;

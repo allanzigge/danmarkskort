@@ -1,4 +1,4 @@
-package handin2;
+package handin2.GUI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,12 +7,12 @@ import javafx.scene.paint.Color;
 public class Colorscheme implements Serializable {
   Color scrub;
 
-  Color building;
+  private Color building;
 
-  Color meadow;
-  Color grass;
-  Color residential;
-  Color other;
+  public Color meadow;
+  private Color grass;
+  private Color residential;
+  private Color other;
 
   Color sand;
   Color rock;
@@ -21,15 +21,15 @@ public class Colorscheme implements Serializable {
 
   Color landuse;
   Color forest;
-  Color water;
+  private Color water;
   Color farmland;
-  Color defaultLanduse;
+  public Color defaultLanduse;
 
-  Color highway;
-  Color motorway;
-  Color trunk;
-  Color primary;
-  Color secondary;
+  private Color highway;
+  private Color motorway;
+  private Color trunk;
+  private Color primary;
+  private Color secondary;
   Color island;
 
   ArrayList<String> themes;
@@ -44,7 +44,87 @@ public class Colorscheme implements Serializable {
     themes.add("Color Blind");
   }
 
-  // Used in View to determine what options to show the user
+  public Color getSecondary() {
+    return secondary;
+}
+
+public void setSecondary(Color secondary) {
+    this.secondary = secondary;
+}
+
+public Color getPrimary() {
+    return primary;
+}
+
+public void setPrimary(Color primary) {
+    this.primary = primary;
+}
+
+public Color getTrunk() {
+    return trunk;
+}
+
+public void setTrunk(Color trunk) {
+    this.trunk = trunk;
+}
+
+public Color getMotorway() {
+    return motorway;
+}
+
+public void setMotorway(Color motorway) {
+    this.motorway = motorway;
+}
+
+public Color getHighway() {
+    return highway;
+}
+
+public void setHighway(Color highway) {
+    this.highway = highway;
+}
+
+public Color getOther() {
+    return other;
+}
+
+public void setOther(Color other) {
+    this.other = other;
+}
+
+public Color getResidential() {
+    return residential;
+}
+
+public void setResidential(Color residential) {
+    this.residential = residential;
+}
+
+public Color getGrass() {
+    return grass;
+}
+
+public void setGrass(Color grass) {
+    this.grass = grass;
+}
+
+public Color getBuilding() {
+    return building;
+}
+
+public void setBuilding(Color building) {
+    this.building = building;
+}
+
+public Color getWater() {
+    return water;
+}
+
+public void setWater(Color water) {
+    this.water = water;
+}
+
+// Used in View to determine what options to show the user
   public ArrayList<String> getThemes() {
     return themes;
   }
@@ -53,13 +133,13 @@ public class Colorscheme implements Serializable {
   public Color get(String element) {
     switch (element) {
       case "background":
-        return water;
+        return getWater();
       case "building":
-        return building;
+        return getBuilding();
       case "residential":
-        return residential;
+        return getResidential();
       default:
-        return other; // if element does not match -return this
+        return getOther(); // if element does not match -return this
     }
   }
 
@@ -67,22 +147,22 @@ public class Colorscheme implements Serializable {
   public Color getHighway(String element) {
     switch (element) {
       case "motorway":
-        return motorway;
+        return getMotorway();
       case "trunk":
-        return trunk;
+        return getTrunk();
       case "primary":
-        return primary;
+        return getPrimary();
       case "secondary":
-        return secondary;
+        return getSecondary();
 
       case "motorway_link":
-        return motorway;
+        return getMotorway();
       case "trunk_link":
-        return trunk;
+        return getTrunk();
       case "primary_link":
-        return primary;
+        return getPrimary();
       case "secondary_link":
-        return secondary;
+        return getSecondary();
       default:
         return highway;
     }
@@ -92,27 +172,27 @@ public class Colorscheme implements Serializable {
   public Color getLanduse(String element) {
     switch (element) {
       case "basin":
-        return water;
+        return getWater();
       case "reservoir":
-        return water;
+        return getWater();
       case "salt_pond":
-        return water;
+        return getWater();
       case "port":
-        return water;
+        return getWater();
       case "aquaculture":
-        return water;
+        return getWater();
       case "meadow":
-        return grass;
+        return getGrass();
       case "orchard":
-        return grass;
+        return getGrass();
       case "plant_nursery":
-        return grass;
+        return getGrass();
       case "vineyard":
-        return grass;
+        return getGrass();
       case "grass":
-        return grass;
+        return getGrass();
       case "village_green":
-        return grass;
+        return getGrass();
       case "forest":
         return forest;
       case "cemetery":
@@ -134,13 +214,13 @@ public class Colorscheme implements Serializable {
   public Color getNatural(String element) {
     switch (element) {
       case "bay":
-        return water;
+        return getWater();
       case "water":
-        return water;
+        return getWater();
       case "wetland":
         return meadow;
       case "spring":
-        return water;
+        return getWater();
 
       case "beach":
         return sand;
@@ -177,9 +257,9 @@ public class Colorscheme implements Serializable {
         return coastline;
 
       case "grassland":
-        return grass;
+        return getGrass();
       case "heath":
-        return grass;
+        return getGrass();
 
       default:
         return defaultNatural;
@@ -202,43 +282,43 @@ public class Colorscheme implements Serializable {
   // Sets all the colors needed for the default mode
   public void defaultMode() {
 
-    building = Color.DARKGRAY;
+    setBuilding(Color.DARKGRAY);
     landuse = Color.DARKSEAGREEN;
     meadow = Color.DARKSEAGREEN;
-    residential = Color.LIGHTGRAY;
-    other = Color.GAINSBORO;
+    setResidential(Color.LIGHTGRAY);
+    setOther(Color.GAINSBORO);
     sand = Color.rgb(255, 229, 180);
     rock = Color.rgb(172, 173, 172);
     coastline = Color.PURPLE;
     defaultNatural = Color.PINK;
     defaultLanduse = Color.rgb(222, 220, 220);
-    grass = Color.rgb(200, 243, 205);
+    setGrass(Color.rgb(200, 243, 205));
     forest = Color.rgb(149, 232, 158);
-    water = Color.rgb(139, 180, 249);
+    setWater(Color.rgb(139, 180, 249));
     farmland = Color.rgb(254, 226, 147);
-    highway = Color.WHITE;
-    motorway = Color.RED;
-    trunk = Color.ORANGE;
-    primary = Color.rgb(214, 157, 2);
-    secondary = Color.LIGHTYELLOW;
+    setHighway(Color.WHITE);
+    setMotorway(Color.RED);
+    setTrunk(Color.ORANGE);
+    setPrimary(Color.rgb(214, 157, 2));
+    setSecondary(Color.LIGHTYELLOW);
   }
 
   // Sets all the colors needed for the colorblind mode
   private void colorblindMode() {
 
-    water = Color.rgb(139, 171, 241);
-    building = Color.rgb(179, 199, 247);
+    setWater(Color.rgb(139, 171, 241));
+    setBuilding(Color.rgb(179, 199, 247));
     landuse = Color.rgb(245, 118, 0);
     meadow = Color.rgb(207, 235, 182);
-    grass = Color.rgb(137, 206, 0);
-    residential = Color.rgb(217, 228, 255);
-    other = Color.rgb(252, 201, 181);
+    setGrass(Color.rgb(137, 206, 0));
+    setResidential(Color.rgb(217, 228, 255));
+    setOther(Color.rgb(252, 201, 181));
 
-    highway = Color.WHITE;
-    motorway = Color.rgb(141, 210, 221);
-    trunk = Color.rgb(141, 210, 221);
-    primary = Color.rgb(230, 48, 138);
-    secondary = Color.WHITE;
+    setHighway(Color.WHITE);
+    setMotorway(Color.rgb(141, 210, 221));
+    setTrunk(Color.rgb(141, 210, 221));
+    setPrimary(Color.rgb(230, 48, 138));
+    setSecondary(Color.WHITE);
 
     farmland = Color.rgb(252, 201, 181);
     forest = Color.rgb(144, 216, 178);
@@ -247,19 +327,27 @@ public class Colorscheme implements Serializable {
   // Sets all the colors needed for the darkmode mode
   public void darkMode() {
     scrub = Color.rgb(42, 66, 40);
-    water = Color.rgb(31, 29, 54);
-    building = Color.rgb(134, 72, 121);
+    setWater(Color.rgb(31, 29, 54));
+    setBuilding(Color.rgb(134, 72, 121));
     landuse = Color.DARKGRAY;
     meadow = Color.DARKGREEN;
-    grass = Color.DARKKHAKI;
-    residential = Color.DARKRED;
-    other = Color.DARKGREY;
+    setGrass(Color.DARKKHAKI);
+    setResidential(Color.DARKRED);
+    setOther(Color.DARKGREY);
     farmland = Color.DARKGREEN;
     forest = Color.rgb(146, 154, 171);
-    highway = Color.rgb(233, 166, 166);
-    motorway = Color.RED;
-    trunk = Color.ORANGE;
-    primary = Color.LIGHTGOLDENRODYELLOW;
-    secondary = Color.LIGHTYELLOW;
+    setHighway(Color.rgb(233, 166, 166));
+    setMotorway(Color.RED);
+    setTrunk(Color.ORANGE);
+    setPrimary(Color.LIGHTGOLDENRODYELLOW);
+    setSecondary(Color.LIGHTYELLOW);
   }
+
+public Object getDefaultLanduse() {
+    return defaultLanduse;
+}
+
+public Object getMeadow() {
+    return meadow;
+}
 }

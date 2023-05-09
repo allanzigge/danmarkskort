@@ -1,8 +1,11 @@
 
-package handin2;
+package handin2.GUI;
 
 import java.util.ArrayList;
 
+import handin2.Model;
+import handin2.Objects.Node;
+import handin2.Objects.Way;
 import javafx.scene.canvas.Canvas;
 
 public class Position {
@@ -10,7 +13,9 @@ public class Position {
     double totalX, totalY;
     double currentX, currentY;
     double newScale;
-    double xPosition, yPosition, latPosition, lonPosition;
+    double xPosition, yPosition;
+    private double latPosition;
+    private double lonPosition;
     double canvasMaxX, canvasMinX, canvasMaxY, canvasMinY;
 
     double canvasWidth, canvasHeight;
@@ -18,9 +23,11 @@ public class Position {
     double latFactor, lonFactor;
 
     float[] canvasBoarder;
-    double panY, panX, zoomOut;
+    private double panY;
+    private double panX;
+    double zoomOut;
 
-    Position(float startScale, Canvas canvas, Model model) {
+    public Position(float startScale, Canvas canvas, Model model) {
         this.startScale = startScale;
         this.factor = 1.0f;
         this.zoomedAtX = 0;
@@ -29,9 +36,9 @@ public class Position {
         this.canvasHeight = canvas.getHeight();
         this.canvasWidth = canvas.getWidth();
 
-        this.maxLat = model.maxlat;
-        this.minLat = model.minlat;
-        this.minLon = model.minlon;
+        this.maxLat = model.getMaxlat();
+        this.minLat = model.getMinlat();
+        this.minLon = model.getMinlon();
 
         // calculates max lon drawn on canvas on start.
         double latLonFactor = 0.56F;
@@ -52,6 +59,38 @@ public class Position {
         this.lonFactor = (maxLon - minLon) / canvasWidth;
 
         this.canvasBoarder = new float[4];
+    }
+
+    public double getPanY() {
+        return panY;
+    }
+
+    public void setPanY(double panY) {
+        this.panY = panY;
+    }
+
+    public double getPanX() {
+        return panX;
+    }
+
+    public void setPanX(double panX) {
+        this.panX = panX;
+    }
+
+    public double getLatPosition() {
+        return latPosition;
+    }
+
+    public void setLatPosition(double latPosition) {
+        this.latPosition = latPosition;
+    }
+
+    public double getLonPosition() {
+        return lonPosition;
+    }
+
+    public void setLonPosition(double lonPosition) {
+        this.lonPosition = lonPosition;
     }
 
     // updates the canvas when user expands the size of the window
@@ -89,8 +128,8 @@ public class Position {
 
     // translate the x and y postion of the mouse to lat and lat
     public void LatLonMousePosition() {
-        latPosition = maxLat + (latFactor * yPosition);
-        lonPosition = minLon + (lonFactor * xPosition);
+        setLatPosition(maxLat + (latFactor * yPosition));
+        setLonPosition(minLon + (lonFactor * xPosition));
 
     }
 
@@ -182,10 +221,10 @@ public class Position {
         double difLat = (canvasMiddleLat - middleLat);
         double difLon = (canvasMiddleLon - middleLon);
 
-        panY = (difLat / latFactor) / factor;
-        panX = (difLon / lonFactor) / factor;
+        setPanY((difLat / latFactor) / factor);
+        setPanX((difLon / lonFactor) / factor);
 
-        dragged(panX, panY);
+        dragged(getPanX(), getPanY());
         setCanvas();
 
     }
