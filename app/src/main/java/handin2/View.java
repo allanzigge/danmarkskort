@@ -181,7 +181,7 @@ public class View {
         StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
         carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
-        carButton.setBackground(new Background(new BackgroundFill(Color.PURPLE, null, null)));
+        carButton.setBackground(new Background(new BackgroundFill(Color.MAGENTA, null, null)));
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
         walkButton = layout.getButtonIcon(layout.getImageView("file:icons/walk.png"), 20);
         clearFindRouteButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
@@ -411,13 +411,6 @@ public class View {
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            if (model.route.size() > 0) {
-                gc.setStroke(Color.PURPLE);
-                for (Edge edge : model.route) {
-                    edge.draw(gc, colors, (float) trans.determinant());
-                    gc.stroke();
-                }
-            }
 
         } else {
             for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
@@ -436,9 +429,9 @@ public class View {
             way.draw(gc, colors, (float) trans.determinant());
         }
         if (model.route.size() > 0) {  
-            if(transportType.equals("walk")) gc.setStroke(Color.LIGHTBLUE);
-            else if (transportType.equals("bike"))  gc.setStroke(Color.PINK);
-            else gc.setStroke(Color.PURPLE);
+            if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
+            else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
+            else gc.setStroke(Color.MAGENTA);
             for (Edge edge : model.route) {
                 edge.draw(gc, colors, (float) trans.determinant());
                 gc.stroke();

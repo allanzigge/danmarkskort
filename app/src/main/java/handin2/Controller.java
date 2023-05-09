@@ -266,7 +266,7 @@ public class Controller {
 
         //button for veichle selection, chooses the color of route and how to calculate the fastest route
         view.carButton.setOnMouseClicked(e -> {
-            veichleTypeSelected(view.carButton, view, Color.PURPLE);
+            veichleTypeSelected(view.carButton, view, Color.MAGENTA);
             view.transportType = "car";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
@@ -275,7 +275,7 @@ public class Controller {
             view.redraw();
         });
         view.bikeButton.setOnMouseClicked(e -> {
-            veichleTypeSelected(view.bikeButton, view, Color.PINK);
+            veichleTypeSelected(view.bikeButton, view, Color.TOMATO);
             view.transportType = "bike";
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
@@ -285,7 +285,7 @@ public class Controller {
         });
         view.walkButton.setOnMouseClicked(e -> {
             view.transportType = "walk";
-            veichleTypeSelected(view.walkButton, view, Color.LIGHTBLUE);
+            veichleTypeSelected(view.walkButton, view, Color.CYAN);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
                 getRouteDescription(model,view);
