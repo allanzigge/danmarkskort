@@ -1,8 +1,6 @@
 package GoKort;
 
 import java.util.ArrayList;
-import java.util.Set;
-
 import GoKort.Objects.Highway;
 import GoKort.Objects.Node;
 import GoKort.Pathfinding.Address;
@@ -207,7 +205,8 @@ public class Controller {
                     view.pan(view.position.getPanX(), view.position.getPanY());
                     findRoute(model, view);
                     view.redraw();   //Maybe not
-                    getRouteDescription(model,view);
+                    if (model.route.size() > 0) 
+                        getRouteDescription(model,view);
                 } else {
                     if(view.searchToNode != null) {
                     view.position.findPosition(view.searchToNode, view.searchFromNode);
@@ -276,7 +275,8 @@ public class Controller {
             model.pathfinder.setType("car");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                if (model.route.size() > 0) 
+                    getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -286,7 +286,8 @@ public class Controller {
             model.pathfinder.setType("bike");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                if (model.route.size() > 0) 
+                    getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -297,7 +298,8 @@ public class Controller {
             veichleTypeSelected(view.walkButton, view, Color.CYAN);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                if (model.route.size() > 0) 
+                    getRouteDescription(model,view);
             }
             view.redraw();
         });
@@ -431,7 +433,7 @@ public class Controller {
         Label label = view.layout.getAdressLabel(adr, 260);
         label.setOnMouseClicked(e -> {
             setOnClickEventSerachResult(searchNode, textField, adr, label, view, model);
-        });
+    });          
         return label;
     }
 
@@ -451,12 +453,14 @@ public class Controller {
         if (view.searchFromNode != null && view.searchToNode != null) {
             findRoute(model, view);
             view.redraw();
-            getRouteDescription(model,view);
+            if (model.route.size() > 0) 
+                getRouteDescription(model,view);
         }
     }
 
     //when searching for a route, this method is called. 
     private void findRoute(Model model, View view) {
+        try {
         if (view.transportType.equals("car")) {
             Edge fromEdge = (Edge) model.edgeTreeCar
                     .NNSearch(new float[] { view.searchFromNode.getLat(), view.searchFromNode.getLon() });
@@ -472,6 +476,9 @@ public class Controller {
             model.route = model.pathfinder.findPathBike(model.vertexMap.get(fromEdge.getFromID()),
                     model.vertexMap.get(toEdge.getToID()));
         }
+    } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+    }
     }
 
     //setting the pressed viechle type button as shown avtive and sets sets the others to default color. 
@@ -492,7 +499,8 @@ public class Controller {
             view.searchToNode = searchToNode;
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                if (model.route.size() > 0) 
+                    getRouteDescription(model,view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.getPanX(), view.position.getPanY());

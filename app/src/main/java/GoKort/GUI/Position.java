@@ -183,6 +183,7 @@ public class Position {
     // Used to for calculating the pan when finding an address. Used for both
     // searching, and finding route
     public void findPosition(Node searchFromNode, Node searchToNode) {
+        
         Float maxLat = searchFromNode.getLat();
         Float minLat = searchFromNode.getLat();
         Float minLon = searchFromNode.getLon();
