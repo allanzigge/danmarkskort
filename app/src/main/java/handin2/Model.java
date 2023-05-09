@@ -539,16 +539,6 @@ public class Model implements Serializable {
                 postcode, city);
         String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase() + " " + city.toLowerCase();
         addresses.put(key, adr);
-        // var value = addresses.get(key);
-
-        // if (addresses.get(key) != null) {
-        // value.add(adr);
-        // addresses.put(key, value);
-        // } else {
-        // value = new HashSet<>();
-        // value.add(adr);
-        // addresses.put(key, value);
-        // }
 
         street = "";
         adrNum = "";
