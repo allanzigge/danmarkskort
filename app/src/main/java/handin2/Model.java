@@ -131,6 +131,9 @@ public class Model implements Serializable {
         }
     }
 
+    // =====================================================================================================================================================
+    // by parsing multible times we ease the load of objects created at once, by
+    // clearing sets and id2node every time we go throug the parser
     private void parseZIP(String filename) throws IOException, XMLStreamException, FactoryConfigurationError {
         var time = java.lang.System.currentTimeMillis() / 1000;
         var input = new ZipInputStream(new FileInputStream(filename));
