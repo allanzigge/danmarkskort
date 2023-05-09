@@ -34,7 +34,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -44,7 +43,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 
 public class View {
     double canvasHeighScale = 1;
@@ -60,7 +58,7 @@ public class View {
     Layout layout = new Layout();
     Address TSTadr;
     Scene scene;
-    
+
     MenuItem fileChoserMenu;
     CheckMenuItem showDebugger;
     CheckMenuItem freezeFrame;
@@ -81,10 +79,10 @@ public class View {
     ImageView findRouteImage;
     ImageView turnLeftImage;
     ImageView turnRightImage;
-    
+
     Button favoritesButton;
     Button searchMenu;
-    Button findRouteMenu;   
+    Button findRouteMenu;
     Button favoritesButton2;
     Button routeDescriptionButton;
     Button swapButton;
@@ -97,7 +95,7 @@ public class View {
     Button carButton;
     Button routeDescriptionCloseButton;
     Button copyButton;
-    
+
     Label scaleLabel;
     Label nearestRoad;
     Rectangle favoritBackgound;
@@ -110,7 +108,7 @@ public class View {
     VBox searchResultFromVBox;
     VBox searchResultToVBox;
     VBox searchResultVBox;
-    
+
     VBox favoritListVBox;
     HBox routeInfoHBox;
     HBox routeDescriptionHhox;
@@ -127,37 +125,34 @@ public class View {
     public View(Model model, Stage primaryStage) {
         this.model = model;
         colors = new Colorscheme(); // Creates coclorscheme
-        
-     
+
         VBox debuggerVbox = new VBox();
         debuggerVbox.setAlignment(Pos.TOP_RIGHT);
-        debuggerVbox.getChildren().addAll(mousePositionLabel,redrawTimerLabel);
-        debuggerOverlay = layout.getStackPane(100,100);
+        debuggerVbox.getChildren().addAll(mousePositionLabel, redrawTimerLabel);
+        debuggerOverlay = layout.getStackPane(100, 100);
         debuggerOverlay.getChildren().addAll(debuggerVbox);
 
-        // UI design 
-        //images that is being copied for favoritelist and directions
+        // UI design
+        // images that is being copied for favoritelist and directions
         turnLeftImage = layout.getImageView("file:icons/turnLeft.png");
         turnRightImage = layout.getImageView("file:icons/turnRight.png");
         serachLoopImage = layout.getImageView("file:icons/searchLoop.png");
         findRouteImage = layout.getImageView("file:icons/findRoute.png");
-        
-        //elements for searching stackpane
+
+        // elements for searching stackpane
         searchTextField = layout.getTextField("Skriv adresse");
         searchResultVBox = layout.getSearchResultVbox();
         favoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/starBlack.png"), 20);
         favoritesButton.setTooltip(new Tooltip("Add address to favoritelist"));
 
-
-        //adds all elements to search stackpane and makes the insets
+        // adds all elements to search stackpane and makes the insets
         searchStackpan = layout.getStackPane(40, 340);
         searchStackpan.getChildren().addAll(searchTextField, searchResultVBox, favoritesButton);
         StackPane.setMargin(searchTextField, new Insets(0, 0, 0, 20));
         StackPane.setMargin(searchResultVBox, new Insets(40, 0, 0, 40));
         StackPane.setMargin(favoritesButton, new Insets(0, 0, 0, 300));
 
-        
-        //elements for find route stackpane
+        // elements for find route stackpane
         carButton = layout.getButtonIcon(layout.getImageView("file:icons/car.png"), 20);
         carButton.setBackground(new Background(new BackgroundFill(Color.MAGENTA, null, null)));
         bikeButton = layout.getButtonIcon(layout.getImageView("file:icons/bike.png"), 20);
@@ -179,10 +174,11 @@ public class View {
         veichleOption.setAlignment(Pos.BASELINE_CENTER);
         Shape box = layout.getRegtangle(130, 340);
 
-        //adds all elements to route stackpane and Insets elements
+        // adds all elements to route stackpane and Insets elements
         findRouteStackPane = layout.getStackPane(100, 300);
         findRouteStackPane.getChildren().addAll(box, findRouteFromTextField, findRouteToTextField, veichleOption,
-            searchResultFromVBox, searchResultToVBox, favoritesButton2, swapButton, routeDescriptionButton, clearFindRouteButton);
+                searchResultFromVBox, searchResultToVBox, favoritesButton2, swapButton, routeDescriptionButton,
+                clearFindRouteButton);
         StackPane.setMargin(clearFindRouteButton, new Insets(0, 0, 90, 300));
         StackPane.setMargin(favoritesButton2, new Insets(45, 0, 45, 300));
         StackPane.setMargin(routeDescriptionButton, new Insets(90, 0, 0, 300));
@@ -193,19 +189,19 @@ public class View {
         StackPane.setMargin(findRouteToTextField, new Insets(45, 0, 0, 20));
         StackPane.setMargin(searchResultToVBox, new Insets(85, 0, 0, 40));
 
-         //elements for favoritelist
+        // elements for favoritelist
         favoritBackgound = layout.getRegtangle(40, 340);
         favoritListVBox = new VBox();
         clearFavoritesButton = layout.getButtonIcon(layout.getImageView("file:icons/clear.png"), 20);
         clearFavoritesButton.setTooltip(new Tooltip("Delete favoritelist"));
 
-        //adds all elements to favoritelist stackpane and Insets elements
+        // adds all elements to favoritelist stackpane and Insets elements
         favoriteStackPane = layout.getStackPane(40, 340);
         favoriteStackPane.getChildren().addAll(favoritBackgound, favoritListVBox, clearFavoritesButton);
         StackPane.setMargin(favoritListVBox, new Insets(40, 0, 0, 0));
         StackPane.setMargin(clearFavoritesButton, new Insets(0, 0, 0, 300));
 
-        //elemnts for route instruction
+        // elemnts for route instruction
         Shape backgroundBox = layout.getRegtangle(280, 340);
         routeDescriptionHhox = new HBox();
         routeDescriptionCloseButton = layout.getButtonIcon(layout.getImageView("file:icons/close.png"), 20);
@@ -216,18 +212,19 @@ public class View {
         routeDescriptionScrollpane = new ScrollPane(routeDescriptionInstruction);
         routeInfoHBox = new HBox();
 
-         //adds all elements to route instructions stackpane and Insets elements
+        // adds all elements to route instructions stackpane and Insets elements
         routeDescriptionStackPane = layout.getStackPane(280, 340);
-        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeInfoHBox, routeDescriptionScrollpane,routeDescriptionCloseButton, copyButton);
+        routeDescriptionStackPane.getChildren().addAll(backgroundBox, routeInfoHBox, routeDescriptionScrollpane,
+                routeDescriptionCloseButton, copyButton);
         StackPane.setMargin(routeDescriptionCloseButton, new Insets(0, 0, 0, 300));
         StackPane.setMargin(routeDescriptionScrollpane, new Insets(40, 0, 20, 0));
         StackPane.setMargin(routeInfoHBox, new Insets(10, 0, 0, 40));
 
-        //elements for setting menu
+        // elements for setting menu
         Menu fileMenu = new Menu("File");
         File file = new File("data");
 
-        //user can upload their own files, endning with osm or zip.
+        // user can upload their own files, endning with osm or zip.
         String[] pathnames = file.list();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
@@ -238,7 +235,7 @@ public class View {
             File file2 = fileChooser.showOpenDialog(primaryStage);
             if (file2 != null) {
                 try {
-                    Model model2 = Model.load(file2.getPath());
+                    Model model2 = new Model(file2.getPath());
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
                 } catch (ClassNotFoundException | IOException | XMLStreamException | FactoryConfigurationError e1) {
@@ -247,12 +244,12 @@ public class View {
             }
         });
 
-        //gets themes from colorSchemes and add them to menuItem
+        // gets themes from colorSchemes and add them to menuItem
         for (String name : pathnames) {
             MenuItem menuItem = new MenuItem(name);
             menuItem.setOnAction(e -> {
-                try {             
-                    var model2 = Model.load("data/" + name);
+                try {
+                    var model2 = new Model("data/" + name);
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);
                 } catch (ClassNotFoundException | IOException | XMLStreamException | FactoryConfigurationError e1) {
@@ -262,7 +259,7 @@ public class View {
             fileMenu.getItems().add(menuItem);
         }
 
-        //gets themes from colorSchemes and add them to menuItem
+        // gets themes from colorSchemes and add them to menuItem
         Menu colorMenu = new Menu("Color");
         ArrayList<String> themes = colors.getThemes();
         for (String name : themes) {
@@ -277,18 +274,18 @@ public class View {
         Menu toolMenu = new Menu("Tools");
         freezeFrame = new CheckMenuItem("Freeze Canvas");
         showDebugger = new CheckMenuItem("Show DebuggerOverlay");
-        toolMenu.getItems().addAll(freezeFrame,showDebugger);
+        toolMenu.getItems().addAll(freezeFrame, showDebugger);
 
-        fileMenu.getItems().addAll(new SeparatorMenuItem(),fileChoserMenu);
+        fileMenu.getItems().addAll(new SeparatorMenuItem(), fileChoserMenu);
         menuBar.getMenus().addAll(fileMenu, colorMenu, toolMenu);
 
-        //adds elements to settings stackpane and insets elements        
+        // adds elements to settings stackpane and insets elements
         settingStackPane = layout.getStackPane(40, 200);
         settingStackPane.getChildren().add(menuBar);
         StackPane.setMargin(menuBar, new Insets(10, 0, 0, 30));
 
-        //mapboarderpane
-        //scalebar drawn in the bottom
+        // mapboarderpane
+        // scalebar drawn in the bottom
         int scalebarLineStart = 5;
         int scalebarLineWidth = (int) (canvas.getHeight() * 0.1) + scalebarLineStart;
         int scalebarLineHight = 10;
@@ -301,16 +298,15 @@ public class View {
         scaleLabel = new Label(scalebar.getScaleLabel());
         nearestRoad = new Label("Navnet på nærmeste vej");
 
-        //elements in mapboarderpane
+        // elements in mapboarderpane
         BorderPane mapBoarderPane = new BorderPane();
         mapBoarderPane.setCenter(canvas);
         HBox scalebarHBox = new HBox(scalebarLine, scaleLabel, nearestRoad);
         scalebarHBox.setSpacing(10);
         scalebarHBox.setPadding(new Insets(0, 0, 0, 10));
         mapBoarderPane.setBottom(scalebarHBox);
-        
-        
-        //Elements for root stackpane 
+
+        // Elements for root stackpane
         searchMenu = layout.getButtonIcon(serachLoopImage, 20);
         searchMenu.setTooltip(new Tooltip("Find address"));
         findRouteMenu = layout.getButtonIcon(findRouteImage, 20);
@@ -320,11 +316,12 @@ public class View {
         settingsMenu = layout.getButtonIcon(layout.getImageView("file:icons/settings.png"), 20);
         settingsMenu.setTooltip(new Tooltip("Settings"));
 
-        //rootstackpane adding element and insets
+        // rootstackpane adding element and insets
         StackPane root = new StackPane(mapBoarderPane, searchStackpan, settingStackPane, settingsMenu,
-            favoriteStackPane, favoriteMenu, findRouteStackPane, routeDescriptionStackPane, findRouteMenu, searchMenu, debuggerOverlay);
+                favoriteStackPane, favoriteMenu, findRouteStackPane, routeDescriptionStackPane, findRouteMenu,
+                searchMenu, debuggerOverlay);
         root.setAlignment(Pos.TOP_LEFT);
-    
+
         int buttonDistance = 45;
         StackPane.setMargin(searchMenu, new Insets(10, 0, 0, 10));
         StackPane.setMargin(searchStackpan, new Insets(10, 0, 0, 10));
@@ -336,8 +333,8 @@ public class View {
         StackPane.setMargin(settingsMenu, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
         StackPane.setMargin(settingStackPane, new Insets(buttonDistance * 3 + 10, 0, 0, 10));
         StackPane.setMargin(debuggerOverlay, new Insets(10, 0, 0, 100));
-       
-        //initialise last stuff for view
+
+        // initialise last stuff for view
         position = new Position(scalebar.getScale(), canvas, model);
         primaryStage.setTitle("GoKort");
         primaryStage.getIcons().add(new Image("file:icons/logo.jpg"));
@@ -349,9 +346,10 @@ public class View {
         zoom(0, 0, (float) canvas.getHeight() / (model.getMaxlat() - model.getMinlat()));
     }
 
-    //Draws everything seen on the map.
+    // Draws everything seen on the map.
     void redraw() {
-        long startTimer = System.currentTimeMillis();  //Timer for tracking how long time it takes to redraw. Used for debugging features, and to determine runtime smoothness
+        long startTimer = System.currentTimeMillis(); // Timer for tracking how long time it takes to redraw. Used for
+                                                      // debugging features, and to determine runtime smoothness
 
         gc.setTransform(new Affine());
         gc.setFill(colors.get("background")); // GAINSBORO
@@ -360,28 +358,30 @@ public class View {
         gc.setLineWidth(1 / Math.sqrt(trans.determinant()));
         float zoom = scalebar.getScale();
 
-        if (!freezeFrame.isSelected()) {    //If the freezeframe debugger method is used, then the current canvas is saved.
+        if (!freezeFrame.isSelected()) { // If the freezeframe debugger method is used, then the current canvas is
+                                         // saved.
             position.setCanvas();
         }
 
-        //What to draw is determined by the zoom level. Depending on the zoom level, different rtrees are searched, and the result is drawn.
+        // What to draw is determined by the zoom level. Depending on the zoom level,
+        // different rtrees are searched, and the result is drawn.
 
-        //The background land (islands, peninsula, islets osv, is allways drawn)
+        // The background land (islands, peninsula, islets osv, is allways drawn)
         for (Way way : model.firstLayerRTree.search(position.getCanvas())) {
             way.draw(gc, colors, (float) trans.determinant());
         }
 
         if (zoom * canvasHeighScale * canvasWidthScale < 500) {
-            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) {    //Naturals
+            for (Way way : model.thirdLayerRTree.search(position.getCanvas())) { // Naturals
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   //Landuses
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) { // Landuses
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.fourthLayerRTree.search(position.getCanvas())) {   //Buildings
+            for (Way way : model.fourthLayerRTree.search(position.getCanvas())) { // Buildings
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.smallRoadRtree.search(position.getCanvas())) {     //All roads
+            for (Way way : model.smallRoadRtree.search(position.getCanvas())) { // All roads
                 way.draw(gc, colors, (float) trans.determinant());
 
             }
@@ -390,12 +390,12 @@ public class View {
             for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
-            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {    //Medium and big roads
+            for (Way way : model.mediumRoadRTree.search(position.getCanvas())) { // Medium and big roads
                 way.draw(gc, colors, (float) trans.determinant());
             }
 
         } else if (zoom * canvasHeighScale * canvasWidthScale < 5000) {
-            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {   
+            for (Way way : model.secondLayerRTree.search(position.getCanvas())) {
                 way.draw(gc, colors, (float) trans.determinant());
             }
             for (Way way : model.mediumRoadRTree.search(position.getCanvas())) {
@@ -404,24 +404,26 @@ public class View {
 
         }
 
-        //And the bigroad r tree is allways drawn ontop    
-        for (Way way : model.bigRoadRTree.search(position.getCanvas())) {   //Only big roads
+        // And the bigroad r tree is allways drawn ontop
+        for (Way way : model.bigRoadRTree.search(position.getCanvas())) { // Only big roads
 
             way.draw(gc, colors, (float) trans.determinant());
         }
 
-        //Draws the route, if there is a route
-        if (model.route.size() > 0) {  
-            if(transportType.equals("walk")) gc.setStroke(Color.CYAN);
-            else if (transportType.equals("bike"))  gc.setStroke(Color.TOMATO);
-            else gc.setStroke(Color.MAGENTA);
+        // Draws the route, if there is a route
+        if (model.route.size() > 0) {
+            if (transportType.equals("walk"))
+                gc.setStroke(Color.CYAN);
+            else if (transportType.equals("bike"))
+                gc.setStroke(Color.TOMATO);
+            else
+                gc.setStroke(Color.MAGENTA);
             for (Edge edge : model.route) {
                 edge.draw(gc, colors, (float) trans.determinant());
                 gc.stroke();
             }
         }
 
-        
         if (freezeFrame.isSelected()) {
             gc.setStroke(Color.RED);
             position.getCanvasOutline().draw(gc, colors, (float) trans.determinant());

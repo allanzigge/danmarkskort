@@ -36,22 +36,6 @@ public class Pathfinder implements Serializable {
         travelType = "default";
     }
 
-    public String getTravelLength() {
-        return travelLength;
-    }
-
-    public void setTravelLength(String travelLength) {
-        this.travelLength = travelLength;
-    }
-
-    public String getTravelTime() {
-        return travelTime;
-    }
-
-    public void setTravelTime(String travelTime) {
-        this.travelTime = travelTime;
-    }
-
     // method for finding path by car - difference is the expected speed
     public ArrayList<Edge> findPathCar(Vertex from, Vertex to) {
         open = new MinPQ<>(); // PQ for storing and sorting neighbor-nodes
@@ -62,8 +46,7 @@ public class Pathfinder implements Serializable {
         map.put(from, start);
         Long timer = System.currentTimeMillis();
 
-        while (open.size() > 0 && System.currentTimeMillis() - 5000 < timer) { // Notice we explore all options, however
-                                                                               // might not be as fast as first path
+        while (open.size() > 0 && System.currentTimeMillis() - 5000 < timer) {
             PathNode next = open.delMin(); // Explode the neighbors for the cheapest option so far
             closed.add(next.originalNode);
 
@@ -250,13 +233,6 @@ public class Pathfinder implements Serializable {
                     }
                 }
 
-                // Coordinates for the intersection Only needed for debugging
-                /*
-                 * System.out.println(thisRoadFromLat +" "+ thisRoadFromLon);
-                 * System.out.println(thisRoadToLat +" "+ thisRoadToLon);
-                 * System.out.println(nextRoadToLat +" "+ thisRoadToLon + "\n");
-                 */
-
                 String rutevejledning = "Fortsaet " + (int) Math.round(tempLength * 111139) + "m af " + nextRoadName
                         + " og drej derefter til " + retning;
                 tempList.add(rutevejledning);
@@ -364,5 +340,22 @@ public class Pathfinder implements Serializable {
                 return 0;
             }
         }
+    }
+
+    // Getter og setter
+    public String getTravelLength() {
+        return travelLength;
+    }
+
+    public void setTravelLength(String travelLength) {
+        this.travelLength = travelLength;
+    }
+
+    public String getTravelTime() {
+        return travelTime;
+    }
+
+    public void setTravelTime(String travelTime) {
+        this.travelTime = travelTime;
     }
 }

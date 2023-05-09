@@ -23,7 +23,7 @@ public class Highway extends Way {
         this.isOneWay = isOneWay;
         this.wayId = wayId;
         this.roadType = roadType;
-        if(roadName != null) {
+        if (roadName != null) {
 
             this.roadName = roadName;
         }
@@ -40,15 +40,8 @@ public class Highway extends Way {
 
     }
 
-    public float getThickness() {
-        return thickness;
-    }
-
-    public void setThickness(float thickness) {
-        this.thickness = thickness;
-    }
-
-    //sets the Highway object's fields needed for pathfinding depending on the OSM tags
+    // sets the Highway object's fields needed for pathfinding depending on the OSM
+    // tags
     private void setProperty() {
         if (roadType.equals("motorway") || roadType.equals("motorway_link")) {
             this.maxSpeed = 110;
@@ -89,9 +82,9 @@ public class Highway extends Way {
         }
     }
 
-    //Sets the line width settings depending on the determinant
-    //and draws the highway path with stroke() instead of just making the path
-    //Used in the View redraw() method
+    // Sets the line width settings depending on the determinant
+    // and draws the highway path with stroke() instead of just making the path
+    // Used in the View redraw() method
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         if (determinant < 2.e9 && determinant > 2.e6) {
@@ -106,11 +99,11 @@ public class Highway extends Way {
         gc.stroke();
     }
 
-    public String getName(){
+    public String getName() {
         return roadName;
     }
 
-    public int getSpeed(){
+    public int getSpeed() {
         return maxSpeed;
     }
 
@@ -128,6 +121,14 @@ public class Highway extends Way {
 
     public boolean isBikeable() {
         return bikeable;
+    }
+
+    public float getThickness() {
+        return thickness;
+    }
+
+    public void setThickness(float thickness) {
+        this.thickness = thickness;
     }
 
     @Override

@@ -2,7 +2,6 @@ package GoKort.Objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
-
 import GoKort.GUI.Colorscheme;
 
 public class Building extends Way {
@@ -18,8 +17,9 @@ public class Building extends Way {
         this.buildingType = v;
     }
 
-    //The draw method is overwritten so that paths that are buildings get drawn using fill()
-    //Used in the View redraw() method
+    // The draw method is overwritten so that paths that are buildings get drawn
+    // using fill()
+    // Used in the View redraw() method
     @Override
     public void draw(GraphicsContext gc, Colorscheme colors, float determinant) {
         gc.setFill(colors.get("building"));

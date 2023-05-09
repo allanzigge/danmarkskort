@@ -26,28 +26,28 @@ public class Layout {
     int circleRadius = 20;
 
     public Layout() {
-      
-
     }
 
     public Button getButtonIcon(ImageView imageView, int size) {
-       
+
         Button button = new Button("", imageView);
-        button.setPadding(new Insets(size/2, size/2, size/2, size/2));
+        button.setPadding(new Insets(size / 2, size / 2, size / 2, size / 2));
         button.setShape(new Circle(size));
-        button.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
-        button.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        button.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        button.setBorder(new Border(
+                new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         return button;
     }
+
     public Button copyButton(Button button, ImageView imageView) {
         Button newButton = new Button("", imageView);
         newButton.setPadding(button.getPadding());
         newButton.setShape(button.getShape());
-        newButton.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
+        newButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         newButton.setBorder(button.getBorder());
         return newButton;
     }
-    
+
     public ImageView getImageView(String path) {
         ImageView imageView = new ImageView(path);
         imageView.setFitHeight(circleRadius);
@@ -56,6 +56,7 @@ public class Layout {
         return imageView;
 
     }
+
     public ImageView copyImageView(ImageView imageView) {
         ImageView newImageView = new ImageView(imageView.getImage());
         newImageView.setFitHeight(imageView.getFitHeight());
@@ -68,10 +69,11 @@ public class Layout {
     public TextField getTextField(String promptText) {
         TextField textField = new TextField();
         textField.setPromptText(promptText);
-        textField.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
-        textField.setBorder(new Border(new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        textField.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        textField.setBorder(new Border(
+                new BorderStroke(Color.LIGHTGREY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         textField.setMaxWidth(300);
-        textField.setMaxHeight(circleRadius*2);
+        textField.setMaxHeight(circleRadius * 2);
         textField.setPadding(new Insets(0, 0, 0, circleRadius));
         textField.setMaxHeight(40);
         return textField;
@@ -80,16 +82,16 @@ public class Layout {
     public VBox getSearchResultVbox() {
         VBox vBox = new VBox();
         vBox.setMaxHeight(0);
-        
-        
-        vBox.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
 
-        return vBox;  
+        vBox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        return vBox;
     }
 
     public Label getAdressLabel(Address address, int width) {
-        Label label = new Label(address.getStreet()+ " " + address.getAdrNum()+address.getAdrLet()+", " + address.getPostcode() + " " + address.getCity());
-        label.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
+        Label label = new Label(address.getStreet() + " " + address.getAdrNum() + address.getAdrLet() + ", "
+                + address.getPostcode() + " " + address.getCity());
+        label.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         label.setMaxWidth(width);
         return label;
     }
