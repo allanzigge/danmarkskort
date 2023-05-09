@@ -224,7 +224,7 @@ public class Controller {
                 Button button = view.layout.copyButton(view.searchMenu,
                         view.layout.copyImageView(view.serachLoopImage));
 
-                addToFavorite(button, vBox, view, model, view.searchFromNode, null);
+                addToFavorite(button, vBox, view, model, view.searchFromNode, null, null);
             }
 
         });
@@ -240,7 +240,7 @@ public class Controller {
                 Button button = view.layout.copyButton(view.findRouteMenu,
                         view.layout.copyImageView(view.findRouteImage));
 
-                addToFavorite(button, vBox, view, model, view.searchFromNode, view.searchToNode);
+                addToFavorite(button, vBox, view, model, view.searchFromNode, view.searchToNode, view.transportType);
             }
         });
 
@@ -479,8 +479,10 @@ public class Controller {
 
     //creates the favorite routes and destinations, and when pressed shows them on the map.
     private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode,
-            Node searchToNode) {
+            Node searchToNode, String veichleType) {
         button.setOnMouseClicked(i -> {
+            model.route.clear();
+            view.transportType = veichleType;
             view.searchFromNode = searchFromNode;
             view.searchToNode = searchToNode;
             if (view.searchFromNode != null && view.searchToNode != null) {
