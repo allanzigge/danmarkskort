@@ -67,6 +67,7 @@ public class Position {
         setFactor();
     }
 
+    //Calculates the new factor to calculate with after zoom input
     public void setFactor() {
         this.factor = newScale / startScale;
     }
@@ -168,6 +169,7 @@ public class Position {
         panPosition(middleLat, middleLon);
     }
 
+    //sets up the canvas for the r-tree and panX and panY are the input for the method pan() in View
     private void panPosition(double middleLat, double middleLon) {
         double minLat = canvasBoarder[0];
         double maxLat = canvasBoarder[1];
