@@ -37,13 +37,13 @@ public class Model implements Serializable {
     List<Edge> route = new ArrayList<>();
     RTree edgeTreeBike = new RTree();
     RTree edgeTreeCar = new RTree();
-    RTree bigRoadRTree = new RTree();   //moterway, trunk and primary
-    RTree mediumRoadRTree = new RTree();    //Secundary and tertiary
-    RTree smallRoadRtree = new RTree();     //The remaining of the drivable highways (residential, unclassified, mm.)
-    RTree firstLayerRTree = new RTree();    //Background land ("islands")
-    RTree secondLayerRTree = new RTree();   // Landuses
-    RTree thirdLayerRTree = new RTree();    // Naturals  
-    RTree fourthLayerRTree = new RTree();     //Buildings
+    RTree bigRoadRTree = new RTree(); // moterway, trunk and primary
+    RTree mediumRoadRTree = new RTree(); // Secundary and tertiary
+    RTree smallRoadRtree = new RTree(); // The remaining of the drivable highways (residential, unclassified, mm.)
+    RTree firstLayerRTree = new RTree(); // Background land ("islands")
+    RTree secondLayerRTree = new RTree(); // Landuses
+    RTree thirdLayerRTree = new RTree(); // Naturals
+    RTree fourthLayerRTree = new RTree(); // Buildings
     Pathfinder pathfinder;
 
     List<Way> testList = new ArrayList<>();
@@ -161,7 +161,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-            save(filename + ".obj");
+            // save(filename + ".obj");
         }
 
     }

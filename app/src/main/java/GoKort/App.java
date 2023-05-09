@@ -11,7 +11,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        String filename = "data/fyn-er-fin.osm.zip";
+        String filename = "data/fyn-er-fin.osm.zip.obj";
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);
