@@ -77,7 +77,7 @@ public class Model implements Serializable {
 
     // Global attributes
     int counter = 0;
-    TST<Set<Address>> addresses = new TST<Set<Address>>();
+    TST<Address> addresses = new TST<Address>();
 
     private float minlat;
     private float maxlat;
@@ -578,17 +578,8 @@ public class Model implements Serializable {
 
         Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), street, adrNum, adrLet,
                 postcode, city);
-        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase();
-        var value = addresses.get(key);
-
-        if (addresses.get(key) != null) {
-            value.add(adr);
-            addresses.put(key, value);
-        } else {
-            value = new HashSet<>();
-            value.add(adr);
-            addresses.put(key, value);
-        }
+        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase() + " " + city.toLowerCase();
+        addresses.put(key, adr);
 
         street = "";
         adrNum = "";

@@ -416,17 +416,10 @@ public class Controller {
         if (newValue.length() > 0) {
             Iterable<String> keys = model.addresses.keysWithPrefix(newValue.toLowerCase());
             int numberOfDropdowns = 0;
-
             
             for (String key : keys) {
-                Set<Address> setOfAdr = model.addresses.get(key);
-
-                for (Address adr : setOfAdr) {
-                    searchVBox.getChildren().add(createDropdownOptions(adr, textField, searchNode, view, model));
+                    searchVBox.getChildren().add(createDropdownOptions(model.addresses.get(key), textField, searchNode, view, model));
                     numberOfDropdowns++;
-                    if (numberOfDropdowns > 5)
-                        break;
-                }
                 if (numberOfDropdowns > 5)
                     break;
             }
