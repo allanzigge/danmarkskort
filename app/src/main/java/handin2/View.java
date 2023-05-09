@@ -45,8 +45,6 @@ public class View {
     TextField toSearch = new TextField("");
     Address TSTadr = null;
     
-
-
     Colorscheme colors;
     Canvas canvas = new Canvas(640, 480);
     double canvasHeighScale = 1;
@@ -271,7 +269,9 @@ public class View {
             MenuItem menuItem = new MenuItem(name);
             menuItem.setOnAction(e -> {
                 try {
-                    var model2 = new Model("data/" + name);
+                    System.out.println(name);
+                    var model2 = Model.load("data/" + name);
+                    System.out.println("data/" + name);
 
                     View view = new View(model2, primaryStage);
                     new Controller(model2, view);

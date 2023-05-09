@@ -10,11 +10,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
-        String filename = "data/fyn.osm.zip";
-
-        // String filename = "data/map.osm";
+        String filename = "data/bornholm.osm.zip.obj";
 
         var model = Model.load(filename);
         var view = new View(model, primaryStage);
