@@ -60,8 +60,9 @@ public class Pathfinder implements Serializable {
         PathNode start = new PathNode(from, null, 0.0, distCalc(from, to));
         open.insert(start);                                 //Start the pathfinding by inserting the first node in the PQ
         map.put(from, start);
+        Long timer = System.currentTimeMillis();
 
-        while (open.size() > 0) {                           //Notice we explore all options, however might not be as fast as first path
+        while (open.size() > 0 && System.currentTimeMillis()-1000 < timer) {                           //Notice we explore all options, however might not be as fast as first path
             PathNode next = open.delMin();                  //Explode the neighbors for the cheapest option so far
             closed.add(next.originalNode);
 
@@ -107,7 +108,6 @@ public class Pathfinder implements Serializable {
             }
         }
         throw new IllegalStateException("No route found");
-
     }
     //method for finding path by bike - difference is the expected speed 
     public ArrayList<Edge> findPathBike(Vertex from, Vertex to) {
@@ -116,9 +116,10 @@ public class Pathfinder implements Serializable {
         closed.clear();
         PathNode start = new PathNode(from, null, 0.0, distCalc(from, to));
         open.insert(start);
-        map.put(from, start);       
+        map.put(from, start); 
+        Long timer = System.currentTimeMillis();      
 
-        while (open.size() > 0) {
+        while (open.size() > 0 && System.currentTimeMillis()-1000 < timer) {
             PathNode next = open.delMin();
             closed.add(next.originalNode);
 
