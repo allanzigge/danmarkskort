@@ -23,13 +23,13 @@ public class Model implements Serializable {
     List<Edge> route = new ArrayList<>();
     RTree edgeTreeBike = new RTree();
     RTree edgeTreeCar = new RTree();
-    RTree bigRoadRTree = new RTree();   //moterway, trunk and primary
-    RTree mediumRoadRTree = new RTree();    //Secundary and tertiary
-    RTree smallRoadRtree = new RTree();     //The remaining of the drivable highways (residential, unclassified, mm.)
-    RTree firstLayerRTree = new RTree();    //Background land ("islands")
-    RTree secondLayerRTree = new RTree();   // Landuses
-    RTree thirdLayerRTree = new RTree();    // Naturals  
-    RTree fourthLayerRTree = new RTree();     //Buildings
+    RTree bigRoadRTree = new RTree(); // moterway, trunk and primary
+    RTree mediumRoadRTree = new RTree(); // Secundary and tertiary
+    RTree smallRoadRtree = new RTree(); // The remaining of the drivable highways (residential, unclassified, mm.)
+    RTree firstLayerRTree = new RTree(); // Background land ("islands")
+    RTree secondLayerRTree = new RTree(); // Landuses
+    RTree thirdLayerRTree = new RTree(); // Naturals
+    RTree fourthLayerRTree = new RTree(); // Buildings
     Pathfinder pathfinder;
 
     List<Way> testList = new ArrayList<>();
@@ -63,7 +63,7 @@ public class Model implements Serializable {
 
     // Global attributes
     int counter = 0;
-    TST<Set<Address>> addresses = new TST<Set<Address>>();
+    TST<Address> addresses = new TST<Address>();
 
     float minlat, maxlat, minlon, maxlon;
 
@@ -120,7 +120,7 @@ public class Model implements Serializable {
             parseOSM(filename);
         }
         if (!filename.endsWith(".obj")) {
-            save(filename + ".obj");
+            // save(filename + ".obj");
         }
 
     }
@@ -537,17 +537,18 @@ public class Model implements Serializable {
 
         Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), street, adrNum, adrLet,
                 postcode, city);
-        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase();
-        var value = addresses.get(key);
+        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase() + " " + city.toLowerCase();
+        addresses.put(key, adr);
+        // var value = addresses.get(key);
 
-        if (addresses.get(key) != null) {
-            value.add(adr);
-            addresses.put(key, value);
-        } else {
-            value = new HashSet<>();
-            value.add(adr);
-            addresses.put(key, value);
-        }
+        // if (addresses.get(key) != null) {
+        // value.add(adr);
+        // addresses.put(key, value);
+        // } else {
+        // value = new HashSet<>();
+        // value.add(adr);
+        // addresses.put(key, value);
+        // }
 
         street = "";
         adrNum = "";

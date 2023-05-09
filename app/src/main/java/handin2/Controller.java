@@ -1,7 +1,6 @@
 package handin2;
 
 import java.util.ArrayList;
-import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -29,7 +28,7 @@ public class Controller {
     float lastY;
 
     public Controller(Model model, View view) {
-        //used for drag calculations
+        // used for drag calculations
         view.canvas.setOnMousePressed(e -> {
             lastX = (float) e.getX();
             lastY = (float) e.getY();
@@ -71,8 +70,10 @@ public class Controller {
             view.position.setPosition(e.getX(), e.getY());
             view.mousePositionLabel.setText("lat: " + view.position.latPosition + " lon: " + view.position.lonPosition);
 
-            //this calculates how far in you need to be zoomed for stuff to be drawn. If the canvas is bigger, the more you need to zoon in. 
-            //It finds the the new nearest visible road, by searching the r-Tree with NNSearch. 
+            // this calculates how far in you need to be zoomed for stuff to be drawn. If
+            // the canvas is bigger, the more you need to zoon in.
+            // It finds the the new nearest visible road, by searching the r-Tree with
+            // NNSearch.
             if ((view.scalebar.getScale() * view.canvasHeighScale * view.canvasWidthScale) < 500) {
                 if (!model.smallRoadRtree.isEmpty) {
                     view.nearestRoad.setText(((Highway) model.smallRoadRtree
@@ -98,7 +99,7 @@ public class Controller {
 
         });
 
-        //when the scene is expanded, the canvas expands propotrinally 
+        // when the scene is expanded, the canvas expands propotrinally
         view.scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -108,8 +109,8 @@ public class Controller {
                 view.redraw();
             }
         });
-        
-        //when the scene is expanded, the canvas expands propotrinally 
+
+        // when the scene is expanded, the canvas expands propotrinally
         view.scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -121,7 +122,7 @@ public class Controller {
             }
         });
 
-        //used for the search-bar for finding route from this startpoint
+        // used for the search-bar for finding route from this startpoint
         view.findRouteFromTextField.setOnMouseClicked(e -> {
             view.findRouteFromTextField.clear();
             view.searchFromNode = null;
@@ -129,7 +130,7 @@ public class Controller {
             view.redraw();
         });
 
-        //used for the search-bar for finding route a route to this endpoint
+        // used for the search-bar for finding route a route to this endpoint
         view.findRouteToTextField.setOnMouseClicked(e -> {
             view.findRouteToTextField.clear();
             view.searchToNode = null;
@@ -137,14 +138,15 @@ public class Controller {
             view.redraw();
         });
 
-        //used for the search-bar for finding a single point
+        // used for the search-bar for finding a single point
         view.searchTextField.setOnMouseClicked(e -> {
             view.searchTextField.clear();
             view.searchFromNode = null;
             view.redraw();
         });
 
-        //When typing in the searchbar, it updates the search Result, and clears the favorites
+        // When typing in the searchbar, it updates the search Result, and clears the
+        // favorites
         view.searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             view.searchResultVBox.getChildren().clear();
             view.favoritesButton.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -153,7 +155,8 @@ public class Controller {
 
         });
 
-        //When typing in the searchbar, it updates the search Result, and clears the favorites
+        // When typing in the searchbar, it updates the search Result, and clears the
+        // favorites
         view.findRouteFromTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             view.searchResultFromVBox.getChildren().clear();
             view.favoritesButton2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -163,7 +166,8 @@ public class Controller {
 
         });
 
-        //When typing in the searchbar, it updates the search Result, and clears the favorites
+        // When typing in the searchbar, it updates the search Result, and clears the
+        // favorites
         view.findRouteToTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             view.searchResultToVBox.getChildren().clear();
             view.favoritesButton2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -173,18 +177,20 @@ public class Controller {
 
         });
 
-        //if route has been found, this button can activate to show the route instructions
+        // if route has been found, this button can activate to show the route
+        // instructions
         view.routeDescriptionButton.setOnMouseClicked(e -> {
             if (model.route.size() > 0) {
-            applyButtonPressReleaseEffect(view.routeDescriptionButton, Color.LIGHTBLUE);
-            view.routeDescriptionStackPane.setVisible(true);
-            view.routeDescriptionStackPane.setMouseTransparent(false);
-            
-            getRouteDescription(model, view);
+                applyButtonPressReleaseEffect(view.routeDescriptionButton, Color.LIGHTBLUE);
+                view.routeDescriptionStackPane.setVisible(true);
+                view.routeDescriptionStackPane.setMouseTransparent(false);
+
+                getRouteDescription(model, view);
             }
         });
 
-        //swaps the to-and-from points and checks if the From- or To- points are null, to do the appropiate actions.
+        // swaps the to-and-from points and checks if the From- or To- points are null,
+        // to do the appropiate actions.
         view.swapButton.setOnMouseClicked(e -> {
             if (view.searchFromNode != null || view.searchToNode != null) {
                 applyButtonPressReleaseEffect(view.swapButton, Color.LIGHTBLUE);
@@ -201,20 +207,21 @@ public class Controller {
                     view.position.findPosition(view.searchFromNode, view.searchToNode);
                     view.pan(view.position.panX, view.position.panY);
                     findRoute(model, view);
-                    view.redraw();   //Maybe not
-                    getRouteDescription(model,view);
+                    view.redraw(); // Maybe not
+                    getRouteDescription(model, view);
                 } else {
-                    if(view.searchToNode != null) {
-                    view.position.findPosition(view.searchToNode, view.searchFromNode);
+                    if (view.searchToNode != null) {
+                        view.position.findPosition(view.searchToNode, view.searchFromNode);
                     } else {
-                    view.position.findPosition(view.searchFromNode,view.searchToNode);
+                        view.position.findPosition(view.searchFromNode, view.searchToNode);
                     }
                     view.pan(view.position.panX, view.position.panY);
                 }
-            } 
+            }
         });
 
-        //adds a point to favorite list, with the adress information, and only if from- is found and not already marked
+        // adds a point to favorite list, with the adress information, and only if from-
+        // is found and not already marked
         view.favoritesButton.setOnMouseClicked(e -> {
             if (view.favoritesButton.getBackground().getFills().get(0).getFill().equals(Color.WHITE)
                     && view.searchFromNode != null) {
@@ -229,7 +236,8 @@ public class Controller {
 
         });
 
-        //adds a route to favorite list, with the adress information, and only if to- and from- is found and not already marked
+        // adds a route to favorite list, with the adress information, and only if to-
+        // and from- is found and not already marked
         view.favoritesButton2.setOnMouseClicked(e -> {
             if (view.favoritesButton2.getBackground().getFills().get(0).getFill().equals(Color.WHITE)
                     && view.searchFromNode != null && view.searchToNode != null) {
@@ -244,14 +252,14 @@ public class Controller {
             }
         });
 
-        //this button clears the list of favorites destinations and routes
+        // this button clears the list of favorites destinations and routes
         view.clearFavoritesButton.setOnMouseClicked(e -> {
             applyButtonPressReleaseEffect(view.clearFavoritesButton, Color.RED);
             view.favoritListVBox.getChildren().clear();
             view.favoritBackgound.setHeight(40);
         });
 
-        //this button clears the searchbars in finding a route to reset the search.
+        // this button clears the searchbars in finding a route to reset the search.
         view.clearFindRouteButton.setOnAction(e -> {
             applyButtonPressReleaseEffect(view.clearFindRouteButton, Color.RED);
             view.findRouteFromTextField.clear();
@@ -264,14 +272,15 @@ public class Controller {
             view.redraw();
         });
 
-        //button for veichle selection, chooses the color of route and how to calculate the fastest route
+        // button for veichle selection, chooses the color of route and how to calculate
+        // the fastest route
         view.carButton.setOnMouseClicked(e -> {
             veichleTypeSelected(view.carButton, view, Color.MAGENTA);
             view.transportType = "car";
             model.pathfinder.setType("car");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                getRouteDescription(model, view);
             }
             view.redraw();
         });
@@ -281,7 +290,7 @@ public class Controller {
             model.pathfinder.setType("bike");
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                getRouteDescription(model, view);
             }
             view.redraw();
         });
@@ -292,12 +301,12 @@ public class Controller {
             veichleTypeSelected(view.walkButton, view, Color.CYAN);
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                getRouteDescription(model, view);
             }
             view.redraw();
         });
 
-        //hides the other menues when selectig another or the an already selected menu
+        // hides the other menues when selectig another or the an already selected menu
         view.findRouteMenu.setOnMouseClicked(e -> {
             menuSelected(view.findRouteMenu, view.findRouteStackPane, view, model);
             view.transportType = "car";
@@ -316,15 +325,14 @@ public class Controller {
             menuSelected(view.searchMenu, view.searchStackpan, view, model);
         });
 
-        
-        //Copies the route-instructions to the clip-holder. Clipboard, clipboard content and String.join was made with help from Chat-GPT
+        // Copies the route-instructions to the clip-holder. Clipboard, clipboard
+        // content and String.join was made with help from Chat-GPT
         view.copyButton.setOnAction(e -> {
             applyButtonPressReleaseEffect(view.copyButton, Color.LIGHTBLUE);
 
             ClipboardContent clipboardContent = new ClipboardContent();
             ArrayList<String> strings = new ArrayList<>();
             ArrayList<ArrayList<String>> ruteVejledning = model.pathfinder.getTextRoute();
-
 
             for (int i = 0; i < ruteVejledning.size(); i++) {
                 String string = ruteVejledning.get(i).get(0);
@@ -334,14 +342,15 @@ public class Controller {
             clipboardContent.putString(String.join(System.lineSeparator(), strings));
             Clipboard.getSystemClipboard().setContent(clipboardContent);
         });
-        
-        //hides the route intructions when pressed
+
+        // hides the route intructions when pressed
         view.routeDescriptionCloseButton.setOnAction(e -> {
             view.routeDescriptionStackPane.setVisible(false);
             view.routeDescriptionStackPane.setMouseTransparent(true);
         });
-        
-        //expands the background of the favorite list, when adding more elements, just visually pleasing
+
+        // expands the background of the favorite list, when adding more elements, just
+        // visually pleasing
         view.favoriteStackPane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -350,7 +359,7 @@ public class Controller {
             }
         });
 
-        //freezes the canvas in view at the point of pressed and makes a red outline.
+        // freezes the canvas in view at the point of pressed and makes a red outline.
         view.freezeFrame.setOnAction(e -> {
             if (view.freezeFrame.isSelected()) {
                 view.position.getCanvas();
@@ -360,7 +369,7 @@ public class Controller {
             }
         });
 
-        //makes the debugger overlay visible when pressed. 
+        // makes the debugger overlay visible when pressed.
         view.showDebugger.setOnAction(e -> {
             if (view.showDebugger.isSelected()) {
                 view.debuggerOverlay.setVisible(true);
@@ -372,10 +381,10 @@ public class Controller {
 
     }
 
-    //creates the routedescription with icons, when a route is found.
+    // creates the routedescription with icons, when a route is found.
     private void getRouteDescription(Model model, View view) {
         view.routeDescriptionInstruction.getChildren().clear();
-        if(model.pathfinder.getTextRoute().size()>0) {
+        if (model.pathfinder.getTextRoute().size() > 0) {
             ArrayList<ArrayList<String>> ruteVejledning = model.pathfinder.getTextRoute();
             view.routeInfoHBox.getChildren().clear();
 
@@ -383,52 +392,45 @@ public class Controller {
             view.routeInfoHBox.getChildren().add(new Label(model.pathfinder.travelLength));
             view.routeInfoHBox.setSpacing(40);
 
-
             for (int i = 0; i < ruteVejledning.size(); i++) {
 
                 Text text = new Text(ruteVejledning.get(i).get(0));
                 TextFlow textFlow = new TextFlow(text);
-                textFlow.setPrefWidth(300); 
+                textFlow.setPrefWidth(300);
 
                 ImageView imageView = new ImageView();
-                 if(ruteVejledning.get(i).get(1).equals("venstre")) {
+                if (ruteVejledning.get(i).get(1).equals("venstre")) {
                     imageView = view.layout.copyImageView(view.turnLeftImage);
-                } 
-                else if (ruteVejledning.get(i).get(1).equals("højre")) {
+                } else if (ruteVejledning.get(i).get(1).equals("højre")) {
                     imageView = view.layout.copyImageView(view.turnRightImage);
-                } 
+                }
                 HBox hBox = new HBox(textFlow, imageView);
                 view.routeDescriptionInstruction.getChildren().add(hBox);
                 view.routeDescriptionInstruction.setSpacing(10);
                 view.routeDescriptionInstruction.setAlignment(Pos.CENTER_LEFT);
             }
-        }   
+        }
     }
 
-	//when typing in the searchbar, this method looks for adress matches and creates no-more than 5 options
+    // when typing in the searchbar, this method looks for adress matches and
+    // creates no-more than 5 options
     private void setAdressOptionBox(TextField textField, VBox searchVBox, String searchNode, String newValue,
             Model model, View view) {
         if (newValue.length() > 0) {
             Iterable<String> keys = model.addresses.keysWithPrefix(newValue.toLowerCase());
             int numberOfDropdowns = 0;
 
-            
             for (String key : keys) {
-                Set<Address> setOfAdr = model.addresses.get(key);
-
-                for (Address adr : setOfAdr) {
-                    searchVBox.getChildren().add(createDropdownOptions(adr, textField, searchNode, view, model));
-                    numberOfDropdowns++;
-                    if (numberOfDropdowns > 5)
-                        break;
-                }
+                searchVBox.getChildren()
+                        .add(createDropdownOptions(model.addresses.get(key), textField, searchNode, view, model));
+                numberOfDropdowns++;
                 if (numberOfDropdowns > 5)
                     break;
             }
         }
     }
 
-    //Creates the different search-result labels
+    // Creates the different search-result labels
     private Label createDropdownOptions(Address adr, TextField textField, String searchNode, View view, Model model) {
         Label label = view.layout.getAdressLabel(adr, 260);
         label.setOnMouseClicked(e -> {
@@ -437,7 +439,7 @@ public class Controller {
         return label;
     }
 
-    //sets up the on action-event for the searchresults labels
+    // sets up the on action-event for the searchresults labels
     private void setOnClickEventSerachResult(String searchNode, TextField textField, Address adr, Label label,
             View view, Model model) {
         textField.setText(label.getText());
@@ -453,11 +455,11 @@ public class Controller {
         if (view.searchFromNode != null && view.searchToNode != null) {
             findRoute(model, view);
             view.redraw();
-            getRouteDescription(model,view);
+            getRouteDescription(model, view);
         }
     }
 
-    //when searching for a route, this method is called. 
+    // when searching for a route, this method is called.
     private void findRoute(Model model, View view) {
         if (view.transportType.equals("car")) {
             Edge fromEdge = (Edge) model.edgeTreeCar
@@ -476,7 +478,8 @@ public class Controller {
         }
     }
 
-    //setting the pressed viechle type button as shown avtive and sets sets the others to default color. 
+    // setting the pressed viechle type button as shown avtive and sets sets the
+    // others to default color.
     private void veichleTypeSelected(Button viechleType, View view, Color color) {
         view.carButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         view.bikeButton.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -484,7 +487,8 @@ public class Controller {
         viechleType.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-    //creates the favorite routes and destinations, and when pressed shows them on the map.
+    // creates the favorite routes and destinations, and when pressed shows them on
+    // the map.
     private void addToFavorite(Button button, VBox vBox, View view, Model model, Node searchFromNode,
             Node searchToNode, String veichleType) {
         button.setOnMouseClicked(i -> {
@@ -494,7 +498,7 @@ public class Controller {
             view.searchToNode = searchToNode;
             if (view.searchFromNode != null && view.searchToNode != null) {
                 findRoute(model, view);
-                getRouteDescription(model,view);
+                getRouteDescription(model, view);
             }
             view.position.findPosition(view.searchFromNode, view.searchToNode);
             view.pan(view.position.panX, view.position.panY);
@@ -512,7 +516,7 @@ public class Controller {
 
     }
 
-    //hides the other menues when selectig another or the an already selected menu
+    // hides the other menues when selectig another or the an already selected menu
     private void menuSelected(Button button, StackPane stackPane, View view, Model model) {
         if (button.getBackground().getFills().get(0).getFill().equals(Color.LIGHTGREY)) {
             button.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -557,7 +561,7 @@ public class Controller {
         }
     }
 
-    //creates a button-press effect for buttons that are not selectable
+    // creates a button-press effect for buttons that are not selectable
     private void applyButtonPressReleaseEffect(Button button, Color wantedColor) {
         button.setOnMousePressed(e -> {
             button.setBackground(new Background(new BackgroundFill(wantedColor, CornerRadii.EMPTY, Insets.EMPTY)));
