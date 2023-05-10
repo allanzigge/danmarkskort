@@ -1,16 +1,13 @@
 package GoKort;
 
 import org.junit.jupiter.api.Test;
-
-import GoKort.Model;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 //this test class was used under the development of Vertices
 
 public class VertexTest {
 
-    //Confrims that all the expected Vertices acual is in the vertexMap
+    // Confrims that all the expected Vertices acual is in the vertexMap
     @Test
     void addVertexTest() throws Exception {
 

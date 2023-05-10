@@ -165,29 +165,20 @@ public class Model implements Serializable {
             out.writeObject(maxlon);
 
             out.writeObject(firstLayerRTree);
-            System.out.println("first layer done");
             out.writeObject(addresses);
-            System.out.println("address done");
             out.writeObject(edgeTreeBike);
             out.reset();
-            System.out.println("edges bike done");
+            // We enwoke a reset, to reset the outputstream, such that we avoid a heap
+            // space overload in the handle table of the outputstream
             out.writeObject(edgeTreeCar);
-            System.out.println("edge car done");
             out.writeObject(bigRoadRTree);
-            System.out.println("bigroads done");
             out.writeObject(mediumRoadRTree);
-            System.out.println("medium road done");
             out.writeObject(smallRoadRtree);
-            System.out.println("small road done");
             out.writeObject(secondLayerRTree);
-            System.out.println("second layer done");
             out.reset();
             out.writeObject(thirdLayerRTree);
-            System.out.println("third layer done");
             out.writeObject(fourthLayerRTree);
-            System.out.println("fourth layer done");
             out.writeObject(pathfinder);
-            System.out.println("wiiii");
             out.close();
         }
     }
