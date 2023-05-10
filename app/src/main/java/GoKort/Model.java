@@ -129,6 +129,7 @@ public class Model implements Serializable {
 
             firstLayerRTree = (RTree) in.readObject();
             addresses = (TST<Address>) in.readObject();
+            vertexMap = (HashMap<Long, Vertex>) in.readObject();
             edgeTreeBike = (RTree) in.readObject();
             edgeTreeCar = (RTree) in.readObject();
             bigRoadRTree = (RTree) in.readObject();
@@ -166,6 +167,7 @@ public class Model implements Serializable {
 
             out.writeObject(firstLayerRTree);
             out.writeObject(addresses);
+            out.writeObject(vertexMap);
             out.writeObject(edgeTreeBike);
             out.reset();
             // We enwoke a reset, to reset the outputstream, such that we avoid a heap
