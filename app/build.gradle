@@ -58,7 +58,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'handin2.Launch'
+    mainClass = 'GoKort.Launch'
 }
 
 tasks.named('test') {
@@ -75,7 +75,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes 'Main-Class': 'handin2.Launch'
+        attributes 'Main-Class': 'GoKort.Launch'
     }
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
