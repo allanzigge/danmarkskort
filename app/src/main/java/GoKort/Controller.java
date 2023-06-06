@@ -432,12 +432,12 @@ public class Controller {
     private void setAdressOptionBox(TextField textField, VBox searchVBox, String searchNode, String newValue,
             Model model, View view) {
         if (newValue.length() > 0) {
-            Iterable<String> keys = model.addresses.keysWithPrefix(newValue.toLowerCase());
+            Iterable<String> keys = model.addresses.keysWithPrefix(newValue);
             int numberOfDropdowns = 0;
 
             for (String key : keys) {
                 searchVBox.getChildren()
-                        .add(createDropdownOptions(model.addresses.get(key), textField, searchNode, view, model));
+                        .add(createDropdownOptions(key, textField, searchNode, view, model, searchVBox));
                 numberOfDropdowns++;
                 if (numberOfDropdowns > 5)
                     break;
@@ -446,10 +446,11 @@ public class Controller {
     }
 
     // Creates the different search-result labels
-    private Label createDropdownOptions(Address adr, TextField textField, String searchNode, View view, Model model) {
-        Label label = view.layout.getAdressLabel(adr, 260);
+    private Label createDropdownOptions(String key, TextField textField, String searchNode, View view, Model model, VBox searchVBox) {
+        Label label = view.layout.getAdressLabel(key, 260);
         label.setOnMouseClicked(e -> {
-            setOnClickEventSerachResult(searchNode, textField, adr, label, view, model);
+            setOnClickEventSerachResult(searchNode, textField, model.addresses.get(key), label, view, model);
+            searchVBox.setVisible(false);
         });
         return label;
     }
@@ -459,9 +460,9 @@ public class Controller {
             View view, Model model) {
         textField.setText(label.getText());
         if (searchNode.equals("searchFromNode")) {
-            view.searchFromNode = new Node(adr.getLat(), adr.getLon(), 1);
+            view.searchFromNode = adr;
         } else {
-            view.searchToNode = new Node(adr.getLat(), adr.getLon(), 1);
+            view.searchToNode = adr;
         }
         if (view.searchFromNode == null) {
             view.position.findPosition(view.searchToNode, view.searchFromNode);

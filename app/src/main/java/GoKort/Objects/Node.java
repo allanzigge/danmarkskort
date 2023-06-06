@@ -3,7 +3,7 @@ package GoKort.Objects;
 import java.io.Serializable;
 
 public class Node implements Serializable {
-    float lat, lon;
+    protected float lat, lon;
     long nodeID;
 
     public Node(float lat, float lon, long nodeID) {

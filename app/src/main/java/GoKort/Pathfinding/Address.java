@@ -1,15 +1,14 @@
 package GoKort.Pathfinding;
 
+import GoKort.Objects.Node;
 import java.io.Serializable;
 
-public class Address implements Serializable {
-    private float lat, lon;
+public class Address extends Node implements Serializable {
     private String street, adrNum, adrLet, postcode, city;
 
-    public Address(float lat, float lon, String street, String adrNum,
+    public Address(float lat, float lon, long id, String street, String adrNum,
             String adrLet, String postcode, String city) {
-        this.lat = lat;
-        this.lon = lon;
+        super(lat,lon,id);
         this.street = street;
         this.adrNum = adrNum;
         this.adrLet = adrLet;
@@ -50,23 +49,4 @@ public class Address implements Serializable {
         return lon;
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public String getAdrNum() {
-        return adrNum;
-    }
-
-    public String getAdrLet() {
-        return adrLet;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public String getCity() {
-        return city;
-    }
 }

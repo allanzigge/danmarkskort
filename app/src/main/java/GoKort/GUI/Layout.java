@@ -88,9 +88,8 @@ public class Layout {
         return vBox;
     }
 
-    public Label getAdressLabel(Address address, int width) {
-        Label label = new Label(address.getStreet() + " " + address.getAdrNum() + address.getAdrLet() + ", "
-                + address.getPostcode() + " " + address.getCity());
+    public Label getAdressLabel(String key, int width) {
+        Label label = new Label(key);
         label.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         label.setMaxWidth(width);
         return label;

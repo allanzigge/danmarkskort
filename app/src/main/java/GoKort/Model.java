@@ -496,14 +496,7 @@ public class Model implements Serializable {
             street = v;
         } else if (k.equals("addr:housenumber")) {
             v = input.getAttributeValue(null, "v");
-            var res = v.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-            if (res.length == 1) {
-                adrNum = res[0];
-            }
-            if (res.length == 2) {
-                adrNum = res[0];
-                adrLet = res[1];
-            }
+            adrNum = v;
         } else if (k.equals("addr:postcode")) {
             v = input.getAttributeValue(null, "v");
             postcode = v;
@@ -589,9 +582,9 @@ public class Model implements Serializable {
     // parses all adresses from the XML document
     private void addressParser() {
 
-        Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), street, adrNum, adrLet,
+        Address adr = new Address(id2node.get(nodeID).getLat(), id2node.get(nodeID).getLon(), nodeID, street, adrNum, adrLet,
                 postcode, city);
-        String key = street.toLowerCase() + " " + adrNum + adrLet.toLowerCase() + " " + city.toLowerCase();
+        String key = street + " " + adrNum + " " + postcode + " "  + city;
         addresses.put(key, adr);
 
         street = "";

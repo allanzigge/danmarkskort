@@ -6,14 +6,10 @@ import java.util.List;
 
 public class Relation implements Serializable {
     private static final long serialVersionUID = 7980625162624571129L;
-    ArrayList<List<Node>> outers;
-    ArrayList<List<Node>> inners;
     String v;
     ArrayList<Node> relationTrace;
 
     public Relation(ArrayList<List<Node>> outerList, ArrayList<List<Node>> innerList, String v) {
-        this.outers = outerList;
-        this.inners = innerList;
 
         this.v = v;
 
