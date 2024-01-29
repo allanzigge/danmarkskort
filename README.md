@@ -1,5 +1,8 @@
 # GoKort
 
+Prerequisites:
+- Make sure you have gradle, as our program uses this to build.
+
 ---
 
 ---
@@ -7,7 +10,7 @@
 Start of program:
 
 - Make sure to have 8gb of ram.
-- Type “./gradlew run” to start program
+- Type “./gradlew run” to start program.
 - After 2-4 min the map of Denmark should pop up.
 
 ---
